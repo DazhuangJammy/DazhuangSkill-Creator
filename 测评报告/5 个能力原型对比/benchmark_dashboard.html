@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skill Creator Benchmark Dashboard</title>
+  <style>
+:root {
+  --bg: #efe5d3;
+  --ink: #1f2630;
+  --muted: #5f6973;
+  --paper: rgba(255,255,255,0.74);
+  --line: rgba(31, 38, 48, 0.12);
+  --shadow: 0 22px 60px rgba(29, 37, 47, 0.12);
+  --radius: 26px;
+  --gold: #d4a43f;
+  --wine: #7d4b48;
+  --teal: #0f766e;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Avenir Next", "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(15, 118, 110, 0.10), transparent 32%),
+    radial-gradient(circle at 88% 10%, rgba(192, 107, 45, 0.10), transparent 34%),
+    linear-gradient(180deg, #f6f0e4 0%, #ebdfca 100%);
+  min-height: 100vh;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(31,38,48,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31,38,48,0.028) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.55;
+}
+.wrap {
+  width: min(1380px, calc(100vw - 36px));
+  margin: 0 auto;
+  padding: 24px 0 56px;
+  position: relative;
+  z-index: 1;
+}
+.top-nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.top-nav a {
+  text-decoration: none;
+  color: var(--ink);
+  background: rgba(255,255,255,0.66);
+  border: 1px solid rgba(255,255,255,0.76);
+  box-shadow: 0 10px 26px rgba(31,38,48,0.08);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.hero, .section {
+  background: linear-gradient(145deg, rgba(255,255,255,0.92), rgba(255,255,255,0.66));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.76);
+  box-shadow: var(--shadow);
+  border-radius: 32px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.section { margin-top: 24px; }
+.hero::after, .section::after {
+  content: "";
+  position: absolute;
+  inset: auto -10% -46% 40%;
+  height: 280px;
+  background: radial-gradient(circle, rgba(15,118,110,0.11), transparent 68%);
+  pointer-events: none;
+}
+.eyebrow {
+  margin: 0 0 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  font-weight: 800;
+}
+h1, h2, h3 {
+  margin: 0;
+  font-family: "Baskerville", "Iowan Old Style", "Palatino Linotype", serif;
+  letter-spacing: -0.035em;
+}
+h1 { font-size: clamp(40px, 7vw, 84px); line-height: 0.94; }
+h2 { font-size: clamp(28px, 4vw, 44px); line-height: 0.98; }
+h3 { font-size: 24px; }
+p { margin: 0; }
+.hero-grid, .two-col, .three-col, .four-col {
+  display: grid;
+  gap: 18px;
+}
+.hero-grid { grid-template-columns: 1.2fr 0.8fr; align-items: end; }
+.two-col { grid-template-columns: 1.15fr 0.85fr; align-items: start; }
+.three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.four-col { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hero-copy p, .section-copy p {
+  color: var(--muted);
+  line-height: 1.72;
+  font-size: 16px;
+}
+.hero-copy .lead { margin-top: 18px; max-width: 66ch; }
+.hero-copy .callout {
+  margin-top: 18px;
+  padding-left: 16px;
+  border-left: 4px solid var(--gold);
+}
+.signal {
+  border-radius: 24px;
+  padding: 18px 18px 16px;
+  background: rgba(31,38,48,0.94);
+  color: #f8f1e4;
+}
+.signal .label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  opacity: 0.72;
+}
+.signal strong { display: block; font-size: 30px; line-height: 1; }
+.signal small { display: block; margin-top: 10px; line-height: 1.55; color: rgba(248,241,228,0.72); }
+.card {
+  border-radius: 24px;
+  padding: 18px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.card strong { display: block; font-size: 18px; margin-bottom: 8px; }
+.card p, .card li { color: var(--muted); line-height: 1.68; }
+.card ul { margin: 0; padding-left: 18px; }
+.version-card {
+  border-radius: 24px;
+  padding: 18px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.88), rgba(255,255,255,0.52)),
+    linear-gradient(180deg, var(--accent-soft), transparent);
+  border: 1px solid rgba(255,255,255,0.72);
+  position: relative;
+  overflow: hidden;
+}
+.version-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: var(--accent);
+}
+.version-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+.rank-badge {
+  min-width: 68px;
+  text-align: center;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 800;
+}
+.version-summary {
+  min-height: 72px;
+  margin: 12px 0 16px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.mini-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.mini-grid div {
+  border-radius: 16px;
+  padding: 12px 13px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(31,38,48,0.07);
+}
+.mini-grid span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.mini-grid strong { font-size: 22px; }
+.check-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.check-card {
+  border-radius: 20px;
+  padding: 16px;
+  border: 1px solid rgba(31,38,48,0.08);
+  background: rgba(255,255,255,0.72);
+  display: grid;
+  gap: 8px;
+}
+.check-card.pass { background: rgba(15,118,110,0.12); }
+.check-card.fail { background: rgba(192,107,45,0.12); }
+.check-status {
+  width: fit-content;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(31,38,48,0.9);
+  color: #fff;
+}
+.table-shell {
+  overflow-x: auto;
+  border-radius: 20px;
+  border: 1px solid rgba(31,38,48,0.08);
+  background: rgba(255,255,255,0.54);
+}
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  padding: 14px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+thead th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 800;
+}
+tbody tr:hover { background: rgba(255,255,255,0.40); }
+.metric-cell { display: grid; gap: 8px; min-width: 140px; }
+.meter { height: 10px; border-radius: 999px; background: rgba(31,38,48,0.08); overflow: hidden; }
+.meter-fill { height: 100%; border-radius: inherit; display: block; }
+.version-dot { display: inline-block; width: 11px; height: 11px; border-radius: 999px; margin-right: 10px; vertical-align: middle; }
+.heat-100 { background: rgba(15,118,110,0.16); }
+.heat-95 { background: rgba(63, 132, 112, 0.14); }
+.heat-85 { background: rgba(212,164,63,0.18); }
+.heat-70 { background: rgba(192,107,45,0.14); }
+.heat-low { background: rgba(125, 75, 72, 0.12); }
+.note {
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(31,38,48,0.05);
+  color: var(--muted);
+  line-height: 1.72;
+}
+.note strong { color: var(--ink); }
+.note ul { margin: 10px 0 0; padding-left: 18px; }
+code, pre {
+  font-family: "SFMono-Regular", "Menlo", "Monaco", monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+code.block {
+  display: block;
+  font-size: 12px;
+  line-height: 1.65;
+  color: #24313a;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(31,38,48,0.08);
+}
+.brief-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.brief-card {
+  border-radius: 24px;
+  padding: 18px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.brief-card h3 { font-size: 22px; margin-bottom: 12px; }
+.brief-card p { color: var(--muted); line-height: 1.68; margin-top: 10px; }
+.weight-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.weight-card {
+  border-radius: 20px;
+  padding: 16px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.weight-card em { display: block; color: var(--muted); font-style: normal; margin-top: 10px; line-height: 1.65; }
+.case-brief {
+  margin-top: 24px;
+  border-radius: 30px;
+  padding: 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.90), rgba(255,255,255,0.62));
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.76);
+}
+.case-top {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 18px;
+  align-items: start;
+}
+.case-task {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px dashed rgba(31,38,48,0.14);
+}
+.case-task-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+.case-task-head strong { font-size: 20px; }
+.case-submeta {
+  margin-top: 8px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.output-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.output-card {
+  border-radius: 20px;
+  padding: 14px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.output-card header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.score-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(31,38,48,0.10);
+}
+.expected-box {
+  border-radius: 20px;
+  padding: 14px;
+  background: rgba(31,38,48,0.05);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.small { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.footer-paths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.path-card {
+  border-radius: 20px;
+  padding: 16px;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.path-card strong { display: block; margin-bottom: 10px; }
+@media (max-width: 1220px) {
+  .brief-grid, .weight-grid, .check-grid, .three-col, .footer-paths { grid-template-columns: 1fr 1fr; }
+  .output-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 980px) {
+  .hero-grid, .two-col, .case-top, .four-col { grid-template-columns: 1fr; }
+  .brief-grid, .weight-grid, .check-grid, .footer-paths, .three-col, .output-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .wrap { width: min(100vw - 16px, 1380px); padding-top: 14px; }
+  .hero, .section, .case-brief { padding: 18px; border-radius: 24px; }
+  h1 { font-size: 42px; }
+  th, td { padding: 12px 8px; }
+}
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="top-nav"><a href="benchmark_dashboard.html">总览 Dashboard</a><a href="benchmark_casebook.html">逐题对比 Casebook</a></nav>
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Boss View / Codex Full Benchmark / 45 Creation Runs + 15 Baselines</p>
+          <h1>Dazhuang Skill Creator 第一，
+          但还不算真正碾压。</h1>
+          <p class="lead callout">如果只看结论：三版里最强的是 <strong>Dazhuang Skill Creator</strong>，
+          第二是 <strong>My Skill Creator Copy</strong>。但按我事先冻结的“碾压式胜出”规则，
+          它还没完全过线，所以我不会硬说它是碾压。</p>
+          <p class="lead">这份测评的“权威性”不来自某个外部机构，而来自方法本身：同题、同环境、规则先冻结、可重复、可回放、还能追溯到每个具体输出。也就是说，它不是“我心里觉得谁更好”，而是“谁在同样条件下反复跑出来更好”。</p>
+        </div>
+        <div class="three-col">
+          <div class="signal">
+            <span class="label">Winner</span>
+            <strong>Dazhuang Skill Creator</strong>
+            <small>综合总分 99.43</small>
+          </div>
+          <div class="signal">
+            <span class="label">Lead</span>
+            <strong>11.59</strong>
+            <small>相对第二名的总分领先</small>
+          </div>
+          <div class="signal">
+            <span class="label">Crushing?</span>
+            <strong>NO</strong>
+            <small>主要卡在实际使用效果领先和语义差距没有超过阈值。</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">One Screen Summary</p>
+        <h2>一眼看懂三版差距</h2>
+        <p>不是谁“看起来更高级”，而是谁在同一套实验里，持续做出更快、更轻、更准的 skill。</p>
+      </div>
+      <div class="three-col" style="margin-top:18px;">
+        
+            <article class="version-card" style="--accent:#0f766e; --accent-soft:rgba(15, 118, 110, 0.18);">
+              <div class="version-head">
+                <div>
+                  <p class="eyebrow">Lean Modular</p>
+                  <h3>Dazhuang Skill Creator</h3>
+                </div>
+                <span class="rank-badge">99.43</span>
+              </div>
+              <p class="version-summary">主 body 更轻、方法论下沉更明显，速度、体积、准确率与稳定性最均衡。</p>
+              <div class="mini-grid">
+                <div><span>Total</span><strong>99.43</strong></div>
+                <div><span>Use Effect</span><strong>98.64</strong></div>
+                <div><span>Create s</span><strong>73.55</strong></div>
+                <div><span>Skill bytes</span><strong>4,290</strong></div>
+              </div>
+            </article>
+            
+            <article class="version-card" style="--accent:#c06b2d; --accent-soft:rgba(192, 107, 45, 0.16);">
+              <div class="version-head">
+                <div>
+                  <p class="eyebrow">Config-Expanded</p>
+                  <h3>My Skill Creator Copy</h3>
+                </div>
+                <span class="rank-badge">87.84</span>
+              </div>
+              <p class="version-summary">比官方版更偏工程化，但结构化分类与 messy brief 归纳会出现掉点。</p>
+              <div class="mini-grid">
+                <div><span>Total</span><strong>87.84</strong></div>
+                <div><span>Use Effect</span><strong>94.60</strong></div>
+                <div><span>Create s</span><strong>90.16</strong></div>
+                <div><span>Skill bytes</span><strong>7,063</strong></div>
+              </div>
+            </article>
+            
+            <article class="version-card" style="--accent:#5b667f; --accent-soft:rgba(91, 102, 127, 0.18);">
+              <div class="version-head">
+                <div>
+                  <p class="eyebrow">Early Longform</p>
+                  <h3>官方原版</h3>
+                </div>
+                <span class="rank-badge">87.22</span>
+              </div>
+              <p class="version-summary">准确率很高，但创建更慢、更重，主 body 更像早期长说明风格。</p>
+              <div class="mini-grid">
+                <div><span>Total</span><strong>87.22</strong></div>
+                <div><span>Use Effect</span><strong>98.06</strong></div>
+                <div><span>Create s</span><strong>100.64</strong></div>
+                <div><span>Skill bytes</span><strong>6,613</strong></div>
+              </div>
+            </article>
+            
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Why This Benchmark Counts</p>
+        <h2>为什么这套测评可以对比，为什么它算有依据</h2>
+        <p>这五类题不是随便挑的。它们分别覆盖 skill creator 最关键的五种真实负载：超压缩输出、严格 JSON 分类、安全判断、模板化 markdown 归档、脏输入到固定 brief 的抽取。只要 creator 真有差异，这五类题一定会把差异放大出来。</p>
+      </div>
+      <div class="four-col" style="margin-top:18px;">
+        <div class="card"><strong>同题同环境</strong><p>三版都在同一台机器、同一 Codex、同一模型 `gpt-5.4`、同一 harness 下跑同一份 brief JSON。</p></div><div class="card"><strong>规则先冻结</strong><p>benchmark brief、权重、任务结构、评分函数先写进脚本，再开始全量跑，避免跑完再改标准。</p></div><div class="card"><strong>重复 3 次</strong><p>每类题每个版本都重复 3 次，防止单次手气好或手气差误导结论。</p></div><div class="card"><strong>原始证据可追溯</strong><p>每一轮创建、下游输出、分数、token、耗时都落盘，最后还能回看具体样例。</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">What Was Tested</p>
+        <h2>我到底测了什么题</h2>
+        <p>不是随便找五道题，而是故意挑了五种最能暴露 skill creator 差异的真实任务类型。</p>
+      </div>
+      <div class="brief-grid" style="margin-top:18px;">
+        
+            <article class="brief-card">
+              <p class="eyebrow">Benchmark Brief</p>
+              <h3>Conventional Commit</h3>
+              <p><strong>测什么：</strong>测极简高压缩输出：creator 能不能把 skill 收束到“一行 commit”这种极易跑偏的目标。</p>
+              <p><strong>为什么能比：</strong>这是最适合测“不要啰嗦、不要乱扩写、要把边界写死”的题型。skill creator 一旦结构松，立刻会把它写胖。</p>
+            </article>
+            
+            <article class="brief-card">
+              <p class="eyebrow">Benchmark Brief</p>
+              <h3>Support Ticket Triager</h3>
+              <p><strong>测什么：</strong>测严格 JSON 分类、标签体系表达、可配置结构，以及 creator 对 schema / config / interface metadata 的判断能力。</p>
+              <p><strong>为什么能比：</strong>这类题很接近真实工作：既要准分类，又要稳定 obey 输出结构，还要考虑以后会不会改标签。</p>
+            </article>
+            
+            <article class="brief-card">
+              <p class="eyebrow">Benchmark Brief</p>
+              <h3>Command Risk Checker</h3>
+              <p><strong>测什么：</strong>测安全判断类 skill：creator 能否让产物既短、又硬约束、还能稳定区分 safe / confirm / refuse。</p>
+              <p><strong>为什么能比：</strong>这是判断型 skill 的典型代表，特别适合测 creator 会不会把规则写散、写软、写到不够可执行。</p>
+            </article>
+            
+            <article class="brief-card">
+              <p class="eyebrow">Benchmark Brief</p>
+              <h3>Weekly Release Notes</h3>
+              <p><strong>测什么：</strong>测模板化 markdown 归纳、资产/模板使用意识，以及 creator 是否会把固定骨架下沉到更合适的位置。</p>
+              <p><strong>为什么能比：</strong>这类题不是纯分类，也不是纯自由写作，而是“固定骨架 + 归类整理”的真实协作型任务。</p>
+            </article>
+            
+            <article class="brief-card">
+              <p class="eyebrow">Benchmark Brief</p>
+              <h3>Stakeholder Brief</h3>
+              <p><strong>测什么：</strong>测“脏输入 -&gt; 固定摘要结构”的抽取能力，尤其是 creator 如何处理 heuristics、模板与 body 的分工。</p>
+              <p><strong>为什么能比：</strong>这是最能拉开 creator 水平的题：输入脏、边界多、容易凭感觉总结，特别考验 instruction 架构。</p>
+            </article>
+            
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Scoring Logic</p>
+        <h2>评分标准到底是什么</h2>
+        <p>这次排序不是凭“感觉”，而是按冻结好的权重和脚本里的评分函数直接算出来的。</p>
+      </div>
+      <div class="weight-grid" style="margin-top:18px;">
+        
+            <div class="weight-card">
+              <span class="pill">35%</span>
+              <strong>实际使用效果</strong>
+              <em>skill 上岗后做真实任务，结果准不准、稳不稳、值不值得用。</em>
+            </div>
+            
+            <div class="weight-card">
+              <span class="pill">25%</span>
+              <strong>创建过程效率</strong>
+              <em>从 brief 到可用 skill 的速度、token、体积负担。</em>
+            </div>
+            
+            <div class="weight-card">
+              <span class="pill">20%</span>
+              <strong>创建与执行精准度</strong>
+              <em>是否理解 brief、文件放置是否对、输出结构是否严格。</em>
+            </div>
+            
+            <div class="weight-card">
+              <span class="pill">15%</span>
+              <strong>产物质量</strong>
+              <em>主 body / references / assets / config 分工是否合理，可维护性如何。</em>
+            </div>
+            
+            <div class="weight-card">
+              <span class="pill">5%</span>
+              <strong>稳定性</strong>
+              <em>重复 3 次是否波动大，还是每次都差不多。</em>
+            </div>
+            
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Crushing Rule</p>
+        <h2>碾压式胜出的 5 条硬门槛</h2>
+        <p>只有全部满足，我才会说“碾压”。这次虽然第一名优势很明显，但还没把第二名拉开到那个程度。</p>
+      </div>
+      <div class="check-grid" style="margin-top:18px;">
+        
+            <div class="check-card pass">
+              <span class="check-status">PASS</span>
+              <strong>总分领先 &gt;= 10</strong>
+              <div class="small">当前值：11.59</div>
+            </div>
+            
+            <div class="check-card fail">
+              <span class="check-status">FAIL</span>
+              <strong>实际使用效果领先 &gt;= 5</strong>
+              <div class="small">当前值：4.04</div>
+            </div>
+            
+            <div class="check-card fail">
+              <span class="check-status">FAIL</span>
+              <strong>语义准确率差 &gt;= 10</strong>
+              <div class="small">当前值：4.96</div>
+            </div>
+            
+            <div class="check-card pass">
+              <span class="check-status">PASS</span>
+              <strong>Precision 不输第二名</strong>
+              <div class="small">当前值：Yes</div>
+            </div>
+            
+            <div class="check-card pass">
+              <span class="check-status">PASS</span>
+              <strong>Stability 不差于第二名</strong>
+              <div class="small">当前值：Yes</div>
+            </div>
+            
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Weighted Scoreboard</p>
+        <h2>综合总分拆解</h2>
+        <p>你可以直接看到：谁在“上岗效果”赢，谁在“创建效率”赢，谁在“产物质量”赢。</p>
+      </div>
+      <div class="table-shell" style="margin-top:18px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Total</th>
+              <th>Use Effect</th>
+              <th>Process</th>
+              <th>Precision</th>
+              <th>Product Quality</th>
+              <th>Stability</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <th><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</th>
+              <td><div class="metric-cell"><strong>99.43</strong><div class="meter"><span class="meter-fill" style="width:100.00%; background:#0f766e;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>98.64</strong><div class="meter"><span class="meter-fill" style="width:100.00%; background:#0f766e;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>100</strong><div class="meter"><span class="meter-fill" style="width:100.00%; background:#0f766e;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>99.53</strong><div class="meter"><span class="meter-fill" style="width:99.53%; background:#0f766e;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>100</strong><div class="meter"><span class="meter-fill" style="width:100.00%; background:#0f766e;"></span></div></div></td>
+              <td><strong>100</strong></td>
+            </tr>
+            
+            <tr>
+              <th><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</th>
+              <td><div class="metric-cell"><strong>87.84</strong><div class="meter"><span class="meter-fill" style="width:88.34%; background:#c06b2d;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>94.60</strong><div class="meter"><span class="meter-fill" style="width:95.90%; background:#c06b2d;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>84.25</strong><div class="meter"><span class="meter-fill" style="width:84.25%; background:#c06b2d;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>97.55</strong><div class="meter"><span class="meter-fill" style="width:97.55%; background:#c06b2d;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>94.39</strong><div class="meter"><span class="meter-fill" style="width:94.39%; background:#c06b2d;"></span></div></div></td>
+              <td><strong>0</strong></td>
+            </tr>
+            
+            <tr>
+              <th><span class="version-dot" style="background:#5b667f;"></span>官方原版</th>
+              <td><div class="metric-cell"><strong>87.22</strong><div class="meter"><span class="meter-fill" style="width:87.72%; background:#5b667f;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>98.06</strong><div class="meter"><span class="meter-fill" style="width:99.41%; background:#5b667f;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>77.18</strong><div class="meter"><span class="meter-fill" style="width:77.18%; background:#5b667f;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>100</strong><div class="meter"><span class="meter-fill" style="width:100.00%; background:#5b667f;"></span></div></div></td>
+              <td><div class="metric-cell"><strong>90.72</strong><div class="meter"><span class="meter-fill" style="width:90.72%; background:#5b667f;"></span></div></div></td>
+              <td><strong>0</strong></td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Per-Brief Score Matrix</p>
+        <h2>每类题目的平均语义准确率</h2>
+        <p>这张表最有用。它能看出谁只是综合分高，谁是真正在关键题型上更强。</p>
+      </div>
+      <div class="two-col" style="margin-top:18px;">
+        <div class="table-shell">
+          <table>
+            <thead>
+              <tr>
+                <th>Brief</th>
+                <th>Baseline</th>
+                <th>官方原版</th>
+                <th>Copy</th>
+                <th>Dazhuang</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+            <tr>
+              <th>Conventional Commit</th>
+              <td class="heat-100">100</td>
+              <td class="heat-100">100</td>
+              <td class="heat-100">100</td>
+              <td class="heat-100">100</td>
+            </tr>
+            
+            <tr>
+              <th>Support Ticket Triager</th>
+              <td class="heat-low">0</td>
+              <td class="heat-100">100</td>
+              <td class="heat-85">94.67</td>
+              <td class="heat-100">100</td>
+            </tr>
+            
+            <tr>
+              <th>Command Risk Checker</th>
+              <td class="heat-low">0</td>
+              <td class="heat-100">100</td>
+              <td class="heat-100">100</td>
+              <td class="heat-100">100</td>
+            </tr>
+            
+            <tr>
+              <th>Weekly Release Notes</th>
+              <td class="heat-low">0</td>
+              <td class="heat-100">100</td>
+              <td class="heat-100">100</td>
+              <td class="heat-100">100</td>
+            </tr>
+            
+            <tr>
+              <th>Stakeholder Brief</th>
+              <td class="heat-low">0</td>
+              <td class="heat-85">86.11</td>
+              <td class="heat-70">80.55</td>
+              <td class="heat-100">100</td>
+            </tr>
+            
+            </tbody>
+          </table>
+        </div>
+        <div class="note">
+          <strong>怎么读这张表</strong>
+          <ul>
+            <li>`Conventional Commit` baseline 本来就很高，所以这一题更像“约束力检查”，不是决定性分水岭。</li>
+            <li>`Support Ticket Triager` 和 `Stakeholder Brief` 是真正拉开 creator 层次的题。</li>
+            <li>这次三版 trigger proxy 全是 100，所以最后主要拼的是下游任务语义准确率、创建成本和产物体积。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Creation Cost</p>
+        <h2>创建过程的时间和 token 成本</h2>
+        <p>如果两个版本都能做对，那更快、更省、更轻的 creator 更值得长期用。</p>
+      </div>
+      <div class="table-shell" style="margin-top:18px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Brief</th>
+              <th>官方原版</th>
+              <th>Copy</th>
+              <th>Dazhuang</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <th>Conventional Commit</th>
+              <td>78.63s / 107,390</td>
+              <td>74.23s / 103,860</td>
+              <td>70.27s / 91,593</td>
+            </tr>
+            
+            <tr>
+              <th>Support Ticket Triager</th>
+              <td>120.85s / 174,391</td>
+              <td>98.45s / 113,622</td>
+              <td>139.72s / 264,397</td>
+            </tr>
+            
+            <tr>
+              <th>Command Risk Checker</th>
+              <td>101.76s / 127,341</td>
+              <td>95.68s / 131,832</td>
+              <td>84.57s / 142,980</td>
+            </tr>
+            
+            <tr>
+              <th>Weekly Release Notes</th>
+              <td>98.61s / 132,387</td>
+              <td>72.89s / 95,011</td>
+              <td>77.82s / 129,896</td>
+            </tr>
+            
+            <tr>
+              <th>Stakeholder Brief</th>
+              <td>103.92s / 125,870</td>
+              <td>95.45s / 132,610</td>
+              <td>68.43s / 89,581</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Artifact Discipline</p>
+        <h2>产物体积、结构适配、最小化控制</h2>
+        <p>skill creator 好不好，不只看“能不能生成”，还要看“会不会把 skill 做得过胖、过散、过多余”。</p>
+      </div>
+      <div class="table-shell" style="margin-top:18px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Skill Bytes</th>
+              <th>Artifact Fit</th>
+              <th>Minimality</th>
+              <th>Validation</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <th><span class="version-dot" style="background:#5b667f;"></span>官方原版</th>
+              <td>6,613</td>
+              <td>63.33</td>
+              <td>98</td>
+              <td>100</td>
+            </tr>
+            
+            <tr>
+              <th><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</th>
+              <td>7,063</td>
+              <td>73.33</td>
+              <td>98</td>
+              <td>93</td>
+            </tr>
+            
+            <tr>
+              <th><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</th>
+              <td>4,290</td>
+              <td>80</td>
+              <td>100</td>
+              <td>98.67</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Where Points Were Lost</p>
+        <h2>不是模糊地说“差一点”，而是明确看哪里掉分</h2>
+        <p>这一块把所有非满分输出都直接列出来，方便你判断到底是你在意的问题，还是可以接受的小偏差。</p>
+      </div>
+      <div class="table-shell" style="margin-top:18px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Brief</th>
+              <th>Task</th>
+              <th>Semantic</th>
+              <th>Representative Output</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</td>
+              <td>Stakeholder Brief</td>
+              <td>ib_research</td>
+              <td>25</td>
+              <td><code class="block">## Goal
+- Clarify export limits for pro users.
+
+## Decisions
+- None
+
+## Open Questions
+- Should large exports have a hard row cap or be handled through a queue?
+
+## Next Steps
+- Priya interviews five pro customers next week.</code></td>
+            </tr>
+            
+            <tr>
+              <td><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</td>
+              <td>Stakeholder Brief</td>
+              <td>ib_research</td>
+              <td>50</td>
+              <td><code class="block">## Goal
+- Clarify export limits for pro users
+## Decisions
+- None
+## Open Questions
+- Should exports have a hard row cap or queue large exports?
+## Next Steps
+- Priya interviews 5 pro customers next week</code></td>
+            </tr>
+            
+            <tr>
+              <td><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</td>
+              <td>Stakeholder Brief</td>
+              <td>ib_research</td>
+              <td>50</td>
+              <td><code class="block">## Goal
+- Clarify export limits for pro users.
+
+## Decisions
+- None
+
+## Open Questions
+- Should large exports be hard-capped by row count or handled through a queue?
+
+## Next Steps
+- Priya interviews five pro customers next week.</code></td>
+            </tr>
+            
+            <tr>
+              <td><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</td>
+              <td>Support Ticket Triager</td>
+              <td>tt_export_blank</td>
+              <td>80</td>
+              <td><code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;export&quot;,&quot;issue_type&quot;:&quot;data_issue&quot;,&quot;customer_tier&quot;:&quot;pro&quot;,&quot;needs_human_reply&quot;:true}</code></td>
+            </tr>
+            
+            <tr>
+              <td><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</td>
+              <td>Support Ticket Triager</td>
+              <td>tt_duplicate_events</td>
+              <td>80</td>
+              <td><code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;api&quot;,&quot;issue_type&quot;:&quot;data_issue&quot;,&quot;customer_tier&quot;:&quot;enterprise&quot;,&quot;needs_human_reply&quot;:true}</code></td>
+            </tr>
+            
+            <tr>
+              <td><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</td>
+              <td>Support Ticket Triager</td>
+              <td>tt_duplicate_events</td>
+              <td>80</td>
+              <td><code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;api&quot;,&quot;issue_type&quot;:&quot;data_issue&quot;,&quot;customer_tier&quot;:&quot;enterprise&quot;,&quot;needs_human_reply&quot;:true}</code></td>
+            </tr>
+            
+            <tr>
+              <td><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</td>
+              <td>Support Ticket Triager</td>
+              <td>tt_duplicate_events</td>
+              <td>80</td>
+              <td><code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;api&quot;,&quot;issue_type&quot;:&quot;data_issue&quot;,&quot;customer_tier&quot;:&quot;enterprise&quot;,&quot;needs_human_reply&quot;:true}</code></td>
+            </tr>
+            
+            <tr>
+              <td><span class="version-dot" style="background:#5b667f;"></span>官方原版</td>
+              <td>Stakeholder Brief</td>
+              <td>ib_research</td>
+              <td>50</td>
+              <td><code class="block">## Goal
+- Clarify export limits for pro users.
+## Decisions
+- None
+## Open Questions
+- Decide whether to hard-cap rows or queue large exports.
+## Next Steps
+- Priya interviews five pro customers next week.</code></td>
+            </tr>
+            
+            <tr>
+              <td><span class="version-dot" style="background:#5b667f;"></span>官方原版</td>
+              <td>Stakeholder Brief</td>
+              <td>ib_research</td>
+              <td>50</td>
+              <td><code class="block">## Goal
+- Clarify export limits for pro users.
+## Decisions
+- None
+## Open Questions
+- Decide whether to hard-cap rows or queue large exports.
+## Next Steps
+- Priya interviews five pro customers next week.</code></td>
+            </tr>
+            
+            <tr>
+              <td><span class="version-dot" style="background:#5b667f;"></span>官方原版</td>
+              <td>Stakeholder Brief</td>
+              <td>ib_research</td>
+              <td>75</td>
+              <td><code class="block">## Goal
+- Clarify export limits for pro users.
+
+## Decisions
+- None
+
+## Open Questions
+- Should large exports be hard-capped by row count or queued?
+
+## Next Steps
+- Priya interviews 5 pro customers next week.</code></td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Boundary & Honesty</p>
+        <h2>哪些地方我不会装作“这也很权威”</h2>
+        <p>为了让这个评测不是“藏在我脑子里的主观判断”，我把方法的边界也摊开写出来。</p>
+      </div>
+      <div class="card" style="margin-top:18px;">
+        <ul><li>这不是外部机构认证的“官方标准”，而是一个内部、可复验、方法透明的对比基准。它的权威性来自方法，而不是来自我一句“我觉得”。</li><li>trigger 这一项这次是“Codex 代理判断这个 skill 应不应该触发”，不是原生运行时的真实自动触发日志回放，所以它更像 proxy check。</li><li>盲审匿名包已经生成，但这轮总排名主要基于脚本量化评分和案例核对，不是额外人工盲审打分。</li><li>baseline 是“没有 skill，直接让模型做任务”，目的是测 skill 对结构约束和工作结果的增益，不是要证明裸模型一无是处。</li></ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Source Integrity</p>
+        <h2>三个源目录有没有被改</h2>
+        <p>你要求“只做测试，千万别改这三个文件夹”。这里给你看最终的前后指纹对比结果。</p>
+      </div>
+      <div class="two-col" style="margin-top:18px;">
+        <div class="table-shell">
+          <table>
+            <thead>
+              <tr>
+                <th>Source Dir</th>
+                <th>Changed Entries</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+            <tr>
+              <th>官方原版</th>
+              <td>0</td>
+              <td>UNCHANGED</td>
+            </tr>
+            
+            <tr>
+              <th>My Skill Creator Copy</th>
+              <td>0</td>
+              <td>UNCHANGED</td>
+            </tr>
+            
+            <tr>
+              <th>Dazhuang Skill Creator</th>
+              <td>0</td>
+              <td>UNCHANGED</td>
+            </tr>
+            
+            </tbody>
+          </table>
+        </div>
+        <div class="note">
+          <strong>结论</strong><br>
+          三个源目录全都是 <strong>0 changed entries</strong>。<br>
+          所有测试产物都写在独立工作区 `benchmark_skill_creator_20260403` 里。<br><br>
+          对应证据文件：<br>
+          <code class="block">benchmark_skill_creator_20260403/manifests/source_manifest_diff.json</code>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Continue Reading</p>
+        <h2>如果你想往下钻</h2>
+        <p>下面这些文件都已经准备好。尤其建议你直接看逐题逐输出对比页。</p>
+      </div>
+      <div class="footer-paths" style="margin-top:18px;">
+        <div class="path-card"><strong>逐题对比页</strong><code class="block">benchmark_skill_creator_20260403/reports/benchmark_casebook.html</code></div>
+        <div class="path-card"><strong>主报告 JSON</strong><code class="block">benchmark_skill_creator_20260403/reports/benchmark_report.json</code></div>
+        <div class="path-card"><strong>全量运行结果</strong><code class="block">benchmark_skill_creator_20260403/reports/all_run_results.json</code></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

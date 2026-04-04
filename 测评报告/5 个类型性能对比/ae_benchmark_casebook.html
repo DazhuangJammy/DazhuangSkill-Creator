@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A-E Skill Benchmark Casebook</title>
+  <style>
+:root {
+  --bg: #efe7d8;
+  --ink: #1f2630;
+  --muted: #5f6973;
+  --paper: rgba(255,255,255,0.8);
+  --line: rgba(31, 38, 48, 0.12);
+  --shadow: 0 20px 54px rgba(29, 37, 47, 0.12);
+  --radius: 24px;
+  --gold: #d4a43f;
+  --teal: #0f766e;
+  --blue: #51627a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Avenir Next", "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(15, 118, 110, 0.10), transparent 32%),
+    radial-gradient(circle at 88% 10%, rgba(81, 98, 122, 0.10), transparent 34%),
+    linear-gradient(180deg, #f7f0e5 0%, #ebdfca 100%);
+  min-height: 100vh;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(31,38,48,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31,38,48,0.028) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.5;
+}
+.wrap {
+  width: min(1380px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 24px 0 56px;
+  position: relative;
+  z-index: 1;
+}
+.top-nav { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.top-nav a {
+  text-decoration: none;
+  color: var(--ink);
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.82);
+  box-shadow: 0 10px 26px rgba(31,38,48,0.08);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.hero, .section, .case-brief {
+  background: linear-gradient(145deg, rgba(255,255,255,0.92), rgba(255,255,255,0.68));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.78);
+  box-shadow: var(--shadow);
+  border-radius: 30px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.section, .case-brief { margin-top: 24px; }
+.hero::after, .section::after, .case-brief::after {
+  content: "";
+  position: absolute;
+  inset: auto -10% -46% 40%;
+  height: 260px;
+  background: radial-gradient(circle, rgba(15,118,110,0.10), transparent 68%);
+  pointer-events: none;
+}
+.eyebrow {
+  margin: 0 0 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  font-weight: 800;
+}
+h1, h2, h3 { margin: 0; font-family: "Baskerville", "Iowan Old Style", "Palatino Linotype", serif; letter-spacing: -0.03em; }
+h1 { font-size: clamp(38px, 6vw, 74px); line-height: 0.95; }
+h2 { font-size: clamp(28px, 4vw, 42px); line-height: 0.98; }
+h3 { font-size: 24px; }
+p { margin: 0; }
+.hero-grid, .two-col, .three-col, .four-col { display: grid; gap: 18px; }
+.hero-grid { grid-template-columns: 1.15fr 0.85fr; align-items: end; }
+.two-col { grid-template-columns: 1.1fr 0.9fr; align-items: start; }
+.three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.four-col { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hero-copy p, .section-copy p, .small, li { color: var(--muted); line-height: 1.7; }
+.hero-copy .lead { margin-top: 18px; max-width: 68ch; }
+.hero-copy .callout { margin-top: 18px; padding-left: 16px; border-left: 4px solid var(--gold); }
+.signal {
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(31,38,48,0.94);
+  color: #f8f1e4;
+}
+.signal .label { display: block; margin-bottom: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; opacity: 0.72; }
+.signal strong { display: block; font-size: 28px; line-height: 1; }
+.signal small { display: block; margin-top: 10px; line-height: 1.55; color: rgba(248,241,228,0.72); }
+.card, .version-card, .weight-card, .path-card, .output-card, .brief-card {
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.version-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.88), rgba(255,255,255,0.58)), linear-gradient(180deg, var(--accent-soft), transparent);
+  border: 1px solid rgba(255,255,255,0.75);
+  position: relative;
+  overflow: hidden;
+}
+.version-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: var(--accent);
+}
+.version-head, .case-task-head, .output-card header, .metric-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+.rank-badge, .pill, .score-badge {
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  background: rgba(31,38,48,0.08);
+}
+.rank-badge { background: var(--accent); color: #fff; min-width: 72px; text-align: center; }
+.metric-grid, .mini-grid, .weight-grid, .output-grid { display: grid; gap: 12px; }
+.metric-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.weight-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.output-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.metric, .mini-grid div {
+  border-radius: 16px;
+  padding: 12px 13px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(31,38,48,0.07);
+}
+.metric span, .mini-grid span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.metric strong, .mini-grid strong { font-size: 22px; }
+.table-wrap { overflow: auto; border-radius: 22px; border: 1px solid rgba(31,38,48,0.08); background: rgba(255,255,255,0.7); }
+table { width: 100%; border-collapse: collapse; min-width: 760px; }
+th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid rgba(31,38,48,0.08); vertical-align: top; }
+th { background: rgba(31,38,48,0.04); font-size: 13px; }
+tr:last-child td { border-bottom: 0; }
+.version-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:8px; }
+.code, code.block {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  background: rgba(31,38,48,0.94);
+  color: #f7f1e7;
+  border-radius: 18px;
+  padding: 16px;
+}
+ul { margin: 0; padding-left: 18px; }
+.case-task { margin-top: 18px; }
+.case-task + .case-task { margin-top: 18px; }
+.case-submeta { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 16px; margin-top: 14px; }
+.expected-box { border-radius: 18px; padding: 16px; background: rgba(255,255,255,0.72); border: 1px solid rgba(31,38,48,0.08); }
+@media (max-width: 1180px) {
+  .hero-grid, .two-col, .three-col, .four-col, .weight-grid, .metric-grid, .output-grid, .case-submeta { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .wrap { width: min(100vw - 20px, 100%); }
+  .hero, .section, .case-brief { padding: 18px; border-radius: 22px; }
+  .hero-grid, .two-col, .three-col, .four-col, .weight-grid, .metric-grid, .output-grid, .case-submeta { grid-template-columns: 1fr; }
+  table { min-width: 0; }
+}
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="top-nav"><a href="ae_benchmark_dashboard.html">总览 Dashboard</a><a href="ae_benchmark_casebook.html">逐题对比 Casebook</a></nav>
+    
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Representative Outputs / Repeat 1 Views / Score = 3-Repeat Average</p>
+          <h1>逐题并排看，
+          才知道差距到底出在哪。</h1>
+          <p class="lead callout">这里不是只看总分，而是把每个类型、每个任务、每个版本的代表输出并排摆开。这样你能直接看到：差距到底来自结构、速度、脚本闭环，还是下游结果本身。</p>
+          <p class="lead">对比成立的前提也很清楚：同一个 brief、同一个 task、同一份 frozen 输入、同一个评分规则、同一模型、同一台机器。这里只换 creator，不换题。</p>
+        </div>
+        <div class="three-col">
+          <div class="signal"><span class="label">比较对象</span><strong>官方原版 vs 大壮版</strong><small>不掺第三版。</small></div>
+          <div class="signal"><span class="label">展示方式</span><strong>代表输出</strong><small>页面里展示 repeat 1；分数显示 3 次平均。</small></div>
+          <div class="signal"><span class="label">任务数</span><strong>23</strong><small>五类题型的全部下游任务都在这里展开。</small></div>
+        </div>
+      </div>
+    </section>
+    
+        <section class="case-brief" id="xiaohongshu_copywriter">
+          <div class="two-col">
+            <div>
+              <p class="eyebrow">Benchmark Brief</p>
+              <h2>A 类｜小红书文案型</h2>
+              <p class="small" style="margin-top:14px;"><strong>测什么：</strong>测提示词、reference、模板资产的组织能力，以及内容型 skill 的上岗质量。</p>
+              <p class="small" style="margin-top:10px;"><strong>为什么这类必须单列：</strong>这是最贴近真实业务的一类。它不只是测会不会写提示词，还测 creator 能不能把平台风格、禁忌词、固定格式、素材约束组织成可复用 skill。</p>
+              <p class="small" style="margin-top:10px;"><strong>这类怎么打分：</strong>格式分看标题/正文/标签结构、标签数量和正文约束；语义分看场景贴合、至少 2 个已确认事实或等义表达、轻 CTA / 软下一步，以及是否出现未被允许的正向夸张。这里不按逐字词表卡分，否定式引用禁写词也不算违规。</p>
+            </div>
+            <div class="three-col">
+            <div class="card">
+              <strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong>
+              <p class="small">平均语义准确率：<strong>100.0</strong></p>
+              <p class="small">平均创建耗时：<strong>121.16s</strong></p>
+              <p class="small">平均创建 token：<strong>145370.0</strong></p>
+            </div>
+            
+            <div class="card">
+              <strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong>
+              <p class="small">平均语义准确率：<strong>100.0</strong></p>
+              <p class="small">平均创建耗时：<strong>97.47s</strong></p>
+              <p class="small">平均创建 token：<strong>148046.33</strong></p>
+            </div>
+            </div>
+          </div>
+          
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task xhs_commute_mom</p>
+                  <strong>请按约定格式，给“果秒轻榨杯”写一篇小红书种草文，面向早八通勤宝妈。一定要像真实分享，不要硬广。</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这是最贴近真实业务的一类。它不只是测会不会写提示词，还测 creator 能不能把平台风格、禁忌词、固定格式、素材约束组织成可复用 skill。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看标题/正文/标签结构、标签数量和正文约束；语义分看场景贴合、至少 2 个已确认事实或等义表达、轻 CTA / 软下一步，以及是否出现未被允许的正向夸张。这里不按逐字词表卡分，否定式引用禁写词也不算违规。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;must_include_groups&quot;: [
+    [
+      &quot;18秒&quot;,
+      &quot;18 秒&quot;
+    ],
+    [
+      &quot;USB-C&quot;,
+      &quot;Type-C&quot;,
+      &quot;USB C&quot;
+    ],
+    [
+      &quot;450ml&quot;,
+      &quot;450 ml&quot;
+    ],
+    [
+      &quot;通勤&quot;,
+      &quot;早八&quot;,
+      &quot;出门&quot;
+    ]
+  ],
+  &quot;must_include_any&quot;: [
+    [
+      &quot;收藏&quot;,
+      &quot;想试试&quot;,
+      &quot;准备继续用&quot;,
+      &quot;先记下&quot;
+    ]
+  ],
+  &quot;must_exclude&quot;: [
+    &quot;最便宜&quot;,
+    &quot;保证瘦&quot;,
+    &quot;医用级&quot;,
+    &quot;100%不漏&quot;
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 66.67</span></header>
+                  <code class="block">标题：早八通勤宝妈，最近真的离不开这个轻榨杯
+
+正文：
+最近早上真的像打仗一样。
+先叫娃起床、换衣服、收拾书包，再给自己留5分钟洗漱，很多时候根本顾不上好好吃早餐。
+
+我现在会前一晚把水果切好放冰箱，早上顺手装进果秒轻榨杯，像香蕉+草莓、苹果+酸奶这种都很省事。出门前带上，送完娃再去公司路上慢慢喝，至少比空着肚子硬撑舒服很多。
+
+我喜欢它的一点是，不用另外找很复杂的步骤，忙的时候也愿意用。杯子大小对通勤来说比较友好，放包里不会太占地方，喝完直接带去公司冲一下也方便。
+
+对我这种早八通勤宝妈来说，它不是那种“用了人生立刻改变”的东西，但确实是能让我早上少一点慌乱的小帮手。尤其是来不及坐下吃早餐的时候，随手带一杯，心里会踏实很多。
+
+如果你也总是早上赶时间，又想尽量给自己补一点水果，这种轻松不费脑的方式还挺适合的。
+
+标签：
+#早八通勤 #宝妈日常 #早餐灵感 #通勤好物 #果秒轻榨杯 #上班族日常 #小家电分享</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">标题
+早八通勤宝妈，我最近出门前会顺手带上这个轻榨杯
+
+正文
+最近早上真的像打仗，叫娃、收拾自己、还得赶通勤，能少一步都很重要。我这阵子会提前把水果备好，出门前简单处理一下，差不多约18秒就能喝，节奏上不会太拖。
+
+它是450ml，对我这种早八通勤来说刚刚好，不会太占包。USB-C充电这点我也挺喜欢，平时放办公室顺手补电就行。不是那种很夸张的“神器”，但在忙乱早晨里，确实让我省心一点，我准备继续用一阵子看看。
+
+标签
+#早八通勤宝妈 #通勤早餐灵感 #果秒轻榨杯 #带娃日常 #上班路上</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">标题
+早八通勤宝妈真的会想把这种省事杯子放包里
+
+正文
+最近早上出门前最怕的就是又要顾孩子、又要顾自己吃没吃好。
+我现在会提前把水果切好，早上直接用果秒轻榨杯打一杯带走，差不多18秒就能搞定，对早八真的很友好。
+它是450ml，我自己喝一杯刚刚好，不会太多也不会占位置。杯子大概680g，放通勤包里我能接受，拎着出门不会觉得特别累。
+还有一点我挺喜欢，杯体能拆开洗，回到公司简单一冲，收拾起来没那么麻烦。
+对我这种早上永远赶时间的宝妈来说，重点不是多厉害，就是省一步是一点。先放进通勤清单了。
+
+标签
+#早八通勤 #宝妈日常 #果秒轻榨杯 #省事早餐 #通勤好物</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task xhs_office_refresh</p>
+                  <strong>请按约定格式，写一篇办公室下午加餐场景的小红书文案，重点让人感觉轻松、不费事。</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这是最贴近真实业务的一类。它不只是测会不会写提示词，还测 creator 能不能把平台风格、禁忌词、固定格式、素材约束组织成可复用 skill。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看标题/正文/标签结构、标签数量和正文约束；语义分看场景贴合、至少 2 个已确认事实或等义表达、轻 CTA / 软下一步，以及是否出现未被允许的正向夸张。这里不按逐字词表卡分，否定式引用禁写词也不算违规。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;must_include_groups&quot;: [
+    [
+      &quot;680g&quot;,
+      &quot;680 克&quot;
+    ],
+    [
+      &quot;可拆洗&quot;,
+      &quot;一冲就净&quot;,
+      &quot;好清洗&quot;
+    ],
+    [
+      &quot;办公室&quot;,
+      &quot;工位&quot;,
+      &quot;下午&quot;
+    ]
+  ],
+  &quot;must_include_any&quot;: [
+    [
+      &quot;收藏&quot;,
+      &quot;改天试试&quot;,
+      &quot;我会继续用&quot;,
+      &quot;先放进清单&quot;
+    ]
+  ],
+  &quot;must_exclude&quot;: [
+    &quot;最便宜&quot;,
+    &quot;保证瘦&quot;,
+    &quot;医用级&quot;,
+    &quot;100%不漏&quot;
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 50.00</span></header>
+                  <code class="block">标题：办公室下午饿了，我现在都这么随手加一餐
+
+正文：
+以前下午三四点一饿，就特别想点奶茶配小零食，吃完整个人更困。
+现在我会在办公室备一点水果，像苹果、蓝莓、橙子这种，想吃的时候直接放进果秒轻榨杯里，几分钟就能弄好，基本不用费什么事。
+
+我很喜欢这种“不需要专门准备”的感觉。
+不是那种很有仪式感的健康生活，就是忙工作间隙，也能顺手给自己加一杯，嘴巴不空，胃里也舒服一点。
+
+而且它对办公室场景很友好：不折腾、不占地方，喝完简单冲一下就行。对我这种懒得复杂操作的人来说，使用门槛很低，所以反而更容易坚持。
+
+下午加餐这件事，真的越轻松越容易做到。如果你也想找一种没负担、没压力的方式补点水果，这种方法我觉得还挺适合上班族的。
+
+标签：
+#办公室日常 #下午加餐 #上班族好物 #轻松生活 #果秒轻榨杯 #水果补给 #懒人友好</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">标题
+办公室下午饿了，我现在的加餐方式省事很多
+
+正文
+下午三四点那阵子最容易又累又想找点东西吃，但我又不想把加餐弄得太麻烦。最近放在工位上的果秒轻榨杯，我觉得就是那种用起来没负担的小东西，想喝的时候弄一下，不用折腾很久。
+
+它大概680g，拿去茶水间再拿回来也不算费劲，杯体还能拆洗，冲一冲做基础清洁就差不多了。对办公室场景来说，这种“轻松、不费事”比什么花哨功能更重要，先收藏这个下午加餐思路。
+
+标签
+#办公室下午加餐 #工位好物 #果秒轻榨杯 #轻松吃点好的 #上班族日常</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">标题
+办公室下午饿了，我现在加餐尽量走省事路线
+
+正文
+下午三四点那阵子，我最怕加餐这件事还要折腾。
+最近工位上会带果秒轻榨杯，水果提前备一点，想喝的时候打一下，差不多18秒就能喝上，整个过程很轻松。
+450ml对办公室下午加餐来说刚好，喝完不会太撑。用完后杯体能拆洗，去茶水间简单冲一冲，收尾也不费事。
+而且它是USB-C充电，平时跟别的设备一起充就行，不用另外记一堆线。
+对我来说，这种不费脑子、不费手的加餐方式，下午真的舒服很多。准备继续用。
+
+标签
+#办公室加餐 #下午茶灵感 #果秒轻榨杯 #省事好物 #工位日常</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task xhs_fix_bad_draft</p>
+                  <strong>请按约定格式，重写下面这段失败草稿，保留真实分享感，但把所有夸张失实内容都去掉：
+“这杯子简直医用级，100%不漏，7天瘦5斤，通勤随便摇两下就能当代餐。”</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这是最贴近真实业务的一类。它不只是测会不会写提示词，还测 creator 能不能把平台风格、禁忌词、固定格式、素材约束组织成可复用 skill。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看标题/正文/标签结构、标签数量和正文约束；语义分看场景贴合、至少 2 个已确认事实或等义表达、轻 CTA / 软下一步，以及是否出现未被允许的正向夸张。这里不按逐字词表卡分，否定式引用禁写词也不算违规。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;must_include_groups&quot;: [
+    [
+      &quot;18秒&quot;,
+      &quot;18 秒&quot;
+    ],
+    [
+      &quot;450ml&quot;,
+      &quot;450 ml&quot;
+    ],
+    [
+      &quot;通勤&quot;,
+      &quot;出门&quot;,
+      &quot;早八&quot;
+    ]
+  ],
+  &quot;must_include_any&quot;: [
+    [
+      &quot;收藏&quot;,
+      &quot;想试试&quot;,
+      &quot;继续用&quot;,
+      &quot;先记下&quot;
+    ]
+  ],
+  &quot;must_exclude&quot;: [
+    &quot;医用级&quot;,
+    &quot;100%不漏&quot;,
+    &quot;7天瘦5斤&quot;,
+    &quot;代餐&quot;
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 41.67</span></header>
+                  <code class="block">标题：通勤路上随手带一杯，确实方便很多
+
+正文：
+一开始我也是图省事入的果秒轻榨杯，用下来最大的感受就是：忙的时候真的很方便。
+
+我一般会提前准备点水果，早上出门前装好，带去公司或者路上喝，至少不用空着肚子赶地铁。它对我来说更像是一个让补充水果这件事变简单的小工具，而不是什么“神奇代餐”。
+
+实际用下来，日常通勤、办公室加餐这些场景都挺合适，带着不算麻烦，清洗也还算省事。像我这种早上总赶时间的人，会觉得这种顺手就能完成的小步骤比较友好。
+
+如果你也只是想在忙碌的时候让吃水果这件事更方便一点，可以看看这种轻榨杯；但还是按自己的饮食节奏来，别指望靠它解决所有问题。
+
+标签：
+#真实分享 #通勤日常 #办公室加餐 #果秒轻榨杯 #自用感受 #理性种草</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">标题
+通勤赶时间时，我更喜欢这种不夸张但顺手的准备方式
+
+正文
+早上赶着出门的时候，我现在会提前备一点水果，想喝的时候用果秒轻榨杯简单处理一下，节奏不会被打乱太多。比起说什么“代餐”或者特别厉害的效果，我更在意的是它用起来是不是省事。
+
+差不多约18秒就能做好一杯，450ml对通勤路上也够喝了。它更像是让我早上多一个方便补充水果的选择，不是神奇用品，但日常用着还挺顺手，准备继续这么搭配下去。
+
+标签
+#通勤日常 #真实分享向 #果秒轻榨杯 #早餐准备灵感</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">标题
+通勤路上想喝点水果，还是更适合这种省事做法
+
+正文
+我现在通勤前如果想带点水果，通常会选更省事的方式。
+像果秒轻榨杯这种，我会提前准备好食材，出门前打一下，差不多18秒就能完成，比较适合赶时间的时候。
+450ml对我来说是一人份刚刚好，带着走也比较顺手。用完后杯体能拆开洗，简单冲一冲，后面收拾不会太麻烦。
+我更在意的是日常用起来方便，而不是夸张的效果。适合像我这样想让通勤补充水果这件事变简单一点的人，先收藏。
+
+标签
+#通勤日常 #真实分享 #果秒轻榨杯 #水果补充 #省事生活</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task xhs_weekend_trip</p>
+                  <strong>请按约定格式，写一篇周末短途出行场景的小红书文案，强调带着不累、补充水果很方便。</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这是最贴近真实业务的一类。它不只是测会不会写提示词，还测 creator 能不能把平台风格、禁忌词、固定格式、素材约束组织成可复用 skill。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看标题/正文/标签结构、标签数量和正文约束；语义分看场景贴合、至少 2 个已确认事实或等义表达、轻 CTA / 软下一步，以及是否出现未被允许的正向夸张。这里不按逐字词表卡分，否定式引用禁写词也不算违规。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;must_include_groups&quot;: [
+    [
+      &quot;周末&quot;,
+      &quot;短途&quot;,
+      &quot;出行&quot;
+    ],
+    [
+      &quot;450ml&quot;,
+      &quot;450 ml&quot;
+    ],
+    [
+      &quot;USB-C&quot;,
+      &quot;Type-C&quot;,
+      &quot;USB C&quot;
+    ]
+  ],
+  &quot;must_include_any&quot;: [
+    [
+      &quot;收藏&quot;,
+      &quot;下次带上&quot;,
+      &quot;准备继续带着&quot;,
+      &quot;先放清单&quot;
+    ]
+  ],
+  &quot;must_exclude&quot;: [
+    &quot;最便宜&quot;,
+    &quot;保证瘦&quot;,
+    &quot;医用级&quot;,
+    &quot;100%不漏&quot;
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 75.00</span></header>
+                  <code class="block">标题：周末短途出门，我包里会顺手带上这个轻榨杯
+
+正文：
+最近周末经常安排那种半天到一天的短途出行，不想背太多东西，但又总想路上吃得清爽一点。
+
+果秒轻榨杯是我现在挺常带的一个小东西，主要是因为拿着不累，放包里也不会有太大负担。像去公园、近郊散步、周边一日游，我会提前装点水果，或者到了地方顺手买点现成水果放进去，想喝的时候就很方便。
+
+对我来说，它特别适合“懒得准备太复杂，但又想补点水果”的场景。不用专门找地方坐下来慢慢吃，走走停停的时候也能比较轻松地解决。
+
+而且周末出门本来就想轻装一点，东西越简单越好。它不是必需品，但如果你和我一样，喜欢短途出行时带点轻便又实用的小东西，这个使用感还不错。
+
+标签：
+#周末出行 #短途旅行 #包里常备 #果秒轻榨杯 #轻装出门 #水果补给 #生活小物</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">标题
+周末短途出门，我会顺手带上这个轻榨杯
+
+正文
+周末出去走走的时候，我现在会更想带那种不累赘、用完也不用太费心收拾的东西。果秒轻榨杯这点还挺对我胃口，拿着出门不算有负担，短途带上刚刚好。
+
+450ml的容量对半天到一天的小出行挺合适，想补点水果也方便，不用特意找店买。USB-C充电也比较省心，出门前补一下电就行。不是为了多高级，就是想让路上吃喝简单一点，感觉还蛮实用的，改天出门我应该还会带。
+
+标签
+#周末短途出行 #出门随手带 #果秒轻榨杯 #水果补充方便 #轻便出行</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">标题
+周末短途出门，我会带这种不太折腾的轻榨杯
+
+正文
+周末短途出行，我最看重的其实不是装备多全，而是带着别太累、路上补充水果方便一点。
+果秒轻榨杯这点还挺符合我的习惯，680g的重量我单手拿或者放包里都还行，不会为了带它额外有负担。
+它是450ml，一路上自己喝基本够用。想喝的时候打一下，大概18秒就能做好，不用专门找店买。要是回到住的地方或者到家，杯体还能拆洗，清理也省事。
+对短途出门来说，这种随手带、随手用的小东西反而很实在。已经被我放进周末出行包了。
+
+标签
+#周末出行 #短途旅行 #果秒轻榨杯 #轻松带着走 #水果补充</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task xhs_gym_recovery</p>
+                  <strong>请按约定格式，写一篇健身后补充场景的小红书文案，要有一点自我感受，但不能编造减脂效果。</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这是最贴近真实业务的一类。它不只是测会不会写提示词，还测 creator 能不能把平台风格、禁忌词、固定格式、素材约束组织成可复用 skill。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看标题/正文/标签结构、标签数量和正文约束；语义分看场景贴合、至少 2 个已确认事实或等义表达、轻 CTA / 软下一步，以及是否出现未被允许的正向夸张。这里不按逐字词表卡分，否定式引用禁写词也不算违规。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;must_include_groups&quot;: [
+    [
+      &quot;健身&quot;,
+      &quot;训练&quot;,
+      &quot;运动后&quot;
+    ],
+    [
+      &quot;18秒&quot;,
+      &quot;18 秒&quot;
+    ],
+    [
+      &quot;450ml&quot;,
+      &quot;450 ml&quot;
+    ]
+  ],
+  &quot;must_include_any&quot;: [
+    [
+      &quot;收藏&quot;,
+      &quot;下次训练后&quot;,
+      &quot;准备继续喝&quot;,
+      &quot;先试一周&quot;
+    ]
+  ],
+  &quot;must_exclude&quot;: [
+    &quot;减脂&quot;,
+    &quot;保证瘦&quot;,
+    &quot;医用级&quot;,
+    &quot;100%不漏&quot;
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 58.33</span></header>
+                  <code class="block">标题：运动完不想吃太撑，我会给自己准备这一杯
+
+正文：
+最近运动后，我越来越喜欢那种“补一点就好”的感觉。
+以前练完常常不知道该吃什么，太油太重不想碰，什么都不吃又觉得空。
+
+现在我会在健身后用果秒轻榨杯做点简单的水果搭配，有时候是香蕉配牛奶，有时候是蓝莓加酸奶，喝起来比较顺口，人也会舒服一点。
+
+我喜欢它的原因不是因为有什么夸张效果，而是运动完状态比较累的时候，这种方式真的省事。带着方便，操作也简单，不用再额外折腾半天。
+
+对我来说，它更像是健身后一个轻松的小补充，让自己从训练状态慢慢缓过来。尤其是下班后去运动、结束已经很晚的时候，这种不费劲的感觉还挺重要的。
+
+如果你也和我一样，运动后更想要一点轻负担、好入口的补充方式，可以试试这种简单做法。
+
+标签：
+#健身打卡 #运动后补充 #自用分享 #果秒轻榨杯 #轻松补给 #日常健身 #真实感受</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">标题
+练完顺手补点水果，这个轻榨杯最近用得挺勤
+
+正文
+我现在训练完不会立刻想吃很重的东西，反而更想先补点清爽一点的。最近会用果秒轻榨杯做个简单的水果饮，练完那会儿喝着比较舒服，整个人也能慢慢缓下来。
+
+我喜欢它差不多约18秒就能做好，不用等太久，450ml对我一次补充来说也够了。用完还能拆洗，收拾起来不麻烦。它对我来说就是一个让训练后补充水果更方便的小工具，没有什么夸张效果，但用着体验还不错，先记下来。
+
+标签
+#健身后补充 #训练后日常 #果秒轻榨杯 #水果补充方便 #运动生活</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">标题
+训练后想补充点水果，我更喜欢这种不费劲的方式
+
+正文
+最近运动完，我会更想快点补充一点清爽的东西，不想再额外折腾。
+果秒轻榨杯我现在带去健身房的频率还挺高，提前装好水果，练完打一下，差不多18秒就能喝，整个人会觉得更顺一点。
+450ml对我来说很合适，运动后喝着没负担。平时充电也是USB-C，和日常设备共用线就行，带出去省心不少。
+我喜欢的不是它有多神奇，而是训练后这一步变简单了，自己也更愿意坚持补充点水果。想试试这种路线的可以先放清单。
+
+标签
+#健身后补充 #运动日常 #果秒轻榨杯 #真实使用感 #轻松补充</code>
+                </article>
+              </div>
+            </section>
+            
+        </section>
+        
+        <section class="case-brief" id="structured_ticket_triager">
+          <div class="two-col">
+            <div>
+              <p class="eyebrow">Benchmark Brief</p>
+              <h2>B 类｜结构化输出型</h2>
+              <p class="small" style="margin-top:14px;"><strong>测什么：</strong>测严格 JSON schema 约束、边界样本稳定性、可维护配置意识。</p>
+              <p class="small" style="margin-top:10px;"><strong>为什么这类必须单列：</strong>这是最客观的一类，可以直接校准 creator 有没有把 skill 做成“能执行的规约”，而不是漂亮说明文。</p>
+              <p class="small" style="margin-top:10px;"><strong>这类怎么打分：</strong>格式分看 JSON 可解析和 key 完整；语义分看每个字段是否精确命中。</p>
+            </div>
+            <div class="three-col">
+            <div class="card">
+              <strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong>
+              <p class="small">平均语义准确率：<strong>100.0</strong></p>
+              <p class="small">平均创建耗时：<strong>123.4s</strong></p>
+              <p class="small">平均创建 token：<strong>143480.67</strong></p>
+            </div>
+            
+            <div class="card">
+              <strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong>
+              <p class="small">平均语义准确率：<strong>100.0</strong></p>
+              <p class="small">平均创建耗时：<strong>121.03s</strong></p>
+              <p class="small">平均创建 token：<strong>187367.0</strong></p>
+            </div>
+            </div>
+          </div>
+          
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task triage_login_outage</p>
+                  <strong>Ticket: Enterprise customer cannot log in after today&#x27;s SSO certificate rotation. All EU users are blocked. They need help before their board meeting in 45 minutes.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这是最客观的一类，可以直接校准 creator 有没有把 skill 做成“能执行的规约”，而不是漂亮说明文。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看 JSON 可解析和 key 完整；语义分看每个字段是否精确命中。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;severity&quot;: &quot;sev1&quot;,
+  &quot;product_area&quot;: &quot;auth&quot;,
+  &quot;issue_type&quot;: &quot;outage&quot;,
+  &quot;customer_tier&quot;: &quot;enterprise&quot;,
+  &quot;needs_human_reply&quot;: true,
+  &quot;response_sla&quot;: &quot;15m&quot;
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 0.00</span></header>
+                  <code class="block">Hi — this is urgent, and we’re treating it as a high-priority login outage.
+
+Because the issue started immediately after today’s SSO certificate rotation and is blocking all EU users, please do these checks right away with your identity provider/admin team:
+- Confirm the new SSO signing certificate was uploaded completely and is now the active certificate in your SSO configuration.
+- Verify the certificate fingerprint/thumbprint matches the one currently presented by your IdP.
+- If your IdP supports multiple active certs, make sure the newly rotated cert is included and the old one is not the only active signing cert.
+- Confirm the SAML metadata/SSO settings were re-saved after rotation.
+
+To help restore access as fast as possible, please send:
+- Your organization name / tenant name
+- Approximate time the failures began
+- One affected user email
+- Any SAML error message or failed login screenshot
+- Whether all EU users are affected or only SSO-enforced users
+
+If you have a break-glass local admin login or a non-SSO admin account, use that for immediate access before the board meeting.
+
+This should be escalated to the on-call identity/auth team immediately as a Sev-1 customer outage.</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;severity&quot;:&quot;sev1&quot;,&quot;product_area&quot;:&quot;auth&quot;,&quot;issue_type&quot;:&quot;outage&quot;,&quot;customer_tier&quot;:&quot;enterprise&quot;,&quot;needs_human_reply&quot;:true,&quot;response_sla&quot;:&quot;15m&quot;}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;severity&quot;:&quot;sev1&quot;,&quot;product_area&quot;:&quot;auth&quot;,&quot;issue_type&quot;:&quot;outage&quot;,&quot;customer_tier&quot;:&quot;enterprise&quot;,&quot;needs_human_reply&quot;:true,&quot;response_sla&quot;:&quot;15m&quot;}</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task triage_export_bug</p>
+                  <strong>Ticket: Pro account says CSV export adds duplicate rows only when the report contains archived projects. Workaround exists: unarchive, export, archive again.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这是最客观的一类，可以直接校准 creator 有没有把 skill 做成“能执行的规约”，而不是漂亮说明文。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看 JSON 可解析和 key 完整；语义分看每个字段是否精确命中。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;severity&quot;: &quot;sev2&quot;,
+  &quot;product_area&quot;: &quot;reporting&quot;,
+  &quot;issue_type&quot;: &quot;bug&quot;,
+  &quot;customer_tier&quot;: &quot;pro&quot;,
+  &quot;needs_human_reply&quot;: true,
+  &quot;response_sla&quot;: &quot;4h&quot;
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 0.00</span></header>
+                  <code class="block">Thanks for reporting this. The behavior you described points to a product bug tied to archived projects being included in CSV exports.
+
+Current workaround:
+- Unarchive the affected projects
+- Run the CSV export
+- Archive them again
+
+Please send the following so this can be fixed faster:
+- Report name or type
+- Approximate row count before/after duplication
+- A sample export showing duplicates
+- Confirmation that duplicates happen only when archived projects are included
+
+Severity appears moderate: export is incorrect, but there is a viable workaround. This should be filed for the product/engineering team with the workaround noted clearly so support can unblock users in the meantime.</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;reporting&quot;,&quot;issue_type&quot;:&quot;bug&quot;,&quot;customer_tier&quot;:&quot;pro&quot;,&quot;needs_human_reply&quot;:true,&quot;response_sla&quot;:&quot;4h&quot;}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;reporting&quot;,&quot;issue_type&quot;:&quot;bug&quot;,&quot;customer_tier&quot;:&quot;pro&quot;,&quot;needs_human_reply&quot;:true,&quot;response_sla&quot;:&quot;4h&quot;}</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task triage_howto</p>
+                  <strong>Ticket: Free user asks where to change notification settings for weekly summaries. No error, just confusion.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这是最客观的一类，可以直接校准 creator 有没有把 skill 做成“能执行的规约”，而不是漂亮说明文。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看 JSON 可解析和 key 完整；语义分看每个字段是否精确命中。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;severity&quot;: &quot;sev4&quot;,
+  &quot;product_area&quot;: &quot;notifications&quot;,
+  &quot;issue_type&quot;: &quot;how_to&quot;,
+  &quot;customer_tier&quot;: &quot;free&quot;,
+  &quot;needs_human_reply&quot;: false,
+  &quot;response_sla&quot;: &quot;72h&quot;
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 0.00</span></header>
+                  <code class="block">You can change weekly summary notification settings from your account notification preferences.
+
+Try this path:
+- Open your profile/avatar menu
+- Go to `Settings`
+- Select `Notifications`
+- Look for the `Weekly summary` email option and turn it on or off
+
+If you don’t see that option, check any separate `Email preferences` section in settings.
+
+If you want, send a screenshot of the settings menu you see and I can point you to the exact place.</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;severity&quot;:&quot;sev4&quot;,&quot;product_area&quot;:&quot;notifications&quot;,&quot;issue_type&quot;:&quot;how_to&quot;,&quot;customer_tier&quot;:&quot;free&quot;,&quot;needs_human_reply&quot;:false,&quot;response_sla&quot;:&quot;72h&quot;}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;severity&quot;:&quot;sev4&quot;,&quot;product_area&quot;:&quot;notifications&quot;,&quot;issue_type&quot;:&quot;how_to&quot;,&quot;customer_tier&quot;:&quot;free&quot;,&quot;needs_human_reply&quot;:false,&quot;response_sla&quot;:&quot;72h&quot;}</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task triage_billing_risk</p>
+                  <strong>Ticket: Growth-plan admin was charged twice after adding 12 seats. They are threatening to cancel if billing is not corrected today.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这是最客观的一类，可以直接校准 creator 有没有把 skill 做成“能执行的规约”，而不是漂亮说明文。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看 JSON 可解析和 key 完整；语义分看每个字段是否精确命中。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;severity&quot;: &quot;sev2&quot;,
+  &quot;product_area&quot;: &quot;billing&quot;,
+  &quot;issue_type&quot;: &quot;billing&quot;,
+  &quot;customer_tier&quot;: &quot;growth&quot;,
+  &quot;needs_human_reply&quot;: true,
+  &quot;response_sla&quot;: &quot;4h&quot;
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 0.00</span></header>
+                  <code class="block">I’m sorry about the double charge — that’s understandable frustration, and this should be reviewed today.
+
+Please reply with:
+- The account/org name
+- Billing email
+- Invoice or charge IDs for both charges
+- Date the 12 seats were added
+- A screenshot of the billing page showing the duplicate charge, if available
+
+What likely happened is that a seat adjustment and a renewal/proration were both billed, but billing needs to confirm whether the second charge was valid or erroneous.
+
+Next step:
+- Escalate this to Billing today as high priority because the customer is threatening cancellation.
+- Ask Billing to confirm whether one charge should be refunded or credited and provide the customer a same-day update.
+
+Suggested customer reply:
+“We’re sorry for the billing issue. We’re reviewing the two charges urgently today and will follow up as soon as billing confirms whether a refund or account credit is needed.”</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;billing&quot;,&quot;issue_type&quot;:&quot;billing&quot;,&quot;customer_tier&quot;:&quot;growth&quot;,&quot;needs_human_reply&quot;:true,&quot;response_sla&quot;:&quot;4h&quot;}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;billing&quot;,&quot;issue_type&quot;:&quot;billing&quot;,&quot;customer_tier&quot;:&quot;growth&quot;,&quot;needs_human_reply&quot;:true,&quot;response_sla&quot;:&quot;4h&quot;}</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task triage_feature_gap</p>
+                  <strong>Ticket: Starter customer asks whether audit logs are available. They are evaluating an upgrade next quarter and just want the current answer.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这是最客观的一类，可以直接校准 creator 有没有把 skill 做成“能执行的规约”，而不是漂亮说明文。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看 JSON 可解析和 key 完整；语义分看每个字段是否精确命中。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;severity&quot;: &quot;sev4&quot;,
+  &quot;product_area&quot;: &quot;security&quot;,
+  &quot;issue_type&quot;: &quot;feature_request&quot;,
+  &quot;customer_tier&quot;: &quot;starter&quot;,
+  &quot;needs_human_reply&quot;: false,
+  &quot;response_sla&quot;: &quot;72h&quot;
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 0.00</span></header>
+                  <code class="block">Audit logs are not available on the Starter plan.
+
+If you’re evaluating an upgrade next quarter, the best next step is to check the plan comparison or talk with sales/support to confirm which higher-tier plan includes audit logs for your account type.
+
+If you want, I can help draft a short upgrade inquiry message.</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;severity&quot;:&quot;sev4&quot;,&quot;product_area&quot;:&quot;security&quot;,&quot;issue_type&quot;:&quot;feature_request&quot;,&quot;customer_tier&quot;:&quot;starter&quot;,&quot;needs_human_reply&quot;:false,&quot;response_sla&quot;:&quot;72h&quot;}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;severity&quot;:&quot;sev4&quot;,&quot;product_area&quot;:&quot;security&quot;,&quot;issue_type&quot;:&quot;feature_request&quot;,&quot;customer_tier&quot;:&quot;starter&quot;,&quot;needs_human_reply&quot;:false,&quot;response_sla&quot;:&quot;72h&quot;}</code>
+                </article>
+              </div>
+            </section>
+            
+        </section>
+        
+        <section class="case-brief" id="research_browser">
+          <div class="two-col">
+            <div>
+              <p class="eyebrow">Benchmark Brief</p>
+              <h2>C 类｜工具/调研型</h2>
+              <p class="small" style="margin-top:14px;"><strong>测什么：</strong>测 creator 会不会让 skill 去看源文件、组织证据、附来源、避免瞎总结。</p>
+              <p class="small" style="margin-top:10px;"><strong>为什么这类必须单列：</strong>为了可复验，这里故意用冻结本地语料，而不是开放互联网。这样同题同料同源，结论才稳。</p>
+              <p class="small" style="margin-top:10px;"><strong>这类怎么打分：</strong>格式分看 `## Answer` / `## Sources` 结构；语义分看结论是否对、引用文件名是否对。</p>
+            </div>
+            <div class="three-col">
+            <div class="card">
+              <strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong>
+              <p class="small">平均语义准确率：<strong>98.89</strong></p>
+              <p class="small">平均创建耗时：<strong>104.9s</strong></p>
+              <p class="small">平均创建 token：<strong>170916.67</strong></p>
+            </div>
+            
+            <div class="card">
+              <strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong>
+              <p class="small">平均语义准确率：<strong>100.0</strong></p>
+              <p class="small">平均创建耗时：<strong>74.86s</strong></p>
+              <p class="small">平均创建 token：<strong>132413.33</strong></p>
+            </div>
+            </div>
+          </div>
+          
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task research_cheapest_paid</p>
+                  <strong>Use the local corpus in /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/c_research. Which vendor has the cheapest paid plan? Use the required sections and cite filenames only.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">为了可复验，这里故意用冻结本地语料，而不是开放互联网。这样同题同料同源，结论才稳。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看 `## Answer` / `## Sources` 结构；语义分看结论是否对、引用文件名是否对。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;Answer&quot;: [
+    [
+      &quot;beacon&quot;,
+      &quot;starter&quot;,
+      &quot;$12&quot;
+    ]
+  ],
+  &quot;Sources&quot;: [
+    [
+      &quot;beacon_pricing.md&quot;
+    ]
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 66.67</span></header>
+                  <code class="block">**Answer**
+Beacon has the cheapest paid plan at `$12/user/month` on Starter. Acme is `$15/user/month` on Pro, and Comet is `$18/user/month` on Growth. (beacon_pricing.md, acme_pricing.md, comet_pricing.md)
+
+**Sources**
+beacon_pricing.md, acme_pricing.md, comet_pricing.md</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">## Answer
+Beacon has the cheapest paid plan in the corpus: `Starter` at `$12 per user/month` billed annually. Acme’s cheapest paid plan is `Pro` at `$15 per user/month`, and Comet’s cheapest paid plan is `Growth` at `$18 per user/month`, so Beacon is the lowest-priced paid option.
+
+## Sources
+- beacon_pricing.md
+- acme_pricing.md
+- comet_pricing.md</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">## Answer
+
+- `Beacon` has the cheapest paid plan in the corpus: `Starter` at `$12` per user/month billed annually.
+- The other lowest paid tiers are `Acme Pro` at `$15` per user/month billed annually and `Comet Growth` at `$18` per user/month billed annually, so `Beacon Starter` is the lowest-priced paid option.
+
+## Sources
+
+- acme_pricing.md
+- beacon_pricing.md
+- comet_pricing.md</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task research_sso_tiers</p>
+                  <strong>Use the local corpus in /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/c_research. Which vendors offer SSO below enterprise, and which vendor keeps SSO enterprise-only? Use the required sections and cite filenames only.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">为了可复验，这里故意用冻结本地语料，而不是开放互联网。这样同题同料同源，结论才稳。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看 `## Answer` / `## Sources` 结构；语义分看结论是否对、引用文件名是否对。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;Answer&quot;: [
+    [
+      &quot;acme&quot;,
+      &quot;business&quot;
+    ],
+    [
+      &quot;beacon&quot;,
+      &quot;scale&quot;
+    ],
+    [
+      &quot;comet&quot;,
+      &quot;enterprise&quot;
+    ]
+  ],
+  &quot;Sources&quot;: [
+    [
+      &quot;acme_pricing.md&quot;
+    ],
+    [
+      &quot;beacon_pricing.md&quot;
+    ],
+    [
+      &quot;comet_pricing.md&quot;
+    ]
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 66.67</span></header>
+                  <code class="block">**Answer**
+Vendors offering SSO below enterprise:
+- Acme: SSO is included on Business and above, so it is available below enterprise. (acme_pricing.md)
+- Beacon: SSO is included on Scale, so it is available below enterprise. (beacon_pricing.md)
+
+Vendor keeping SSO enterprise-only:
+- Comet: SSO is Enterprise only. (comet_pricing.md)
+
+**Sources**
+acme_pricing.md, beacon_pricing.md, comet_pricing.md</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">## Answer
+Vendors that offer SSO below enterprise:
+- Acme offers SSO on `Business and above`, so it is available below enterprise.
+- Beacon includes SSO on `Scale`, which is also below enterprise.
+
+Vendor that keeps SSO enterprise-only:
+- Comet lists SSO as `Enterprise only`.
+
+## Sources
+- acme_pricing.md
+- beacon_pricing.md
+- comet_pricing.md</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">## Answer
+
+- Vendors that offer SSO below enterprise are `Acme` and `Beacon`.
+- `Acme` includes SSO on `Business and above`, so SSO is available below enterprise there.
+- `Beacon` includes SSO on `Scale only`, which is also below enterprise in the corpus.
+- `Comet` keeps SSO `Enterprise only`.
+
+## Sources
+
+- acme_pricing.md
+- beacon_pricing.md
+- comet_pricing.md</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task research_eu_residency</p>
+                  <strong>Use the local corpus in /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/c_research. Summarize EU data residency by vendor and tier. Use the required sections and cite filenames only.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">为了可复验，这里故意用冻结本地语料，而不是开放互联网。这样同题同料同源，结论才稳。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看 `## Answer` / `## Sources` 结构；语义分看结论是否对、引用文件名是否对。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;Answer&quot;: [
+    [
+      &quot;acme&quot;,
+      &quot;business&quot;
+    ],
+    [
+      &quot;comet&quot;,
+      &quot;enterprise&quot;
+    ],
+    [
+      &quot;beacon&quot;,
+      &quot;no public mention&quot;
+    ]
+  ],
+  &quot;Sources&quot;: [
+    [
+      &quot;acme_trust_center.md&quot;
+    ],
+    [
+      &quot;comet_security.md&quot;
+    ],
+    [
+      &quot;beacon_security.md&quot;
+    ]
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 66.67</span></header>
+                  <code class="block">**Answer**
+- Acme: EU data residency is available on Business and Enterprise. (acme_trust_center.md)
+- Beacon: No public mention of EU data residency appears in the pricing or FAQ docs in this corpus. (beacon_security.md)
+- Comet: EU data residency is available on Enterprise only. (comet_security.md)
+
+**Sources**
+acme_trust_center.md, beacon_security.md, comet_security.md</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 94.44</span></header>
+                  <code class="block">## Answer
+- Acme: EU data residency is available on `Business` and `Enterprise` workspaces.
+- Beacon: the corpus says there is `no public mention` of EU data residency in Beacon’s pricing or FAQ docs, so this is a documentation gap rather than confirmed availability or absence.
+- Comet: EU data residency is available on `Enterprise`.
+
+## Sources
+- acme_trust_center.md
+- beacon_security.md
+- comet_security.md</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">## Answer
+
+- `Acme`: EU data residency is available on `Business` and `Enterprise` workspaces.
+- `Beacon`: the inspected corpus has `no public mention` of EU data residency.
+- `Comet`: EU data residency is available on `Enterprise`.
+
+## Sources
+
+- acme_trust_center.md
+- beacon_security.md
+- comet_security.md</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task research_best_fit</p>
+                  <strong>Use the local corpus in /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/c_research. Recommend the best fit for a 20-seat EU team that needs SSO and CSV export. Use the required sections and cite filenames only.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">为了可复验，这里故意用冻结本地语料，而不是开放互联网。这样同题同料同源，结论才稳。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看 `## Answer` / `## Sources` 结构；语义分看结论是否对、引用文件名是否对。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;Answer&quot;: [
+    [
+      &quot;acme&quot;,
+      &quot;business&quot;
+    ],
+    [
+      &quot;sso&quot;
+    ],
+    [
+      &quot;csv export&quot;
+    ],
+    [
+      &quot;eu data residency&quot;
+    ]
+  ],
+  &quot;Sources&quot;: [
+    [
+      &quot;acme_pricing.md&quot;
+    ],
+    [
+      &quot;acme_trust_center.md&quot;
+    ]
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 66.67</span></header>
+                  <code class="block">**Answer**
+Acme is the best fit for a 20-seat EU team that needs SSO and CSV export.
+
+Why:
+- It supports SSO on Business, which is below enterprise. (acme_pricing.md)
+- It includes EU data residency on Business and Enterprise. (acme_trust_center.md)
+- It offers CSV export on every paid plan. (acme_pricing.md)
+- At `$29/user/month` on Business, it is the only vendor in the corpus that clearly satisfies all three needs without requiring enterprise. (acme_pricing.md, acme_trust_center.md, comet_pricing.md, comet_security.md, beacon_pricing.md, beacon_security.md)
+
+Not as good:
+- Beacon has SSO on Scale and CSV export, but the corpus does not show EU data residency. (beacon_pricing.md, beacon_security.md)
+- Comet has CSV export on Growth, but both SSO and EU data residency are Enterprise-only. (comet_pricing.md, comet_security.md)
+
+**Sources**
+acme_pricing.md, acme_trust_center.md, beacon_pricing.md, beacon_security.md, comet_pricing.md, comet_security.md</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">## Answer
+The best fit is `Acme Business` for a 20-seat EU team that needs SSO and CSV export. Acme Business includes SSO because Acme lists SSO on `Business and above`, CSV export is available on every paid plan, and EU data residency is available on `Business and Enterprise` workspaces.
+
+Beacon is not a full fit because it supports SSO on `Scale` and CSV export on paid tiers, but the corpus has no public mention of EU data residency. Comet is also not a full fit because CSV export is on `Growth` and `Enterprise`, but SSO and EU data residency are both `Enterprise` only.
+
+## Sources
+- acme_pricing.md
+- acme_trust_center.md
+- beacon_pricing.md
+- beacon_security.md
+- comet_pricing.md
+- comet_security.md</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">## Answer
+
+- The best fit in this corpus is `Acme Business`.
+- It matches all stated requirements that are explicitly supported in the files: `SSO` is included on `Business and above`, `CSV export` is available on every paid plan, and `EU data residency` is available on `Business` and `Enterprise` workspaces.
+- `Beacon Scale` has SSO and CSV export, but the corpus has `no public mention` of EU data residency for Beacon.
+- `Comet Enterprise` also supports SSO, CSV export, and EU data residency, but it is `Enterprise` with `custom pricing`, while `Acme Business` is a clearly priced non-enterprise option.
+
+## Sources
+
+- acme_pricing.md
+- acme_trust_center.md
+- beacon_pricing.md
+- beacon_security.md
+- comet_pricing.md
+- comet_security.md</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task research_free_limits</p>
+                  <strong>Use the local corpus in /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/c_research. Summarize the free-plan seat limits and call out any vendor with no free plan. Use the required sections and cite filenames only.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">为了可复验，这里故意用冻结本地语料，而不是开放互联网。这样同题同料同源，结论才稳。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看 `## Answer` / `## Sources` 结构；语义分看结论是否对、引用文件名是否对。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;Answer&quot;: [
+    [
+      &quot;acme&quot;,
+      &quot;3&quot;
+    ],
+    [
+      &quot;comet&quot;,
+      &quot;5&quot;
+    ],
+    [
+      &quot;beacon&quot;,
+      &quot;no free&quot;
+    ]
+  ],
+  &quot;Sources&quot;: [
+    [
+      &quot;acme_pricing.md&quot;
+    ],
+    [
+      &quot;comet_pricing.md&quot;
+    ],
+    [
+      &quot;beacon_pricing.md&quot;
+    ]
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 66.67</span></header>
+                  <code class="block">**Answer**
+- Acme: Free plan available for up to 3 seats. (acme_pricing.md)
+- Comet: Free plan available for up to 5 seats. (comet_pricing.md)
+- Beacon: No free plan. (beacon_pricing.md)
+
+**Sources**
+acme_pricing.md, comet_pricing.md, beacon_pricing.md</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">## Answer
+- Acme Free allows up to `3 seats`.
+- Comet Free allows up to `5 seats`.
+- Beacon has `no free plan`.
+
+## Sources
+- acme_pricing.md
+- comet_pricing.md
+- beacon_pricing.md</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">## Answer
+
+- `Acme` free plan: up to `3 seats`.
+- `Comet` free plan: up to `5 seats`.
+- `Beacon` has `no free plan`.
+
+## Sources
+
+- acme_pricing.md
+- beacon_pricing.md
+- comet_pricing.md</code>
+                </article>
+              </div>
+            </section>
+            
+        </section>
+        
+        <section class="case-brief" id="automation_ops_analyst">
+          <div class="two-col">
+            <div>
+              <p class="eyebrow">Benchmark Brief</p>
+              <h2>D 类｜自动化脚本型</h2>
+              <p class="small" style="margin-top:14px;"><strong>测什么：</strong>测 creator 能不能产出真的可运行的脚本型 skill，而不是只写一堆看似专业的流程。</p>
+              <p class="small" style="margin-top:10px;"><strong>为什么这类必须单列：</strong>这类 skill 的关键不是文采，而是能不能跑、跑得对不对、失败会不会收住。</p>
+              <p class="small" style="margin-top:10px;"><strong>这类怎么打分：</strong>下游任务看 JSON 正确率；额外脚本烟雾测试直接执行 `scripts/analyze_inputs.py`。</p>
+            </div>
+            <div class="three-col">
+            <div class="card">
+              <strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong>
+              <p class="small">平均语义准确率：<strong>100.0</strong></p>
+              <p class="small">平均创建耗时：<strong>150.0s</strong></p>
+              <p class="small">平均创建 token：<strong>159452.0</strong></p>
+            </div>
+            
+            <div class="card">
+              <strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong>
+              <p class="small">平均语义准确率：<strong>100.0</strong></p>
+              <p class="small">平均创建耗时：<strong>111.45s</strong></p>
+              <p class="small">平均创建 token：<strong>146050.33</strong></p>
+            </div>
+            </div>
+          </div>
+          
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task ops_log_summary</p>
+                  <strong>Analyze /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/d_ops/incidents.log and return strict JSON with keys top_error_code, top_endpoint, distinct_error_codes.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这类 skill 的关键不是文采，而是能不能跑、跑得对不对、失败会不会收住。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>下游任务看 JSON 正确率；额外脚本烟雾测试直接执行 `scripts/analyze_inputs.py`。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;top_error_code&quot;: &quot;PAY_402&quot;,
+  &quot;top_endpoint&quot;: &quot;/api/charge&quot;,
+  &quot;distinct_error_codes&quot;: 3
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 77.78</span></header>
+                  <code class="block">{&quot;top_error_code&quot;:&quot;PAY_402&quot;,&quot;top_endpoint&quot;:&quot;/api/charge&quot;,&quot;distinct_error_codes&quot;:3}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;top_error_code&quot;:&quot;PAY_402&quot;,&quot;top_endpoint&quot;:&quot;/api/charge&quot;,&quot;distinct_error_codes&quot;:3}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;top_error_code&quot;:&quot;PAY_402&quot;,&quot;top_endpoint&quot;:&quot;/api/charge&quot;,&quot;distinct_error_codes&quot;:3}</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task ops_invoice_summary</p>
+                  <strong>Analyze /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/d_ops/invoices.csv and return strict JSON with keys overdue_invoice_count, total_overdue, overdue_customers.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这类 skill 的关键不是文采，而是能不能跑、跑得对不对、失败会不会收住。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>下游任务看 JSON 正确率；额外脚本烟雾测试直接执行 `scripts/analyze_inputs.py`。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;overdue_invoice_count&quot;: 3,
+  &quot;total_overdue&quot;: 1420,
+  &quot;overdue_customers&quot;: [
+    &quot;C-12&quot;,
+    &quot;C-31&quot;,
+    &quot;C-44&quot;
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;overdue_invoice_count&quot;:3,&quot;total_overdue&quot;:1420,&quot;overdue_customers&quot;:[&quot;C-12&quot;,&quot;C-31&quot;,&quot;C-44&quot;]}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;overdue_invoice_count&quot;:3,&quot;total_overdue&quot;:1420,&quot;overdue_customers&quot;:[&quot;C-12&quot;,&quot;C-31&quot;,&quot;C-44&quot;]}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;overdue_invoice_count&quot;:3,&quot;total_overdue&quot;:1420,&quot;overdue_customers&quot;:[&quot;C-12&quot;,&quot;C-31&quot;,&quot;C-44&quot;]}</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task ops_overlap_customers</p>
+                  <strong>Look at both /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/d_ops/incidents.log and /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/d_ops/invoices.csv. Return strict JSON with keys at_risk_customers and count for customers that appear in failures and also have overdue open invoices.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这类 skill 的关键不是文采，而是能不能跑、跑得对不对、失败会不会收住。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>下游任务看 JSON 正确率；额外脚本烟雾测试直接执行 `scripts/analyze_inputs.py`。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;at_risk_customers&quot;: [
+    &quot;C-12&quot;,
+    &quot;C-31&quot;,
+    &quot;C-44&quot;
+  ],
+  &quot;count&quot;: 3
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;at_risk_customers&quot;:[&quot;C-12&quot;,&quot;C-31&quot;,&quot;C-44&quot;],&quot;count&quot;:3}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;at_risk_customers&quot;:[&quot;C-12&quot;,&quot;C-31&quot;,&quot;C-44&quot;],&quot;count&quot;:3}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;at_risk_customers&quot;:[&quot;C-12&quot;,&quot;C-31&quot;,&quot;C-44&quot;],&quot;count&quot;:3}</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task ops_priority_code</p>
+                  <strong>Using /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/d_ops/incidents.log and /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/d_ops/invoices.csv, return strict JSON with keys priority_code and linked_to_overdue_customers. Pick the error code that most deserves follow-up.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这类 skill 的关键不是文采，而是能不能跑、跑得对不对、失败会不会收住。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>下游任务看 JSON 正确率；额外脚本烟雾测试直接执行 `scripts/analyze_inputs.py`。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;priority_code&quot;: &quot;PAY_402&quot;,
+  &quot;linked_to_overdue_customers&quot;: true
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 50.00</span></header>
+                  <code class="block">{&quot;priority_code&quot;:&quot;DB_TIMEOUT&quot;,&quot;linked_to_overdue_customers&quot;:[&quot;C-12&quot;,&quot;C-44&quot;]}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;priority_code&quot;:&quot;PAY_402&quot;,&quot;linked_to_overdue_customers&quot;:true}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;priority_code&quot;:&quot;PAY_402&quot;,&quot;linked_to_overdue_customers&quot;:[&quot;C-12&quot;]}</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task ops_payment_orders</p>
+                  <strong>From /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/d_ops/incidents.log, return strict JSON with keys payment_failure_orders and repeated_customer. Only count PAY_402 events.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">这类 skill 的关键不是文采，而是能不能跑、跑得对不对、失败会不会收住。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>下游任务看 JSON 正确率；额外脚本烟雾测试直接执行 `scripts/analyze_inputs.py`。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;payment_failure_orders&quot;: [
+    &quot;O-1001&quot;,
+    &quot;O-1002&quot;,
+    &quot;O-1004&quot;
+  ],
+  &quot;repeated_customer&quot;: &quot;C-12&quot;
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;payment_failure_orders&quot;:[&quot;O-1001&quot;,&quot;O-1002&quot;,&quot;O-1004&quot;],&quot;repeated_customer&quot;:&quot;C-12&quot;}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;payment_failure_orders&quot;:[&quot;O-1001&quot;,&quot;O-1002&quot;,&quot;O-1004&quot;],&quot;repeated_customer&quot;:&quot;C-12&quot;}</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 100.00</span></header>
+                  <code class="block">{&quot;payment_failure_orders&quot;:[&quot;O-1001&quot;,&quot;O-1002&quot;,&quot;O-1004&quot;],&quot;repeated_customer&quot;:&quot;C-12&quot;}</code>
+                </article>
+              </div>
+            </section>
+            
+        </section>
+        
+        <section class="case-brief" id="hybrid_launch_brief">
+          <div class="two-col">
+            <div>
+              <p class="eyebrow">Benchmark Brief</p>
+              <h2>E 类｜混合编排型</h2>
+              <p class="small" style="margin-top:14px;"><strong>测什么：</strong>测 prompt + reference + asset + script 的协同编排能力。</p>
+              <p class="small" style="margin-top:10px;"><strong>为什么这类必须单列：</strong>它最接近真实生产工作流，也是最容易把 creator 的架构差距拉开的题型。</p>
+              <p class="small" style="margin-top:10px;"><strong>这类怎么打分：</strong>格式分看固定 section；语义分看跨来源事实、事件计数、下一步动作是否落对 section。</p>
+            </div>
+            <div class="three-col">
+            <div class="card">
+              <strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong>
+              <p class="small">平均语义准确率：<strong>83.72</strong></p>
+              <p class="small">平均创建耗时：<strong>97.26s</strong></p>
+              <p class="small">平均创建 token：<strong>127350.67</strong></p>
+            </div>
+            
+            <div class="card">
+              <strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong>
+              <p class="small">平均语义准确率：<strong>83.82</strong></p>
+              <p class="small">平均创建耗时：<strong>88.94s</strong></p>
+              <p class="small">平均创建 token：<strong>152100.33</strong></p>
+            </div>
+            </div>
+          </div>
+          
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task hybrid_exec_brief</p>
+                  <strong>Use these files: /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/competitor_launch.md, /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/customer_calls.md, /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/analyst_note.md, /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/signal_events.jsonl. Create the required brief for a PM leader.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">它最接近真实生产工作流，也是最容易把 creator 的架构差距拉开的题型。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看固定 section；语义分看跨来源事实、事件计数、下一步动作是否落对 section。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;Snapshot&quot;: [
+    [
+      &quot;team workspaces&quot;
+    ],
+    [
+      &quot;sso&quot;,
+      &quot;pro&quot;
+    ]
+  ],
+  &quot;Signals&quot;: [
+    [
+      &quot;enterprise_demo&quot;,
+      &quot;7&quot;
+    ],
+    [
+      &quot;export_latency_ticket&quot;,
+      &quot;5&quot;
+    ]
+  ],
+  &quot;Risks&quot;: [
+    [
+      &quot;audit logs&quot;
+    ],
+    [
+      &quot;export&quot;,
+      &quot;two minutes&quot;
+    ]
+  ],
+  &quot;Next Moves&quot;: [
+    [
+      &quot;audit logs&quot;
+    ],
+    [
+      &quot;workspace permissions&quot;
+    ]
+  ],
+  &quot;Sources&quot;: [
+    [
+      &quot;competitor_launch.md&quot;
+    ],
+    [
+      &quot;customer_calls.md&quot;
+    ],
+    [
+      &quot;analyst_note.md&quot;
+    ],
+    [
+      &quot;signal_events.jsonl&quot;
+    ]
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 0.00</span></header>
+                  <code class="block">PM Leader Brief
+
+Headline: RivalBoard’s launch sharpens a feature-gap story in enterprise readiness while exposing reliability and usability gaps we can still turn into a roadmap advantage.
+
+What changed
+- RivalBoard launched team workspaces on 2026-03-27.
+- It includes SSO on Pro and Enterprise, increasing pressure on enterprise-only packaging.
+- AI summaries are only in closed beta, so the immediate buying criteria still center on admin, security, and operational basics.
+
+What customers are signaling
+- Audit logs are the clearest blocker: two enterprise prospects said missing audit logs is blocking procurement.
+- Workspace permissions are still confusing for multi-brand teams, matching analyst concern around workspace-level permissions.
+- CSV export performance is materially hurting experience: three mid-market customers reported exports taking over two minutes.
+- Demand is active: 7 enterprise demo signals suggest near-term pipeline if enterprise gaps are closed.
+
+Market read
+- Analyst note says EU procurement increasingly expects audit logs and workspace-level permissions.
+- Competitor bundling of SSO on mid-tier plans creates pricing and packaging pressure.
+- RivalBoard kept CSV export on every paid plan, so weak export performance is especially risky if buyers compare operational usability.
+
+Recommended priorities
+1. Ship audit logs as the top enterprise-readiness priority.
+2. Simplify and clarify workspace permissions for multi-brand teams.
+3. Reduce CSV export latency and make performance visible with clear targets.
+4. Revisit SSO packaging to prepare for increased mid-tier pricing pressure.
+
+Suggested next 30 days
+- Lock audit logs scope and target accounts blocked in procurement.
+- Run a permissions UX review focused on multi-brand admin flows.
+- Open an export latency fix program tied to the 5 support-ticket signals.
+- Prepare GTM messaging that positions us on reliability/admin control rather than chasing closed-beta AI claims.
+
+Bottom line
+The strongest near-term win is not feature breadth; it is closing enterprise trust gaps fast enough to convert active demand and prevent RivalBoard from defining the procurement checklist.</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 80.56</span></header>
+                  <code class="block">## Snapshot
+- RivalBoard’s 2026-03-27 launch raises the bar on packaging: SSO is included on Pro and Enterprise, and CSV export is available on every paid plan.
+- Our product posture shows two likely launch blockers for PM attention: missing audit logs are blocking procurement in enterprise deals, and workspace permissions remain confusing for multi-brand teams.
+- Customer friction is not only feature breadth but usability and performance: three mid-market customers report CSV export taking more than two minutes.
+- Analyst context reinforces the gap: EU buyers increasingly expect audit logs and workspace-level permissions, while mid-tier SSO bundling creates pressure on enterprise-only SSO packaging.
+
+## Signals
+- `enterprise_demo`: 7
+- `export_latency_ticket`: 5
+- `churn_risk`: 3
+- The signal mix suggests healthy top-of-funnel interest, but repeated export and churn signals point to adoption blockers that can weaken conversion if the launch story outruns product readiness.
+
+## Risks
+- Packaging risk: RivalBoard’s broader SSO and export availability could make our enterprise-only packaging look expensive or incomplete during launch comparisons.
+- Capability risk: missing audit logs directly blocks procurement, especially where buyers expect auditability as table stakes.
+- Adoption risk: confusing workspace permissions and slow CSV export can turn active evaluation into stalled rollout or support burden.
+- Prioritization risk: AI-summary messaging from the competitor may distract internal focus from more urgent platform gaps that customers already cite.
+
+## Next Moves
+- Prioritize audit logs and clearer workspace-level permissions as near-term platform bets, because both are explicitly tied to procurement and buyer expectations.
+- Define a launch decision on SSO packaging, including whether a mid-tier offer or temporary commercial exception is needed to counter pricing pressure.
+- Triage CSV export latency as a launch-readiness issue with a concrete performance target and owner this week.
+- Adjust launch messaging to acknowledge current limitations and emphasize reliability, governance, and workflow improvements over aspirational AI positioning.
+
+## Sources
+- `fixtures/e_hybrid/competitor_launch.md`
+- `fixtures/e_hybrid/customer_calls.md`
+- `fixtures/e_hybrid/analyst_note.md`
+- `fixtures/e_hybrid/signal_events.jsonl`</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 80.56</span></header>
+                  <code class="block">## Snapshot
+- RivalBoard launched team workspaces on 2026-03-27, raising the bar on collaboration packaging.
+- Competitive packaging is tightening: SSO is included on RivalBoard Pro and Enterprise, while analysts note mid-tier SSO bundling is creating pricing pressure.
+- Capability gaps are landing in real deals: two enterprise prospects said missing audit logs is blocking procurement.
+- Customer friction also persists in core workflow areas, with slow CSV export and confusing workspace permissions for multi-brand teams.
+
+## Signals
+- `enterprise_demo`: 7
+- `export_latency_ticket`: 5
+- `churn_risk`: 3
+- Readout: demand is concentrated in enterprise evaluation, but adoption risk is tied to governance and workflow friction.
+
+## Risks
+- Missing audit logs leaves the product exposed in enterprise procurement cycles.
+- Enterprise-only SSO packaging creates avoidable pricing pressure versus competitors bundling it lower.
+- Weak workspace permissions clarity can blunt the impact of any workspace launch story.
+- Export latency issues risk undermining trust in day-to-day reliability during expansion conversations.
+
+## Next Moves
+- Prioritize audit logs and workspace-level permissions as near-term product commitments.
+- Reassess SSO packaging so PM and GTM can respond to mid-tier competitive pressure with a clear stance.
+- Tighten the workspace narrative around multi-brand team usability, not just feature parity.
+- Put CSV export latency on the launch risk list so it does not erode otherwise strong enterprise interest.
+
+## Sources
+- `competitor_launch.md`
+- `customer_calls.md`
+- `analyst_note.md`
+- `signal_events.jsonl`</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task hybrid_sales_brief</p>
+                  <strong>Use these files: /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/competitor_launch.md, /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/customer_calls.md, /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/analyst_note.md, /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/signal_events.jsonl. Create the required brief for a sales leader focused on procurement pressure.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">它最接近真实生产工作流，也是最容易把 creator 的架构差距拉开的题型。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看固定 section；语义分看跨来源事实、事件计数、下一步动作是否落对 section。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;Snapshot&quot;: [
+    [
+      &quot;eu procurement&quot;
+    ],
+    [
+      &quot;sso&quot;,
+      &quot;mid-tier&quot;
+    ]
+  ],
+  &quot;Signals&quot;: [
+    [
+      &quot;enterprise_demo&quot;,
+      &quot;7&quot;
+    ]
+  ],
+  &quot;Risks&quot;: [
+    [
+      &quot;missing audit logs&quot;
+    ],
+    [
+      &quot;pricing pressure&quot;
+    ]
+  ],
+  &quot;Next Moves&quot;: [
+    [
+      &quot;procurement&quot;
+    ],
+    [
+      &quot;audit logs&quot;
+    ]
+  ],
+  &quot;Sources&quot;: [
+    [
+      &quot;customer_calls.md&quot;
+    ],
+    [
+      &quot;analyst_note.md&quot;
+    ],
+    [
+      &quot;signal_events.jsonl&quot;
+    ]
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 0.00</span></header>
+                  <code class="block">Sales Leader Brief: Procurement Pressure
+
+Executive takeaway
+Procurement pressure is rising around auditability, permissions, and SSO packaging. The biggest deal risk is not flashy AI competition; it is failing enterprise security and admin expectations during evaluation.
+
+Key evidence
+- Two enterprise prospects said missing audit logs is blocking procurement.
+- Analyst note says EU procurement teams increasingly expect audit logs and workspace-level permissions.
+- RivalBoard now includes SSO on Pro and Enterprise, which increases pressure on enterprise-only SSO pricing.
+- 7 `enterprise_demo` events indicate strong top-of-funnel enterprise interest, but procurement friction can stall conversion.
+
+What this means for sales
+- Audit logs are now a first-order procurement requirement, especially in EU and larger enterprise cycles.
+- Workspace-permission clarity matters in multi-brand evaluations and can become a red flag if not handled well.
+- SSO packaging will trigger price comparisons earlier, especially if prospects question why SSO is gated higher than rivals.
+- Export latency is a secondary but real value-risk issue because 3 customers complained and 5 latency tickets were logged.
+
+Immediate actions
+- Flag all active enterprise deals lacking audit-log coverage as elevated procurement risk.
+- Build a procurement-risk tracker with fields for audit logs, workspace permissions, SSO expectations, and region.
+- Equip AEs with a direct response to RivalBoard’s mid-tier SSO bundling and a pricing-value defense.
+- Pull product into late-stage deals where multi-brand permissions or admin controls are under scrutiny.
+
+Recommended messaging
+- Lead with security roadmap transparency where audit logs are not yet available.
+- Emphasize operational fit, governance, and support quality over closed-beta AI claims.
+- For pricing pushback, anchor on total admin/control value, but avoid surprise on SSO packaging.
+
+Leadership watchlist
+- Highest risk: enterprise deals in procurement without audit-log coverage.
+- Emerging risk: discount pressure tied to competitor SSO bundling.
+- Conversion opportunity: the current demo volume suggests demand is present if procurement objections are handled early and consistently.
+
+Bottom line
+Sales should treat procurement readiness as the main battleground: audit logs, permissions clarity, and SSO packaging are now core deal-control issues.</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 76.67</span></header>
+                  <code class="block">## Snapshot
+- Procurement pressure is concentrating around governance requirements: two enterprise prospects said missing audit logs is blocking procurement, and analysts note EU buyers increasingly expect audit logs and workspace-level permissions.
+- RivalBoard’s launch strengthens competitive pricing pressure by bundling SSO on Pro and Enterprise, while analysts explicitly call out mid-tier SSO bundling as pressure on enterprise-only SSO packages.
+- RivalBoard also keeps CSV export on every paid plan, while three mid-market customers say our CSV export takes more than two minutes.
+- Sales risk is less about lack of demand than deal friction: buyer expectations on security, permissions, and packaging are rising faster than our current story supports.
+
+## Signals
+- `enterprise_demo`: 7
+- `export_latency_ticket`: 5
+- `churn_risk`: 3
+- Demo volume is strong, but the operational and churn signals suggest procurement objections can quickly spread into broader competitive and commercial pressure.
+
+## Risks
+- Deal-cycle risk: missing audit logs can stop procurement review before pricing or product value is fully considered.
+- Commercial risk: competitor SSO bundling gives procurement teams leverage to challenge enterprise-only pricing and ask for concessions.
+- Proof-point risk: slow CSV export and confusing permissions weaken seller credibility when buyers ask about operational readiness.
+- Regional risk: EU procurement expectations on auditability and workspace controls may raise loss risk in regulated or multi-brand accounts.
+
+## Next Moves
+- Equip account teams with a procurement objection pack covering current audit-log limitations, roadmap language, and approved escalation paths.
+- Create pricing guidance for SSO-related concessions or packaging exceptions where competitor mid-tier bundling is active.
+- Add clear talk tracks on workspace permissions and CSV export, including when to position workarounds versus when to avoid overcommitting.
+- Flag enterprise deals with governance-heavy procurement early so product and leadership can support save plans before late-stage stalls.
+
+## Sources
+- `fixtures/e_hybrid/competitor_launch.md`
+- `fixtures/e_hybrid/customer_calls.md`
+- `fixtures/e_hybrid/analyst_note.md`
+- `fixtures/e_hybrid/signal_events.jsonl`</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 80.00</span></header>
+                  <code class="block">## Snapshot
+- Procurement pressure is rising from both buyers and competitors: two enterprise prospects said missing audit logs is blocking procurement.
+- Analyst input says EU procurement teams increasingly expect audit logs and workspace-level permissions.
+- RivalBoard is also tightening commercial pressure by including SSO on Pro and Enterprise.
+- Customer friction on export speed and permissions adds more scrutiny once deals move into evaluation.
+
+## Signals
+- `enterprise_demo`: 7
+- `export_latency_ticket`: 5
+- `churn_risk`: 3
+- Readout: pipeline interest is healthy, but procurement blockers and packaging pressure threaten conversion quality.
+
+## Risks
+- Audit-log gaps can stall or lose enterprise deals before pricing or product value is fully evaluated.
+- Enterprise-only SSO packaging creates discount pressure when competitors bundle SSO on mid-tier plans.
+- Missing workspace-level permissions can become a compliance objection, especially for EU-oriented buyers.
+- Export latency and permissions confusion can give procurement teams extra reasons to slow approval.
+
+## Next Moves
+- Arm sales with a clear procurement-risk talk track covering audit logs, permissions, and current roadmap posture.
+- Review SSO packaging and approval guardrails so reps are not forced into reactive discounting.
+- Flag deals with governance requirements early and route them through tighter technical qualification.
+- Use export-latency and permissions complaints as renewal and late-stage risk signals in forecast reviews.
+
+## Sources
+- `competitor_launch.md`
+- `customer_calls.md`
+- `analyst_note.md`
+- `signal_events.jsonl`</code>
+                </article>
+              </div>
+            </section>
+            
+            <section class="case-task">
+              <div class="case-task-head">
+                <div>
+                  <p class="eyebrow">Task hybrid_churn_memo</p>
+                  <strong>Use these files: /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/competitor_launch.md, /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/customer_calls.md, /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/analyst_note.md, /Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/fixtures/e_hybrid/signal_events.jsonl. Create the required brief for a product ops lead focused on churn risk.</strong>
+                </div>
+                <span class="pill">展示 repeat 1 输出 / 分数是 3 次平均</span>
+              </div>
+              <div class="case-submeta">
+                <div class="expected-box">
+                  <strong>为什么这题在这里</strong>
+                  <p class="small" style="margin-top:10px;">它最接近真实生产工作流，也是最容易把 creator 的架构差距拉开的题型。</p>
+                  <p class="small" style="margin-top:10px;"><strong>评分规则：</strong>格式分看固定 section；语义分看跨来源事实、事件计数、下一步动作是否落对 section。</p>
+                </div>
+                <div class="expected-box">
+                  <strong>Frozen fixture / 参考验证点</strong>
+                  <p class="small" style="margin-top:10px;">这里展示的是冻结任务夹具，目的是让你看见测试材料里有哪些参考事实；它不是要求输出逐字命中这些词。</p>
+                  <code class="block">{
+  &quot;Snapshot&quot;: [
+    [
+      &quot;workspace permissions&quot;
+    ],
+    [
+      &quot;csv export&quot;
+    ]
+  ],
+  &quot;Signals&quot;: [
+    [
+      &quot;churn_risk&quot;,
+      &quot;3&quot;
+    ],
+    [
+      &quot;export_latency_ticket&quot;,
+      &quot;5&quot;
+    ]
+  ],
+  &quot;Risks&quot;: [
+    [
+      &quot;export&quot;
+    ],
+    [
+      &quot;workspace permissions&quot;
+    ]
+  ],
+  &quot;Next Moves&quot;: [
+    [
+      &quot;export latency&quot;
+    ],
+    [
+      &quot;permissions&quot;
+    ]
+  ],
+  &quot;Sources&quot;: [
+    [
+      &quot;competitor_launch.md&quot;
+    ],
+    [
+      &quot;customer_calls.md&quot;
+    ],
+    [
+      &quot;signal_events.jsonl&quot;
+    ]
+  ]
+}</code>
+                </div>
+              </div>
+              <div class="output-grid" style="margin-top:16px;">
+                <article class="output-card">
+                  <header><strong>Baseline</strong><span class="score-badge">Avg 0.00</span></header>
+                  <code class="block">Product Ops Memo: Churn Risk
+
+Summary
+Churn risk is rising from unresolved operational pain points, especially export latency and admin-control gaps that align with broader market expectations.
+
+Risk signals
+- 3 `churn_risk` events were logged.
+- 5 `export_latency_ticket` events were logged.
+- Three mid-market customers said CSV export takes more than two minutes.
+- Customers also report confusing workspace permissions for multi-brand teams.
+- Analyst note shows audit logs and workspace-level permissions are increasingly expected, especially by EU procurement teams.
+
+Primary churn drivers
+1. Export reliability/performance: repeated latency complaints suggest a day-to-day workflow failure, not a minor annoyance.
+2. Permissions complexity: multi-brand teams may experience ongoing admin friction that reduces product trust.
+3. Missing audit logs: while often seen as a sales blocker, this can also become a retention issue for customers expanding governance requirements.
+4. Competitive comparison risk: RivalBoard offers CSV export on every paid plan and bundles SSO more broadly, increasing the chance that dissatisfied accounts explore alternatives.
+
+Accounts most at risk
+- Mid-market customers dependent on recurring CSV workflows.
+- Multi-brand teams with more complex workspace/admin setups.
+- Customers entering stricter compliance or procurement review cycles.
+
+Recommended interventions
+- Create a churn watchlist combining accounts with export complaints, multi-brand usage, and governance-sensitive use cases.
+- Triage export latency as the top retention incident and define a target recovery timeline.
+- Launch proactive outreach to customers affected by export delays before renewal risk escalates.
+- Gather structured feedback on workspace-permission confusion and feed it into product prioritization.
+- Tag accounts likely to need audit logs soon so CS can manage expectations early.
+
+Operating metrics to monitor weekly
+- Volume of export-related tickets.
+- Count of accounts with repeated admin/permissions complaints.
+- Churn-risk accounts by segment and renewal window.
+- Escalations tied to compliance, procurement, or governance requirements.
+
+Bottom line
+The near-term churn threat is operational friction, especially export latency, with admin-control gaps increasing the likelihood that frustrated accounts become competitively vulnerable.</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#51627a;"></span>官方原版</strong><span class="score-badge">Avg 93.94</span></header>
+                  <code class="block">## Snapshot
+- Churn risk is tied to day-to-day workflow friction more than headline features: three mid-market customers report CSV export taking more than two minutes, and workspace permissions remain confusing for multi-brand teams.
+- Event signals reinforce this pattern, with repeated export-latency tickets and churn-risk events despite strong demo activity.
+- Competitive pressure matters because RivalBoard offers CSV export on every paid plan and launched team workspaces, which may sharpen customer comparisons around operational basics.
+- Analyst evidence suggests buyer expectations are also moving toward stronger workspace-level permissions and auditability, increasing the cost of unresolved friction.
+
+## Signals
+- `enterprise_demo`: 7
+- `export_latency_ticket`: 5
+- `churn_risk`: 3
+- The highest operational signal is export latency, and paired churn-risk events suggest the issues are not isolated complaints but a retention pattern worth intervening on now.
+
+## Risks
+- Retention risk: slow CSV export can disrupt recurring reporting workflows and push customers toward evaluating easier-to-use alternatives.
+- Expansion risk: confusing permissions for multi-brand teams can stall broader rollout, lower adoption, and create support fatigue in strategic accounts.
+- Competitive risk: RivalBoard’s broader export availability and workspace positioning may make our operational gaps more visible during renewals.
+- Escalation risk: unresolved workflow pain can turn active support issues into churn conversations before product changes land.
+
+## Next Moves
+- Stand up a churn watchlist for accounts with export complaints or permissions confusion, and route them to proactive outreach this week.
+- Partner with engineering on a focused mitigation plan for CSV export latency, including temporary workarounds and customer-facing status updates.
+- Create a clear permissions guidance pack for multi-brand teams so CSMs and support can reduce confusion before it becomes renewal risk.
+- Feed a weekly product-ops summary to PM and sales leadership linking export, permissions, and churn-risk patterns to affected accounts and save actions.
+
+## Sources
+- `fixtures/e_hybrid/competitor_launch.md`
+- `fixtures/e_hybrid/customer_calls.md`
+- `fixtures/e_hybrid/analyst_note.md`
+- `fixtures/e_hybrid/signal_events.jsonl`</code>
+                </article>
+                <article class="output-card">
+                  <header><strong><span class="version-dot" style="background:#0f766e;"></span>大壮版</strong><span class="score-badge">Avg 90.91</span></header>
+                  <code class="block">## Snapshot
+- Churn risk is tied to daily workflow friction more than launch hype: three mid-market customers complained CSV export takes more than two minutes.
+- Workspace permissions remain confusing for multi-brand teams, pointing to operational friction in shared setups.
+- Governance gaps also matter because audit logs are blocking some enterprise procurement and analysts say workspace-level permissions are increasingly expected.
+- Event data shows both active demand and active risk, with notable export-related support volume.
+
+## Signals
+- `export_latency_ticket`: 5
+- `churn_risk`: 3
+- `enterprise_demo`: 7
+- Readout: product interest is present, but retention risk clusters around export speed and permissions clarity.
+
+## Risks
+- Slow CSV export can drive repeat frustration in reporting-heavy accounts and increase support burden.
+- Confusing workspace permissions can trigger user error, admin distrust, and adoption drag in multi-brand teams.
+- If operational friction persists, expansion interest may not translate into durable retention.
+- Governance gaps such as missing audit logs can compound churn risk in larger accounts that expect stronger controls.
+
+## Next Moves
+- Triage export latency as a save-risk issue and track affected accounts for proactive follow-up.
+- Audit permission-related support patterns and identify the highest-friction multi-brand workflows.
+- Create a churn watchlist combining export complaints, permissions confusion, and elevated risk events.
+- Partner with product on short-term mitigations for admins while audit logs and workspace-level permissions mature.
+
+## Sources
+- `competitor_launch.md`
+- `customer_calls.md`
+- `analyst_note.md`
+- `signal_events.jsonl`</code>
+                </article>
+              </div>
+            </section>
+            
+        </section>
+        
+    
+  </main>
+</body>
+</html>

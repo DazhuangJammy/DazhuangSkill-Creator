@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A-E Skill Benchmark Dashboard</title>
+  <style>
+:root {
+  --bg: #efe7d8;
+  --ink: #1f2630;
+  --muted: #5f6973;
+  --paper: rgba(255,255,255,0.8);
+  --line: rgba(31, 38, 48, 0.12);
+  --shadow: 0 20px 54px rgba(29, 37, 47, 0.12);
+  --radius: 24px;
+  --gold: #d4a43f;
+  --teal: #0f766e;
+  --blue: #51627a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Avenir Next", "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(15, 118, 110, 0.10), transparent 32%),
+    radial-gradient(circle at 88% 10%, rgba(81, 98, 122, 0.10), transparent 34%),
+    linear-gradient(180deg, #f7f0e5 0%, #ebdfca 100%);
+  min-height: 100vh;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(31,38,48,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31,38,48,0.028) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.5;
+}
+.wrap {
+  width: min(1380px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 24px 0 56px;
+  position: relative;
+  z-index: 1;
+}
+.top-nav { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.top-nav a {
+  text-decoration: none;
+  color: var(--ink);
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.82);
+  box-shadow: 0 10px 26px rgba(31,38,48,0.08);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.hero, .section, .case-brief {
+  background: linear-gradient(145deg, rgba(255,255,255,0.92), rgba(255,255,255,0.68));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.78);
+  box-shadow: var(--shadow);
+  border-radius: 30px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.section, .case-brief { margin-top: 24px; }
+.hero::after, .section::after, .case-brief::after {
+  content: "";
+  position: absolute;
+  inset: auto -10% -46% 40%;
+  height: 260px;
+  background: radial-gradient(circle, rgba(15,118,110,0.10), transparent 68%);
+  pointer-events: none;
+}
+.eyebrow {
+  margin: 0 0 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  font-weight: 800;
+}
+h1, h2, h3 { margin: 0; font-family: "Baskerville", "Iowan Old Style", "Palatino Linotype", serif; letter-spacing: -0.03em; }
+h1 { font-size: clamp(38px, 6vw, 74px); line-height: 0.95; }
+h2 { font-size: clamp(28px, 4vw, 42px); line-height: 0.98; }
+h3 { font-size: 24px; }
+p { margin: 0; }
+.hero-grid, .two-col, .three-col, .four-col { display: grid; gap: 18px; }
+.hero-grid { grid-template-columns: 1.15fr 0.85fr; align-items: end; }
+.two-col { grid-template-columns: 1.1fr 0.9fr; align-items: start; }
+.three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.four-col { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hero-copy p, .section-copy p, .small, li { color: var(--muted); line-height: 1.7; }
+.hero-copy .lead { margin-top: 18px; max-width: 68ch; }
+.hero-copy .callout { margin-top: 18px; padding-left: 16px; border-left: 4px solid var(--gold); }
+.signal {
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(31,38,48,0.94);
+  color: #f8f1e4;
+}
+.signal .label { display: block; margin-bottom: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; opacity: 0.72; }
+.signal strong { display: block; font-size: 28px; line-height: 1; }
+.signal small { display: block; margin-top: 10px; line-height: 1.55; color: rgba(248,241,228,0.72); }
+.card, .version-card, .weight-card, .path-card, .output-card, .brief-card {
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.version-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.88), rgba(255,255,255,0.58)), linear-gradient(180deg, var(--accent-soft), transparent);
+  border: 1px solid rgba(255,255,255,0.75);
+  position: relative;
+  overflow: hidden;
+}
+.version-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: var(--accent);
+}
+.version-head, .case-task-head, .output-card header, .metric-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+.rank-badge, .pill, .score-badge {
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  background: rgba(31,38,48,0.08);
+}
+.rank-badge { background: var(--accent); color: #fff; min-width: 72px; text-align: center; }
+.metric-grid, .mini-grid, .weight-grid, .output-grid { display: grid; gap: 12px; }
+.metric-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.mini-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.weight-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.output-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.metric, .mini-grid div {
+  border-radius: 16px;
+  padding: 12px 13px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(31,38,48,0.07);
+}
+.metric span, .mini-grid span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.metric strong, .mini-grid strong { font-size: 22px; }
+.table-wrap { overflow: auto; border-radius: 22px; border: 1px solid rgba(31,38,48,0.08); background: rgba(255,255,255,0.7); }
+table { width: 100%; border-collapse: collapse; min-width: 760px; }
+th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid rgba(31,38,48,0.08); vertical-align: top; }
+th { background: rgba(31,38,48,0.04); font-size: 13px; }
+tr:last-child td { border-bottom: 0; }
+.version-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:8px; }
+.code, code.block {
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  background: rgba(31,38,48,0.94);
+  color: #f7f1e7;
+  border-radius: 18px;
+  padding: 16px;
+}
+ul { margin: 0; padding-left: 18px; }
+.case-task { margin-top: 18px; }
+.case-task + .case-task { margin-top: 18px; }
+.case-submeta { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 16px; margin-top: 14px; }
+.expected-box { border-radius: 18px; padding: 16px; background: rgba(255,255,255,0.72); border: 1px solid rgba(31,38,48,0.08); }
+@media (max-width: 1180px) {
+  .hero-grid, .two-col, .three-col, .four-col, .weight-grid, .metric-grid, .output-grid, .case-submeta { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .wrap { width: min(100vw - 20px, 100%); }
+  .hero, .section, .case-brief { padding: 18px; border-radius: 22px; }
+  .hero-grid, .two-col, .three-col, .four-col, .weight-grid, .metric-grid, .output-grid, .case-submeta { grid-template-columns: 1fr; }
+  table { min-width: 0; }
+}
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="top-nav"><a href="ae_benchmark_dashboard.html">总览 Dashboard</a><a href="ae_benchmark_casebook.html">逐题对比 Casebook</a></nav>
+    
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">A-E Skill Benchmark / 2 Versions / 30 Creation Runs + 15 Baselines</p>
+          <h1>综合第一和纯准确率第一，
+都是大壮版。</h1>
+          <p class="lead callout">这轮最重要的结论，不是一句简单的“谁更强”。更准确的说法是：这轮最重要的结论是：<strong>大壮版同时拿下综合分和纯语义准确率第一，但领先幅度仍然不够到“碾压”。</strong></p>
+          <p class="lead">所以这份报告不是帮你“偏袒一个版本”，而是把两个版本在不同观察口径下的强弱拆开讲清楚：谁更快、谁更轻、谁更稳、谁在具体类型上更强。</p>
+        </div>
+        <div class="three-col">
+          <div class="signal">
+            <span class="label">综合第一</span>
+            <strong>大壮版</strong>
+            <small>综合总分 99.44，领先 3.24。</small>
+          </div>
+          <div class="signal">
+            <span class="label">纯准确率第一</span>
+            <strong>大壮版</strong>
+            <small>下游语义准确率 96.76，领先 0.24。</small>
+          </div>
+          <div class="signal">
+            <span class="label">碾压?</span>
+            <strong>NO</strong>
+            <small>综合领先只有 3.24，稳定性门槛也没过，不构成碾压。</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">One Screen Summary</p>
+        <h2>两个版本到底怎么分高下</h2>
+        <p>这轮要避免一个常见误解：综合分第一，不代表每个维度都第一。这里把“综合分”和“纯准确率”并排摆出来，防止误读。</p>
+      </div>
+      <div class="two-col" style="margin-top:18px;">
+        
+    <article class="version-card" style="--accent:#0f766e; --accent-soft:rgba(15, 118, 110, 0.18);">
+      <div class="version-head">
+        <div>
+          <p class="eyebrow">综合更强</p>
+          <h3>大壮版</h3>
+        </div>
+        <span class="rank-badge">99.44</span>
+      </div>
+      <p class="small" style="margin-top:12px;">综合分第一，速度、体积、结构完整度更好，在 C/D/E 类表现也更强。</p>
+      <div class="mini-grid" style="margin-top:14px;">
+        <div><span>综合总分</span><strong>99.44</strong></div>
+        <div><span>纯语义准确率</span><strong>96.76</strong></div>
+        <div><span>创建耗时(秒)</span><strong>102.742</strong></div>
+        <div><span>技能体积(bytes)</span><strong>6,541.0</strong></div>
+      </div>
+    </article>
+    
+        
+    <article class="version-card" style="--accent:#51627a; --accent-soft:rgba(81, 98, 122, 0.16);">
+      <div class="version-head">
+        <div>
+          <p class="eyebrow">文案更稳</p>
+          <h3>官方原版</h3>
+        </div>
+        <span class="rank-badge">96.2</span>
+      </div>
+      <p class="small" style="margin-top:12px;">在内容型 skill 上依然稳定，但创建速度、token 和体积不占优。</p>
+      <div class="mini-grid" style="margin-top:14px;">
+        <div><span>综合总分</span><strong>96.2</strong></div>
+        <div><span>纯语义准确率</span><strong>96.52</strong></div>
+        <div><span>创建耗时(秒)</span><strong>119.066</strong></div>
+        <div><span>技能体积(bytes)</span><strong>8,743.0</strong></div>
+      </div>
+    </article>
+    
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Why This Counts</p>
+        <h2>为什么这轮对比有依据</h2>
+        <p>这不是拿两个 creator 随便写一题比感觉，而是把 skill 明确拆成 A 到 E 五种工作机制，再用同题同料同机同模去压。也就是说，它比较的是“在同样压力下，哪个 creator 更能稳定产出好 skill”。</p>
+      </div>
+      <div class="three-col" style="margin-top:18px;">
+        <div class="card"><strong>只比两版</strong><p style="margin-top:8px;">这轮只比较 `官方原版` 和 `dazhuangskill-creator`，不引入第三版，结论更聚焦。</p></div><div class="card"><strong>A-E 全覆盖</strong><p style="margin-top:8px;">不是只看一种 skill，而是分别压文案型、结构型、调研型、脚本型、混合型五类。</p></div><div class="card"><strong>同机同模同料</strong><p style="margin-top:8px;">同一台机器、同一 Codex、同一模型 `gpt-5.4`、同一 harness、同一份 frozen brief/fixtures。</p></div><div class="card"><strong>重复 3 次</strong><p style="margin-top:8px;">每个类型每个版本重复 3 次，不把一次手气当结论。</p></div><div class="card"><strong>原始证据落盘</strong><p style="margin-top:8px;">创建输出、下游回答、脚本校验、token、耗时都保存到本地。</p></div><div class="card"><strong>源目录零改动</strong><p style="margin-top:8px;">对比对象只读使用，最后有 manifest diff 证明没有动原目录。</p></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">What Was Tested</p>
+        <h2>A-E 五类到底测了什么</h2>
+        <p>这五类不是按行业分，而是按 skill 的工作机制分。这样最后得到的不是一句空泛的“谁强”，而是“谁更擅长做哪类 skill”。</p>
+      </div>
+      <div class="three-col" style="margin-top:18px;">
+        <article class="brief-card"><p class="eyebrow">A 类｜小红书文案型</p><strong>测提示词、reference、模板资产的组织能力，以及内容型 skill 的上岗质量。</strong><p class="small" style="margin-top:10px;">这是最贴近真实业务的一类。它不只是测会不会写提示词，还测 creator 能不能把平台风格、禁忌词、固定格式、素材约束组织成可复用 skill。</p></article><article class="brief-card"><p class="eyebrow">B 类｜结构化输出型</p><strong>测严格 JSON schema 约束、边界样本稳定性、可维护配置意识。</strong><p class="small" style="margin-top:10px;">这是最客观的一类，可以直接校准 creator 有没有把 skill 做成“能执行的规约”，而不是漂亮说明文。</p></article><article class="brief-card"><p class="eyebrow">C 类｜工具/调研型</p><strong>测 creator 会不会让 skill 去看源文件、组织证据、附来源、避免瞎总结。</strong><p class="small" style="margin-top:10px;">为了可复验，这里故意用冻结本地语料，而不是开放互联网。这样同题同料同源，结论才稳。</p></article><article class="brief-card"><p class="eyebrow">D 类｜自动化脚本型</p><strong>测 creator 能不能产出真的可运行的脚本型 skill，而不是只写一堆看似专业的流程。</strong><p class="small" style="margin-top:10px;">这类 skill 的关键不是文采，而是能不能跑、跑得对不对、失败会不会收住。</p></article><article class="brief-card"><p class="eyebrow">E 类｜混合编排型</p><strong>测 prompt + reference + asset + script 的协同编排能力。</strong><p class="small" style="margin-top:10px;">它最接近真实生产工作流，也是最容易把 creator 的架构差距拉开的题型。</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Scoring Logic</p>
+        <h2>评分到底怎么来的</h2>
+        <p>综合排序不是凭感觉，而是按冻结好的权重算出来的。你如果只关心准确率，也可以单独看“纯语义准确率”列，不必被综合分带偏。</p>
+      </div>
+      <div class="weight-grid" style="margin-top:18px;">
+        <div class="weight-card"><span class="pill">35%</span><strong>实际使用效果</strong><p class="small" style="margin-top:8px;">真实任务结果是否正确、是否值得用。</p></div><div class="weight-card"><span class="pill">25%</span><strong>创建过程效率</strong><p class="small" style="margin-top:8px;">从 brief 到可用 skill 的时间、token、体积成本。</p></div><div class="weight-card"><span class="pill">20%</span><strong>创建与执行精准度</strong><p class="small" style="margin-top:8px;">是否理解 brief、结构是否正确、脚本是否按要求可执行。</p></div><div class="weight-card"><span class="pill">15%</span><strong>产物质量</strong><p class="small" style="margin-top:8px;">SKILL / references / assets / scripts 分工是否合理。</p></div><div class="weight-card"><span class="pill">5%</span><strong>稳定性</strong><p class="small" style="margin-top:8px;">重复 3 次的波动是否够小。</p></div>
+      </div>
+      <div class="table-wrap" style="margin-top:18px;">
+        <table>
+          <thead>
+            <tr>
+              <th>版本</th>
+              <th>综合总分</th>
+              <th>纯语义准确率</th>
+              <th>实战效果分</th>
+              <th>创建耗时(秒)</th>
+              <th>创建 token</th>
+              <th>技能体积(bytes)</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td><span class="version-dot" style="background:#51627a;"></span>官方原版</td>
+          <td>96.2</td>
+          <td>96.52</td>
+          <td>98.08</td>
+          <td>119.066</td>
+          <td>141,773.0</td>
+          <td>8,743.0</td>
+        </tr>
+        
+        <tr>
+          <td><span class="version-dot" style="background:#0f766e;"></span>大壮版</td>
+          <td>99.44</td>
+          <td>96.76</td>
+          <td>100.0</td>
+          <td>102.742</td>
+          <td>151,546.0</td>
+          <td>6,541.0</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Category Matrix</p>
+        <h2>逐类看，谁在哪类更强</h2>
+        <p>这一段最关键，因为它直接回答“到底该选哪个 creator 去做哪种 skill”。</p>
+      </div>
+      <div class="table-wrap" style="margin-top:18px;">
+        <table>
+          <thead>
+            <tr>
+              <th>类型</th>
+              <th>语义更强</th>
+              <th>速度更快</th>
+              <th>官方语义</th>
+              <th>大壮语义</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+        <tr>
+          <td><strong>A 类｜小红书文案型</strong><div class="small">测提示词、reference、模板资产的组织能力，以及内容型 skill 的上岗质量。</div></td>
+          <td>两边同档<div class="small">同分 100.0</div></td>
+          <td>大壮版<div class="small">97.47s</div></td>
+          <td>100.0</td>
+          <td>100.0</td>
+        </tr>
+        
+        <tr>
+          <td><strong>B 类｜结构化输出型</strong><div class="small">测严格 JSON schema 约束、边界样本稳定性、可维护配置意识。</div></td>
+          <td>两边同档<div class="small">同分 100.0</div></td>
+          <td>大壮版<div class="small">121.03s</div></td>
+          <td>100.0</td>
+          <td>100.0</td>
+        </tr>
+        
+        <tr>
+          <td><strong>C 类｜工具/调研型</strong><div class="small">测 creator 会不会让 skill 去看源文件、组织证据、附来源、避免瞎总结。</div></td>
+          <td>大壮版<div class="small">语义 100.0</div></td>
+          <td>大壮版<div class="small">74.86s</div></td>
+          <td>98.89</td>
+          <td>100.0</td>
+        </tr>
+        
+        <tr>
+          <td><strong>D 类｜自动化脚本型</strong><div class="small">测 creator 能不能产出真的可运行的脚本型 skill，而不是只写一堆看似专业的流程。</div></td>
+          <td>两边同档<div class="small">同分 100.0</div></td>
+          <td>大壮版<div class="small">111.45s</div></td>
+          <td>100.0</td>
+          <td>100.0</td>
+        </tr>
+        
+        <tr>
+          <td><strong>E 类｜混合编排型</strong><div class="small">测 prompt + reference + asset + script 的协同编排能力。</div></td>
+          <td>两边同档<div class="small">同分 83.72</div></td>
+          <td>大壮版<div class="small">88.94s</div></td>
+          <td>83.72</td>
+          <td>83.82</td>
+        </tr>
+        
+          </tbody>
+        </table>
+      </div>
+      <div class="card" style="margin-top:18px;">
+        <ul>
+          <li>A 文案型：两边同档。在公平 rubric 下，两版都满足共同明确约束，不再靠个性化 token 命中拉分。</li>
+          <li>B 结构型：两边都是满分，属于同档；大壮版只是在速度和体积上更占优。</li>
+          <li>C 调研型：大壮版更强，说明它在冻结语料检索与证据组织上更好。</li>
+          <li>D 脚本型：两边都能把脚本跑通，也都答对，下阶段如果你更关心复杂自动化，还需要再加更难脚本题拉开差距。</li>
+          <li>E 混合型：两边接近，大壮版略强一点点，但这类题目前还没拉开明显差距。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Integrity</p>
+        <h2>原目录有没有被我动过</h2>
+        <p>没有。所有写入都只发生在 `benchmark_skill_creator_ae_20260403`，原目录只读。下面这张表是最终 manifest diff 结果。</p>
+      </div>
+      <div class="table-wrap" style="margin-top:18px;">
+        <table>
+          <thead><tr><th>源目录</th><th>变更项</th></tr></thead>
+          <tbody><tr><td>官方原版</td><td>0</td></tr><tr><td>大壮版</td><td>0</td></tr></tbody>
+        </table>
+      </div>
+      <div class="two-col" style="margin-top:18px;">
+        <div class="path-card"><strong>主报告 JSON</strong><code class="block">/Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/reports/benchmark_report.json</code></div>
+        <div class="path-card"><strong>源目录 diff</strong><code class="block">/Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/manifests/source_manifest_diff.json</code></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Boundary & Honesty</p>
+        <h2>这套报告哪里强，哪里不能乱吹</h2>
+      </div>
+      <div class="card" style="margin-top:18px;">
+        <ul><li>这不是外部机构认证，而是一套内部可复验、规则透明的 benchmark。它的可信度来自方法，不来自我一句“我觉得”。</li><li>A 类文案型已经按你的质疑改成更平衡的 rubric：不再按某几个预设参数词硬性命中，而是看共同明确约束、等义表达，以及是否真的写出了不被允许的正向夸张。</li><li>C 类和 E 类为了可复验，故意使用冻结本地语料代替开放互联网；这更像研究/浏览能力的受控代理测试。</li><li>trigger 这一项是 Codex 代理判断 skill 是否应该触发，不是运行时自动触发日志。</li><li>D 类和 E 类都做了脚本烟雾测试，本轮两版脚本可执行率都是 100。</li><li>综合总分第一不自动代表每个维度都第一，所以页面把综合分和纯语义准确率分开列，避免口径混淆。</li></ul>
+      </div>
+    </section>
+    
+  </main>
+</body>
+</html>

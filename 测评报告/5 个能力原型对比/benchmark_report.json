@@ -1,0 +1,95 @@
+{
+  "aggregates": {
+    "official": {
+      "creation_elapsed_s": 100.635,
+      "creation_total_tokens": 127853.0,
+      "skill_total_bytes": 6613.0,
+      "success_rate": 100.0,
+      "validation_score": 100.0,
+      "static_score": 88.5,
+      "artifact_fit": 63.33,
+      "minimality": 98.0,
+      "downstream_format_accuracy": 100.0,
+      "downstream_semantic_accuracy": 97.22,
+      "lift_vs_baseline": 77.22,
+      "trigger_accuracy": 100.0,
+      "downstream_elapsed_s": 15.262,
+      "downstream_total_tokens": 22202.0,
+      "semantic_stddev": 5.83,
+      "runs": 15
+    },
+    "copy": {
+      "creation_elapsed_s": 90.16,
+      "creation_total_tokens": 115024.0,
+      "skill_total_bytes": 7063.0,
+      "success_rate": 100.0,
+      "validation_score": 93.0,
+      "static_score": 88.35,
+      "artifact_fit": 73.33,
+      "minimality": 98.0,
+      "downstream_format_accuracy": 100.0,
+      "downstream_semantic_accuracy": 95.04,
+      "lift_vs_baseline": 75.04,
+      "trigger_accuracy": 100.0,
+      "downstream_elapsed_s": 19.418,
+      "downstream_total_tokens": 23212.0,
+      "semantic_stddev": 7.78,
+      "runs": 15
+    },
+    "dazhuang": {
+      "creation_elapsed_s": 73.553,
+      "creation_total_tokens": 112878.0,
+      "skill_total_bytes": 4290.0,
+      "success_rate": 100.0,
+      "validation_score": 98.67,
+      "static_score": 93.4,
+      "artifact_fit": 80.0,
+      "minimality": 100.0,
+      "downstream_format_accuracy": 100.0,
+      "downstream_semantic_accuracy": 100.0,
+      "lift_vs_baseline": 80.0,
+      "trigger_accuracy": 100.0,
+      "downstream_elapsed_s": 18.09,
+      "downstream_total_tokens": 22769.0,
+      "semantic_stddev": 0.0,
+      "runs": 15
+    }
+  },
+  "scores": {
+    "official": {
+      "process_efficiency": 77.18,
+      "precision": 100.0,
+      "product_quality": 90.72,
+      "actual_use_effect": 98.06,
+      "stability": 0.0,
+      "total": 87.22
+    },
+    "copy": {
+      "process_efficiency": 84.25,
+      "precision": 97.55,
+      "product_quality": 94.39,
+      "actual_use_effect": 94.6,
+      "stability": 0.0,
+      "total": 87.84
+    },
+    "dazhuang": {
+      "process_efficiency": 100.0,
+      "precision": 99.53,
+      "product_quality": 100.0,
+      "actual_use_effect": 98.64,
+      "stability": 100.0,
+      "total": 99.43
+    }
+  },
+  "verdict": {
+    "winner": "dazhuang",
+    "runner_up": "copy",
+    "total_lead": 11.59,
+    "actual_use_lead": 4.04,
+    "semantic_accuracy_gap": 4.96,
+    "precision_ok": true,
+    "stability_ok": true,
+    "is_crushing": false
+  },
+  "blind_map_path": "/Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_20260403/artifacts/blind_packets/blind_map.json"
+}

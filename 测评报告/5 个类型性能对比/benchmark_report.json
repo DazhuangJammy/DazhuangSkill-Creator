@@ -1,0 +1,176 @@
+{
+  "aggregates": {
+    "official": {
+      "creation_elapsed_s": 119.066,
+      "creation_total_tokens": 141773.0,
+      "skill_total_bytes": 8743.0,
+      "success_rate": 100.0,
+      "validation_score": 100.0,
+      "static_score": 95.0,
+      "artifact_fit": 83.33,
+      "minimality": 100.0,
+      "runtime_validation": 100.0,
+      "downstream_format_accuracy": 100.0,
+      "downstream_semantic_accuracy": 96.52,
+      "lift_vs_baseline": 54.41,
+      "trigger_accuracy": 100.0,
+      "downstream_elapsed_s": 40.793,
+      "downstream_total_tokens": 33958.0,
+      "semantic_stddev": 6.67,
+      "runs": 15
+    },
+    "dazhuang": {
+      "creation_elapsed_s": 102.742,
+      "creation_total_tokens": 151546.0,
+      "skill_total_bytes": 6541.0,
+      "success_rate": 100.0,
+      "validation_score": 100.0,
+      "static_score": 96.67,
+      "artifact_fit": 88.89,
+      "minimality": 100.0,
+      "runtime_validation": 100.0,
+      "downstream_format_accuracy": 100.0,
+      "downstream_semantic_accuracy": 96.76,
+      "lift_vs_baseline": 54.65,
+      "trigger_accuracy": 100.0,
+      "downstream_elapsed_s": 34.757,
+      "downstream_total_tokens": 33182.0,
+      "semantic_stddev": 6.49,
+      "runs": 15
+    }
+  },
+  "scores": {
+    "official": {
+      "process_efficiency": 89.37,
+      "precision": 100.0,
+      "product_quality": 97.75,
+      "actual_use_effect": 98.08,
+      "stability": 97.3,
+      "total": 96.2
+    },
+    "dazhuang": {
+      "process_efficiency": 97.74,
+      "precision": 100.0,
+      "product_quality": 100.0,
+      "actual_use_effect": 100.0,
+      "stability": 100.0,
+      "total": 99.44
+    }
+  },
+  "verdict": {
+    "winner": "dazhuang",
+    "runner_up": "official",
+    "winner_label": "大壮版",
+    "runner_up_label": "官方原版",
+    "total_lead": 3.24,
+    "actual_use_lead": 1.92,
+    "semantic_accuracy_gap": 0.24,
+    "precision_ok": true,
+    "stability_ok": true,
+    "is_crushing": false
+  },
+  "brief_breakdown": {
+    "automation_ops_analyst": {
+      "official": {
+        "creation_elapsed_s": 150.0,
+        "creation_total_tokens": 159452.0,
+        "skill_total_bytes": 8934.33,
+        "runtime_validation": 100.0,
+        "format_accuracy": 100.0,
+        "semantic_accuracy": 100.0,
+        "trigger_accuracy": 100.0
+      },
+      "dazhuang": {
+        "creation_elapsed_s": 111.45,
+        "creation_total_tokens": 146050.33,
+        "skill_total_bytes": 8379.67,
+        "runtime_validation": 100.0,
+        "format_accuracy": 100.0,
+        "semantic_accuracy": 100.0,
+        "trigger_accuracy": 100.0
+      }
+    },
+    "hybrid_launch_brief": {
+      "official": {
+        "creation_elapsed_s": 97.26,
+        "creation_total_tokens": 127350.67,
+        "skill_total_bytes": 8605.67,
+        "runtime_validation": 100.0,
+        "format_accuracy": 100.0,
+        "semantic_accuracy": 83.72,
+        "trigger_accuracy": 100.0
+      },
+      "dazhuang": {
+        "creation_elapsed_s": 88.94,
+        "creation_total_tokens": 152100.33,
+        "skill_total_bytes": 5453.67,
+        "runtime_validation": 100.0,
+        "format_accuracy": 100.0,
+        "semantic_accuracy": 83.82,
+        "trigger_accuracy": 100.0
+      }
+    },
+    "research_browser": {
+      "official": {
+        "creation_elapsed_s": 104.9,
+        "creation_total_tokens": 170916.67,
+        "skill_total_bytes": 6709.33,
+        "runtime_validation": 100.0,
+        "format_accuracy": 100.0,
+        "semantic_accuracy": 98.89,
+        "trigger_accuracy": 100.0
+      },
+      "dazhuang": {
+        "creation_elapsed_s": 74.86,
+        "creation_total_tokens": 132413.33,
+        "skill_total_bytes": 4378.33,
+        "runtime_validation": 100.0,
+        "format_accuracy": 100.0,
+        "semantic_accuracy": 100.0,
+        "trigger_accuracy": 100.0
+      }
+    },
+    "structured_ticket_triager": {
+      "official": {
+        "creation_elapsed_s": 123.4,
+        "creation_total_tokens": 143480.67,
+        "skill_total_bytes": 10020.0,
+        "runtime_validation": 100.0,
+        "format_accuracy": 100.0,
+        "semantic_accuracy": 100.0,
+        "trigger_accuracy": 100.0
+      },
+      "dazhuang": {
+        "creation_elapsed_s": 121.03,
+        "creation_total_tokens": 187367.0,
+        "skill_total_bytes": 8825.67,
+        "runtime_validation": 100.0,
+        "format_accuracy": 100.0,
+        "semantic_accuracy": 100.0,
+        "trigger_accuracy": 100.0
+      }
+    },
+    "xiaohongshu_copywriter": {
+      "official": {
+        "creation_elapsed_s": 121.16,
+        "creation_total_tokens": 145370.0,
+        "skill_total_bytes": 7689.0,
+        "runtime_validation": 100.0,
+        "format_accuracy": 100.0,
+        "semantic_accuracy": 100.0,
+        "trigger_accuracy": 100.0
+      },
+      "dazhuang": {
+        "creation_elapsed_s": 97.47,
+        "creation_total_tokens": 148046.33,
+        "skill_total_bytes": 5837.67,
+        "runtime_validation": 100.0,
+        "format_accuracy": 100.0,
+        "semantic_accuracy": 100.0,
+        "trigger_accuracy": 100.0
+      }
+    }
+  },
+  "blind_map_path": "/Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/artifacts/blind_packets/blind_map.json",
+  "manifest_diff_path": "/Users/jammy/Desktop/龙虾架构/benchmark_skill_creator_ae_20260403/manifests/source_manifest_diff.json"
+}

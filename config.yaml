@@ -1,0 +1,36 @@
+# dazhuangskill-creator 的人工可编辑默认值
+# 经常要调的参数放这里，不要把它们散落到 JSON。
+# 机器写入的运行产物、缓存、严格交换格式，依然可以继续用 JSON。
+
+evaluation:
+  num_workers: 10
+  timeout: 30
+  runs_per_query: 3
+  trigger_threshold: 0.5
+  model: ""
+
+optimization:
+  max_iterations: 5
+  holdout: 0.4
+  report: auto
+  results_dir: ""
+  model: ""
+
+init_skill:
+  output_path: ""
+  resources: []
+  include_examples: false
+  create_config: false
+  create_openai_yaml: false
+
+openai_yaml:
+  interface_defaults:
+    display_name: ""
+    short_description: ""
+    default_prompt: ""
+    brand_color: ""
+    icon_small: ""
+    icon_large: ""
+
+package_skill:
+  output_dir: ""

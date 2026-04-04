@@ -1,0 +1,794 @@
+[
+  {
+    "brief_id": "conventional_commit",
+    "repeat": 1,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 8.048,
+      "input_tokens": 6488,
+      "output_tokens": 135,
+      "total_tokens": 6623,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "cc_docs": "docs(readme): fix typo in install curl snippet",
+      "cc_fix": "fix(startup): avoid crash when WEBHOOK_SECRET is missing",
+      "cc_perf": "perf(config): cache parsed config during boot to reduce cold start time by 35%",
+      "cc_breaking": "feat!: replace public sync flag --team with --workspace",
+      "cc_feat": "feat(sync): add --dry-run option"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "cc_docs",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "docs(readme): fix typo in install curl snippet"
+        },
+        {
+          "task_id": "cc_fix",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "fix(startup): avoid crash when WEBHOOK_SECRET is missing"
+        },
+        {
+          "task_id": "cc_perf",
+          "format": 0.75,
+          "semantic": 1.0,
+          "answer": "perf(config): cache parsed config during boot to reduce cold start time by 35%"
+        },
+        {
+          "task_id": "cc_breaking",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "feat!: replace public sync flag --team with --workspace"
+        },
+        {
+          "task_id": "cc_feat",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "feat(sync): add --dry-run option"
+        }
+      ],
+      "format_accuracy": 95.0,
+      "semantic_accuracy": 100.0
+    }
+  },
+  {
+    "brief_id": "conventional_commit",
+    "repeat": 2,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 5.631,
+      "input_tokens": 6488,
+      "output_tokens": 134,
+      "total_tokens": 6622,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "cc_docs": "docs: fix typo in README install curl snippet",
+      "cc_fix": "fix: avoid startup crash when WEBHOOK_SECRET is missing",
+      "cc_perf": "perf: cache parsed config during boot to reduce cold start time by 35%",
+      "cc_breaking": "feat!: replace public sync flag --team with --workspace",
+      "cc_feat": "feat: add --dry-run option to sync command"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "cc_docs",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "docs: fix typo in README install curl snippet"
+        },
+        {
+          "task_id": "cc_fix",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "fix: avoid startup crash when WEBHOOK_SECRET is missing"
+        },
+        {
+          "task_id": "cc_perf",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "perf: cache parsed config during boot to reduce cold start time by 35%"
+        },
+        {
+          "task_id": "cc_breaking",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "feat!: replace public sync flag --team with --workspace"
+        },
+        {
+          "task_id": "cc_feat",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "feat: add --dry-run option to sync command"
+        }
+      ],
+      "format_accuracy": 100.0,
+      "semantic_accuracy": 100.0
+    }
+  },
+  {
+    "brief_id": "conventional_commit",
+    "repeat": 3,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 9.959,
+      "input_tokens": 6488,
+      "output_tokens": 136,
+      "total_tokens": 6624,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "cc_docs": "docs(readme): fix typo in install curl snippet",
+      "cc_fix": "fix(startup): avoid crash when WEBHOOK_SECRET is missing",
+      "cc_perf": "perf(config): cache parsed config during boot to reduce cold start by 35%",
+      "cc_breaking": "feat!: replace public sync flag --team with --workspace",
+      "cc_feat": "feat(sync): add --dry-run option"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "cc_docs",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "docs(readme): fix typo in install curl snippet"
+        },
+        {
+          "task_id": "cc_fix",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "fix(startup): avoid crash when WEBHOOK_SECRET is missing"
+        },
+        {
+          "task_id": "cc_perf",
+          "format": 0.75,
+          "semantic": 1.0,
+          "answer": "perf(config): cache parsed config during boot to reduce cold start by 35%"
+        },
+        {
+          "task_id": "cc_breaking",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "feat!: replace public sync flag --team with --workspace"
+        },
+        {
+          "task_id": "cc_feat",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "feat(sync): add --dry-run option"
+        }
+      ],
+      "format_accuracy": 95.0,
+      "semantic_accuracy": 100.0
+    }
+  },
+  {
+    "brief_id": "ticket_triager_json",
+    "repeat": 1,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 15.043,
+      "input_tokens": 6562,
+      "output_tokens": 524,
+      "total_tokens": 7086,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "tt_sso": "Priority: Critical\nCategory: Authentication / SSO outage\nImpact: High — org-wide login failure affecting about 140 users, time-sensitive payroll risk in 3 hours\nRoute to: Enterprise support + Identity/SSO engineering immediately\nSeverity: Sev-1\nSuggested handling: Treat as a production outage, open an incident now, and contact the customer on the urgent channel while investigating the SSO cutover.",
+      "tt_dark_mode": "Priority: Low\nCategory: Feature request / UI theming\nImpact: Low — no breakage, usability preference\nRoute to: Product feedback backlog\nSeverity: Sev-4\nSuggested handling: Acknowledge the request, note dashboard dark mode demand, and add it to the feature-request queue for prioritization.",
+      "tt_export_blank": "Priority: High\nCategory: Billing / Export bug\nImpact: Medium-High — invoice CSV export for March is unusable across multiple browsers, likely not client-specific\nRoute to: Pro support + Billing/Reporting engineering\nSeverity: Sev-2\nSuggested handling: Triage as a reproducible product defect affecting financial exports and investigate March invoice export generation.",
+      "tt_invoice_question": "Priority: Normal\nCategory: Billing / Account configuration question\nImpact: Low — how-to request, no outage\nRoute to: Billing support\nSeverity: Sev-4\nSuggested handling: Respond with instructions for updating the billing contact email in account billing settings, and verify required admin permissions if needed.",
+      "tt_duplicate_events": "Priority: Critical\nCategory: Webhooks / Duplicate event delivery\nImpact: High — customer reports downstream duplicate shipments caused by duplicate webhook deliveries for about two hours\nRoute to: Enterprise support + Integrations/Webhooks engineering immediately\nSeverity: Sev-1\nSuggested handling: Open an incident, investigate delivery logs and retry behavior for the affected window, and coordinate customer mitigation guidance for duplicate processing."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "tt_sso",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Critical\nCategory: Authentication / SSO outage\nImpact: High — org-wide login failure affecting about 140 users, time-sensitive payroll risk in 3 hours\nRoute to: Enterprise support + Identity/SSO engineering immediately\nSeverity: Sev-1\nSuggested handling: Treat as a production outage, open an incident now, and contact the customer on the urgent channel while investigating the SSO cutover."
+        },
+        {
+          "task_id": "tt_dark_mode",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Low\nCategory: Feature request / UI theming\nImpact: Low — no breakage, usability preference\nRoute to: Product feedback backlog\nSeverity: Sev-4\nSuggested handling: Acknowledge the request, note dashboard dark mode demand, and add it to the feature-request queue for prioritization."
+        },
+        {
+          "task_id": "tt_export_blank",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: High\nCategory: Billing / Export bug\nImpact: Medium-High — invoice CSV export for March is unusable across multiple browsers, likely not client-specific\nRoute to: Pro support + Billing/Reporting engineering\nSeverity: Sev-2\nSuggested handling: Triage as a reproducible product defect affecting financial exports and investigate March invoice export generation."
+        },
+        {
+          "task_id": "tt_invoice_question",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Normal\nCategory: Billing / Account configuration question\nImpact: Low — how-to request, no outage\nRoute to: Billing support\nSeverity: Sev-4\nSuggested handling: Respond with instructions for updating the billing contact email in account billing settings, and verify required admin permissions if needed."
+        },
+        {
+          "task_id": "tt_duplicate_events",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Critical\nCategory: Webhooks / Duplicate event delivery\nImpact: High — customer reports downstream duplicate shipments caused by duplicate webhook deliveries for about two hours\nRoute to: Enterprise support + Integrations/Webhooks engineering immediately\nSeverity: Sev-1\nSuggested handling: Open an incident, investigate delivery logs and retry behavior for the affected window, and coordinate customer mitigation guidance for duplicate processing."
+        }
+      ],
+      "format_accuracy": 0.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "ticket_triager_json",
+    "repeat": 2,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 14.407,
+      "input_tokens": 6562,
+      "output_tokens": 394,
+      "total_tokens": 6956,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "tt_sso": "Priority: Critical\nQueue: Identity / SSO\nType: Incident\nImpact: Enterprise customer blocked; ~140 users unable to log in; payroll deadline in 3 hours.\nAction: Page the on-call engineer immediately and escalate to incident commander. Treat as a production outage.",
+      "tt_dark_mode": "Priority: Low\nQueue: Product Feedback\nType: Feature Request\nImpact: Free-tier request for dark mode on the dashboard.\nAction: Log as a feature request, acknowledge customer feedback, and route to product backlog.",
+      "tt_export_blank": "Priority: High\nQueue: Billing / Exports\nType: Bug\nImpact: Pro customer cannot export March invoice CSVs; reproducible across Chrome and Safari.\nAction: Route to engineering for investigation and ask support to collect account ID, affected invoice range, and a sample export timestamp.",
+      "tt_invoice_question": "Priority: Normal\nQueue: Billing Support\nType: How-to / Account Configuration\nImpact: Business customer needs to update the billing contact email.\nAction: Route to billing support for a direct how-to response.",
+      "tt_duplicate_events": "Priority: Critical\nQueue: Webhooks / Platform Reliability\nType: Incident\nImpact: Enterprise customer reports duplicate webhook deliveries for ~2 hours, causing duplicate shipments.\nAction: Escalate immediately to platform engineering, open an incident, and have support gather affected event IDs and delivery timestamps."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "tt_sso",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Critical\nQueue: Identity / SSO\nType: Incident\nImpact: Enterprise customer blocked; ~140 users unable to log in; payroll deadline in 3 hours.\nAction: Page the on-call engineer immediately and escalate to incident commander. Treat as a production outage."
+        },
+        {
+          "task_id": "tt_dark_mode",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Low\nQueue: Product Feedback\nType: Feature Request\nImpact: Free-tier request for dark mode on the dashboard.\nAction: Log as a feature request, acknowledge customer feedback, and route to product backlog."
+        },
+        {
+          "task_id": "tt_export_blank",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: High\nQueue: Billing / Exports\nType: Bug\nImpact: Pro customer cannot export March invoice CSVs; reproducible across Chrome and Safari.\nAction: Route to engineering for investigation and ask support to collect account ID, affected invoice range, and a sample export timestamp."
+        },
+        {
+          "task_id": "tt_invoice_question",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Normal\nQueue: Billing Support\nType: How-to / Account Configuration\nImpact: Business customer needs to update the billing contact email.\nAction: Route to billing support for a direct how-to response."
+        },
+        {
+          "task_id": "tt_duplicate_events",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Critical\nQueue: Webhooks / Platform Reliability\nType: Incident\nImpact: Enterprise customer reports duplicate webhook deliveries for ~2 hours, causing duplicate shipments.\nAction: Escalate immediately to platform engineering, open an incident, and have support gather affected event IDs and delivery timestamps."
+        }
+      ],
+      "format_accuracy": 0.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "ticket_triager_json",
+    "repeat": 3,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 14.002,
+      "input_tokens": 6562,
+      "output_tokens": 437,
+      "total_tokens": 6999,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "tt_sso": "Priority: Critical\nSeverity: Sev-1\nQueue: Identity / SSO Escalation\nType: Incident\nReason: Enterprise customer, complete login outage after SSO cutover, ~140 blocked users, time-sensitive payroll impact in 3 hours.\nAction: Page on-call immediately and open incident bridge.",
+      "tt_dark_mode": "Priority: Low\nSeverity: Sev-4\nQueue: Product Feedback / Feature Requests\nType: Feature Request\nReason: Free-tier request for dark mode; no break/fix issue or service impact.\nAction: Log feature request and acknowledge interest.",
+      "tt_export_blank": "Priority: High\nSeverity: Sev-2\nQueue: Billing / Exports Engineering\nType: Bug\nReason: Pro customer reports reproducible blank CSV exports for March invoices across multiple browsers, suggesting a product issue rather than local environment.\nAction: Route to engineering for investigation and gather account/example invoice details.",
+      "tt_invoice_question": "Priority: Normal\nSeverity: Sev-4\nQueue: Billing Support\nType: How-to / Account Configuration\nReason: Business-tier question about updating the billing contact email; no outage or bug indicated.\nAction: Send billing settings instructions.",
+      "tt_duplicate_events": "Priority: Critical\nSeverity: Sev-1\nQueue: Integrations / Webhooks Escalation\nType: Incident\nReason: Enterprise customer reports duplicate webhook deliveries for two hours causing downstream duplicate shipments, indicating customer-impacting data integrity and financial risk.\nAction: Escalate to on-call immediately, open incident, and assess scope plus mitigation."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "tt_sso",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Critical\nSeverity: Sev-1\nQueue: Identity / SSO Escalation\nType: Incident\nReason: Enterprise customer, complete login outage after SSO cutover, ~140 blocked users, time-sensitive payroll impact in 3 hours.\nAction: Page on-call immediately and open incident bridge."
+        },
+        {
+          "task_id": "tt_dark_mode",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Low\nSeverity: Sev-4\nQueue: Product Feedback / Feature Requests\nType: Feature Request\nReason: Free-tier request for dark mode; no break/fix issue or service impact.\nAction: Log feature request and acknowledge interest."
+        },
+        {
+          "task_id": "tt_export_blank",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: High\nSeverity: Sev-2\nQueue: Billing / Exports Engineering\nType: Bug\nReason: Pro customer reports reproducible blank CSV exports for March invoices across multiple browsers, suggesting a product issue rather than local environment.\nAction: Route to engineering for investigation and gather account/example invoice details."
+        },
+        {
+          "task_id": "tt_invoice_question",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Normal\nSeverity: Sev-4\nQueue: Billing Support\nType: How-to / Account Configuration\nReason: Business-tier question about updating the billing contact email; no outage or bug indicated.\nAction: Send billing settings instructions."
+        },
+        {
+          "task_id": "tt_duplicate_events",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Priority: Critical\nSeverity: Sev-1\nQueue: Integrations / Webhooks Escalation\nType: Incident\nReason: Enterprise customer reports duplicate webhook deliveries for two hours causing downstream duplicate shipments, indicating customer-impacting data integrity and financial risk.\nAction: Escalate to on-call immediately, open incident, and assess scope plus mitigation."
+        }
+      ],
+      "format_accuracy": 0.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "ops_command_risk",
+    "repeat": 1,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 12.341,
+      "input_tokens": 6500,
+      "output_tokens": 503,
+      "total_tokens": 7003,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "cr_ls": "Low risk if you trust the path. `ls -la /var/log/myapp` only lists files and metadata; it does not modify anything. Possible concerns: it may fail with permission errors, and it could reveal sensitive log filenames if others can see your terminal output.",
+      "cr_reset": "Not safe if you might need those last 3 commits or any uncommitted changes. `git reset --hard HEAD~3` permanently moves your branch back three commits and discards tracked working-tree changes. Safer checks first: `git log --oneline -n 5`; safer alternatives: `git reset --soft HEAD~3` or create a backup branch with `git branch backup-before-reset`.",
+      "cr_rm_root": "No. `rm -rf /` is extremely dangerous because it attempts to recursively delete the entire root filesystem. On many systems it is blocked unless forced with extra flags, but you should treat it as catastrophic and never run it.",
+      "cr_k8s_prod": "Very high risk. `kubectl delete namespace prod` deletes the entire `prod` namespace and everything in it, often including running workloads, services, config, and secrets. Only run it if you explicitly intend to destroy that environment. Safer checks: `kubectl config current-context`, `kubectl get ns`, and consider a narrower delete target instead.",
+      "cr_mkdir_copy": "Generally safe. `mkdir -p tmp/build-cache && cp artifact.tgz tmp/build-cache/` creates a local directory if needed and copies `artifact.tgz` into it. Main risks: `artifact.tgz` may not exist, the copy may overwrite an existing file of the same name, and disk usage will increase.",
+      "cr_delete_pyc": "Usually safe, but use care. `find . -name \"*.pyc\" -delete` removes all Python bytecode files under the current directory tree. It is often fine for cleanup because `.pyc` files are regenerated, but the risk is scope: if you run it from the wrong directory, it will delete more widely than intended. Safer preview: `find . -name \"*.pyc\"`."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "cr_ls",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Low risk if you trust the path. `ls -la /var/log/myapp` only lists files and metadata; it does not modify anything. Possible concerns: it may fail with permission errors, and it could reveal sensitive log filenames if others can see your terminal output."
+        },
+        {
+          "task_id": "cr_reset",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Not safe if you might need those last 3 commits or any uncommitted changes. `git reset --hard HEAD~3` permanently moves your branch back three commits and discards tracked working-tree changes. Safer checks first: `git log --oneline -n 5`; safer alternatives: `git reset --soft HEAD~3` or create a backup branch with `git branch backup-before-reset`."
+        },
+        {
+          "task_id": "cr_rm_root",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "No. `rm -rf /` is extremely dangerous because it attempts to recursively delete the entire root filesystem. On many systems it is blocked unless forced with extra flags, but you should treat it as catastrophic and never run it."
+        },
+        {
+          "task_id": "cr_k8s_prod",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Very high risk. `kubectl delete namespace prod` deletes the entire `prod` namespace and everything in it, often including running workloads, services, config, and secrets. Only run it if you explicitly intend to destroy that environment. Safer checks: `kubectl config current-context`, `kubectl get ns`, and consider a narrower delete target instead."
+        },
+        {
+          "task_id": "cr_mkdir_copy",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Generally safe. `mkdir -p tmp/build-cache && cp artifact.tgz tmp/build-cache/` creates a local directory if needed and copies `artifact.tgz` into it. Main risks: `artifact.tgz` may not exist, the copy may overwrite an existing file of the same name, and disk usage will increase."
+        },
+        {
+          "task_id": "cr_delete_pyc",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Usually safe, but use care. `find . -name \"*.pyc\" -delete` removes all Python bytecode files under the current directory tree. It is often fine for cleanup because `.pyc` files are regenerated, but the risk is scope: if you run it from the wrong directory, it will delete more widely than intended. Safer preview: `find . -name \"*.pyc\"`."
+        }
+      ],
+      "format_accuracy": 0.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "ops_command_risk",
+    "repeat": 2,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 17.349,
+      "input_tokens": 6500,
+      "output_tokens": 509,
+      "total_tokens": 7009,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "cr_ls": "Low risk if your goal is just to inspect logs. `ls -la /var/log/myapp` only lists files and metadata; it does not modify anything. Main caveats: it may fail with permission errors, and it will reveal filenames that could be sensitive if you share the output.",
+      "cr_reset": "Not safe if you might need those commits. `git reset --hard HEAD~3` forcefully moves the current branch back 3 commits and discards tracked working-tree changes, so recent local work can be lost. Safer alternatives: `git log --oneline` first to confirm, or `git reset --soft HEAD~3` if you want to keep the changes staged.",
+      "cr_rm_root": "No. `rm -rf /` is extremely dangerous because it recursively tries to delete the entire root filesystem. On many systems protections block it unless flags override them, but you should treat this as catastrophic and never run it unless you explicitly intend to wipe the machine.",
+      "cr_k8s_prod": "Very high risk. `kubectl delete namespace prod` deletes the entire `prod` namespace and all namespaced resources in it, which is typically a production outage-level action. Verify the cluster/context with `kubectl config current-context` and inspect first with `kubectl get ns prod` before doing anything destructive.",
+      "cr_mkdir_copy": "Generally safe if `artifact.tgz` and `tmp/build-cache/` are the paths you intend. It creates `tmp/build-cache` if needed and copies `artifact.tgz` into it; it does not delete or overwrite directories. Caveat: if `tmp/build-cache/artifact.tgz` already exists, `cp` will overwrite that file.",
+      "cr_delete_pyc": "Usually safe, but use care. `find . -name \"*.pyc\" -delete` recursively deletes all `.pyc` files under the current directory, which are normally regenerable Python bytecode caches. Risk comes from running it in the wrong directory or from deleting files you wanted to keep for debugging; a safer preview is `find . -name \"*.pyc\"` first."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "cr_ls",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Low risk if your goal is just to inspect logs. `ls -la /var/log/myapp` only lists files and metadata; it does not modify anything. Main caveats: it may fail with permission errors, and it will reveal filenames that could be sensitive if you share the output."
+        },
+        {
+          "task_id": "cr_reset",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Not safe if you might need those commits. `git reset --hard HEAD~3` forcefully moves the current branch back 3 commits and discards tracked working-tree changes, so recent local work can be lost. Safer alternatives: `git log --oneline` first to confirm, or `git reset --soft HEAD~3` if you want to keep the changes staged."
+        },
+        {
+          "task_id": "cr_rm_root",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "No. `rm -rf /` is extremely dangerous because it recursively tries to delete the entire root filesystem. On many systems protections block it unless flags override them, but you should treat this as catastrophic and never run it unless you explicitly intend to wipe the machine."
+        },
+        {
+          "task_id": "cr_k8s_prod",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Very high risk. `kubectl delete namespace prod` deletes the entire `prod` namespace and all namespaced resources in it, which is typically a production outage-level action. Verify the cluster/context with `kubectl config current-context` and inspect first with `kubectl get ns prod` before doing anything destructive."
+        },
+        {
+          "task_id": "cr_mkdir_copy",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Generally safe if `artifact.tgz` and `tmp/build-cache/` are the paths you intend. It creates `tmp/build-cache` if needed and copies `artifact.tgz` into it; it does not delete or overwrite directories. Caveat: if `tmp/build-cache/artifact.tgz` already exists, `cp` will overwrite that file."
+        },
+        {
+          "task_id": "cr_delete_pyc",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Usually safe, but use care. `find . -name \"*.pyc\" -delete` recursively deletes all `.pyc` files under the current directory, which are normally regenerable Python bytecode caches. Risk comes from running it in the wrong directory or from deleting files you wanted to keep for debugging; a safer preview is `find . -name \"*.pyc\"` first."
+        }
+      ],
+      "format_accuracy": 0.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "ops_command_risk",
+    "repeat": 3,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 14.301,
+      "input_tokens": 6500,
+      "output_tokens": 464,
+      "total_tokens": 6964,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "cr_ls": "Low risk. `ls -la /var/log/myapp` only lists directory contents, including hidden files and permissions; it does not modify anything. Main caveat: it may expose sensitive log filenames or metadata on your screen.",
+      "cr_reset": "Not safe if you might need those commits. `git reset --hard HEAD~3` moves the current branch back 3 commits and discards tracked working-tree and index changes. It can cause data loss. Safer if you want a checkpoint first: `git branch backup-before-reset` or inspect with `git log --oneline` before running it.",
+      "cr_rm_root": "Extremely unsafe. `rm -rf /` attempts to recursively delete the entire root filesystem. On many systems it is blocked unless extra flags are used, but you should treat it as catastrophic and never run it.",
+      "cr_k8s_prod": "High risk. `kubectl delete namespace prod` deletes the entire `prod` namespace and all namespaced resources in it. This is potentially production-impacting and may cause major downtime or data loss. Verify context first with `kubectl config current-context` and review with `kubectl get ns prod` before doing anything destructive.",
+      "cr_mkdir_copy": "Generally safe. `mkdir -p tmp/build-cache && cp artifact.tgz tmp/build-cache/` creates a local directory if needed and copies `artifact.tgz` into it. It does not delete anything. Main caveat: `cp` will overwrite an existing `tmp/build-cache/artifact.tgz` on some systems without prompting, depending on aliases/options.",
+      "cr_delete_pyc": "Usually safe, but destructive. `find . -name \"*.pyc\" -delete` deletes all `.pyc` files under the current directory tree. That is commonly fine because they are generated bytecode caches, but make sure you are in the intended directory first. Safer preview: `find . -name \"*.pyc\"`."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "cr_ls",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Low risk. `ls -la /var/log/myapp` only lists directory contents, including hidden files and permissions; it does not modify anything. Main caveat: it may expose sensitive log filenames or metadata on your screen."
+        },
+        {
+          "task_id": "cr_reset",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Not safe if you might need those commits. `git reset --hard HEAD~3` moves the current branch back 3 commits and discards tracked working-tree and index changes. It can cause data loss. Safer if you want a checkpoint first: `git branch backup-before-reset` or inspect with `git log --oneline` before running it."
+        },
+        {
+          "task_id": "cr_rm_root",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Extremely unsafe. `rm -rf /` attempts to recursively delete the entire root filesystem. On many systems it is blocked unless extra flags are used, but you should treat it as catastrophic and never run it."
+        },
+        {
+          "task_id": "cr_k8s_prod",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "High risk. `kubectl delete namespace prod` deletes the entire `prod` namespace and all namespaced resources in it. This is potentially production-impacting and may cause major downtime or data loss. Verify context first with `kubectl config current-context` and review with `kubectl get ns prod` before doing anything destructive."
+        },
+        {
+          "task_id": "cr_mkdir_copy",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Generally safe. `mkdir -p tmp/build-cache && cp artifact.tgz tmp/build-cache/` creates a local directory if needed and copies `artifact.tgz` into it. It does not delete anything. Main caveat: `cp` will overwrite an existing `tmp/build-cache/artifact.tgz` on some systems without prompting, depending on aliases/options."
+        },
+        {
+          "task_id": "cr_delete_pyc",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Usually safe, but destructive. `find . -name \"*.pyc\" -delete` deletes all `.pyc` files under the current directory tree. That is commonly fine because they are generated bytecode caches, but make sure you are in the intended directory first. Safer preview: `find . -name \"*.pyc\"`."
+        }
+      ],
+      "format_accuracy": 0.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "release_notes_markdown",
+    "repeat": 1,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 10.183,
+      "input_tokens": 6449,
+      "output_tokens": 175,
+      "total_tokens": 6624,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "rn_mix_a": "This week’s release includes CSV export for payouts, a fix for an OAuth token refresh loop, and a new self-hosting guide in the docs.",
+      "rn_mix_b": "This release updates the billing page to group invoices by month, fixes duplicate webhook deliveries, and adds a dry-run mode to the sync command.",
+      "rn_docs_only": "This week’s documentation updates clarify the SSO setup steps and add API retry examples."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "rn_mix_a",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "This week’s release includes CSV export for payouts, a fix for an OAuth token refresh loop, and a new self-hosting guide in the docs."
+        },
+        {
+          "task_id": "rn_mix_b",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "This release updates the billing page to group invoices by month, fixes duplicate webhook deliveries, and adds a dry-run mode to the sync command."
+        },
+        {
+          "task_id": "rn_docs_only",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "This week’s documentation updates clarify the SSO setup steps and add API retry examples."
+        }
+      ],
+      "format_accuracy": 20.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "release_notes_markdown",
+    "repeat": 2,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 6.691,
+      "input_tokens": 6449,
+      "output_tokens": 177,
+      "total_tokens": 6626,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "rn_mix_a": "This week’s release includes CSV export for payouts, a fix for an OAuth token refresh loop, and a new self-hosting guide in the docs.",
+      "rn_mix_b": "This release updates the billing page layout to group invoices by month, fixes duplicate webhook deliveries, and adds a dry-run mode to the sync command.",
+      "rn_docs_only": "This week’s release includes documentation improvements: clarified SSO setup steps and new API retry examples."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "rn_mix_a",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "This week’s release includes CSV export for payouts, a fix for an OAuth token refresh loop, and a new self-hosting guide in the docs."
+        },
+        {
+          "task_id": "rn_mix_b",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "This release updates the billing page layout to group invoices by month, fixes duplicate webhook deliveries, and adds a dry-run mode to the sync command."
+        },
+        {
+          "task_id": "rn_docs_only",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "This week’s release includes documentation improvements: clarified SSO setup steps and new API retry examples."
+        }
+      ],
+      "format_accuracy": 20.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "release_notes_markdown",
+    "repeat": 3,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 8.508,
+      "input_tokens": 6449,
+      "output_tokens": 168,
+      "total_tokens": 6617,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "rn_mix_a": "This week’s release includes CSV export for payouts, a fix for an OAuth token refresh loop, and a new self-hosting guide in the docs.",
+      "rn_mix_b": "This release updates the billing page to group invoices by month, fixes duplicate webhook deliveries, and adds a dry-run mode to the sync command.",
+      "rn_docs_only": "This week’s release includes documentation improvements for clearer SSO setup steps and new API retry examples."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "rn_mix_a",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "This week’s release includes CSV export for payouts, a fix for an OAuth token refresh loop, and a new self-hosting guide in the docs."
+        },
+        {
+          "task_id": "rn_mix_b",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "This release updates the billing page to group invoices by month, fixes duplicate webhook deliveries, and adds a dry-run mode to the sync command."
+        },
+        {
+          "task_id": "rn_docs_only",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "This week’s release includes documentation improvements for clearer SSO setup steps and new API retry examples."
+        }
+      ],
+      "format_accuracy": 20.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "interview_brief_markdown",
+    "repeat": 1,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 9.394,
+      "input_tokens": 6507,
+      "output_tokens": 220,
+      "total_tokens": 6727,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "ib_launch": "Goal: Launch self-serve SSO in May\nDecisions:\n- Keep SCIM out of v1\nOpen Questions:\n- Should audit logs be enterprise-only?\nNext Steps:\n- Sara to draft the rollout plan by Tuesday",
+      "ib_pricing": "Goal: Reduce enterprise sales friction\nDecisions:\n- Show annual pricing on the website\n- Legal review is not needed for the copy tweak\nNext Steps:\n- Max to update the pricing page tomorrow",
+      "ib_research": "Goal: Clarify export limits for pro users\nOpen Questions:\n- Should exports have a hard row cap or queue large exports?\nNext Steps:\n- Priya to interview 5 pro customers next week"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "ib_launch",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "Goal: Launch self-serve SSO in May\nDecisions:\n- Keep SCIM out of v1\nOpen Questions:\n- Should audit logs be enterprise-only?\nNext Steps:\n- Sara to draft the rollout plan by Tuesday"
+        },
+        {
+          "task_id": "ib_pricing",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "Goal: Reduce enterprise sales friction\nDecisions:\n- Show annual pricing on the website\n- Legal review is not needed for the copy tweak\nNext Steps:\n- Max to update the pricing page tomorrow"
+        },
+        {
+          "task_id": "ib_research",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "Goal: Clarify export limits for pro users\nOpen Questions:\n- Should exports have a hard row cap or queue large exports?\nNext Steps:\n- Priya to interview 5 pro customers next week"
+        }
+      ],
+      "format_accuracy": 20.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "interview_brief_markdown",
+    "repeat": 2,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 9.867,
+      "input_tokens": 6507,
+      "output_tokens": 234,
+      "total_tokens": 6741,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "ib_launch": "Goal: Launch self-serve SSO in May\nDecisions: Keep SCIM out of v1\nOpen questions: Should audit logs be enterprise-only?\nNext steps: Sara drafts the rollout plan by Tuesday",
+      "ib_pricing": "Goal: Reduce enterprise sales friction\nDecisions: Show annual pricing on the website; legal review is not needed for the copy tweak\nOpen questions: None\nNext steps: Max updates the pricing page tomorrow",
+      "ib_research": "Goal: Clarify export limits for pro users\nDecisions: None\nOpen questions: Should exports use a hard row cap or queue large exports?\nNext steps: Priya interviews 5 pro customers next week"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "ib_launch",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "Goal: Launch self-serve SSO in May\nDecisions: Keep SCIM out of v1\nOpen questions: Should audit logs be enterprise-only?\nNext steps: Sara drafts the rollout plan by Tuesday"
+        },
+        {
+          "task_id": "ib_pricing",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "Goal: Reduce enterprise sales friction\nDecisions: Show annual pricing on the website; legal review is not needed for the copy tweak\nOpen questions: None\nNext steps: Max updates the pricing page tomorrow"
+        },
+        {
+          "task_id": "ib_research",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "Goal: Clarify export limits for pro users\nDecisions: None\nOpen questions: Should exports use a hard row cap or queue large exports?\nNext steps: Priya interviews 5 pro customers next week"
+        }
+      ],
+      "format_accuracy": 20.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "interview_brief_markdown",
+    "repeat": 3,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 7.253,
+      "input_tokens": 6507,
+      "output_tokens": 247,
+      "total_tokens": 6754,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "ib_launch": "Goal: Launch self-serve SSO in May\nDecisions: SCIM will be excluded from v1\nOpen question: Should audit logs be enterprise-only?\nNext step: Sara drafts the rollout plan by Tuesday",
+      "ib_pricing": "Goal: Reduce enterprise sales friction\nDecisions: Show annual pricing on the website; legal review is not needed for the copy tweak\nOpen question: None\nNext step: Max updates the pricing page tomorrow",
+      "ib_research": "Goal: Clarify export limits for pro users\nDecisions: None\nOpen question: Should large exports be hard-capped by row count or handled via a queue?\nNext step: Priya interviews 5 pro customers next week"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "ib_launch",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "Goal: Launch self-serve SSO in May\nDecisions: SCIM will be excluded from v1\nOpen question: Should audit logs be enterprise-only?\nNext step: Sara drafts the rollout plan by Tuesday"
+        },
+        {
+          "task_id": "ib_pricing",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "Goal: Reduce enterprise sales friction\nDecisions: Show annual pricing on the website; legal review is not needed for the copy tweak\nOpen question: None\nNext step: Max updates the pricing page tomorrow"
+        },
+        {
+          "task_id": "ib_research",
+          "format": 0.2,
+          "semantic": 0.0,
+          "answer": "Goal: Clarify export limits for pro users\nDecisions: None\nOpen question: Should large exports be hard-capped by row count or handled via a queue?\nNext step: Priya interviews 5 pro customers next week"
+        }
+      ],
+      "format_accuracy": 20.0,
+      "semantic_accuracy": 0.0
+    }
+  }
+]

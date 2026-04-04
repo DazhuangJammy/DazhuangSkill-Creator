@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skill Creator Benchmark Casebook</title>
+  <style>
+:root {
+  --bg: #efe5d3;
+  --ink: #1f2630;
+  --muted: #5f6973;
+  --paper: rgba(255,255,255,0.74);
+  --line: rgba(31, 38, 48, 0.12);
+  --shadow: 0 22px 60px rgba(29, 37, 47, 0.12);
+  --radius: 26px;
+  --gold: #d4a43f;
+  --wine: #7d4b48;
+  --teal: #0f766e;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Avenir Next", "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(15, 118, 110, 0.10), transparent 32%),
+    radial-gradient(circle at 88% 10%, rgba(192, 107, 45, 0.10), transparent 34%),
+    linear-gradient(180deg, #f6f0e4 0%, #ebdfca 100%);
+  min-height: 100vh;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(31,38,48,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31,38,48,0.028) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.55;
+}
+.wrap {
+  width: min(1380px, calc(100vw - 36px));
+  margin: 0 auto;
+  padding: 24px 0 56px;
+  position: relative;
+  z-index: 1;
+}
+.top-nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.top-nav a {
+  text-decoration: none;
+  color: var(--ink);
+  background: rgba(255,255,255,0.66);
+  border: 1px solid rgba(255,255,255,0.76);
+  box-shadow: 0 10px 26px rgba(31,38,48,0.08);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.hero, .section {
+  background: linear-gradient(145deg, rgba(255,255,255,0.92), rgba(255,255,255,0.66));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.76);
+  box-shadow: var(--shadow);
+  border-radius: 32px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.section { margin-top: 24px; }
+.hero::after, .section::after {
+  content: "";
+  position: absolute;
+  inset: auto -10% -46% 40%;
+  height: 280px;
+  background: radial-gradient(circle, rgba(15,118,110,0.11), transparent 68%);
+  pointer-events: none;
+}
+.eyebrow {
+  margin: 0 0 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  font-weight: 800;
+}
+h1, h2, h3 {
+  margin: 0;
+  font-family: "Baskerville", "Iowan Old Style", "Palatino Linotype", serif;
+  letter-spacing: -0.035em;
+}
+h1 { font-size: clamp(40px, 7vw, 84px); line-height: 0.94; }
+h2 { font-size: clamp(28px, 4vw, 44px); line-height: 0.98; }
+h3 { font-size: 24px; }
+p { margin: 0; }
+.hero-grid, .two-col, .three-col, .four-col {
+  display: grid;
+  gap: 18px;
+}
+.hero-grid { grid-template-columns: 1.2fr 0.8fr; align-items: end; }
+.two-col { grid-template-columns: 1.15fr 0.85fr; align-items: start; }
+.three-col { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.four-col { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.hero-copy p, .section-copy p {
+  color: var(--muted);
+  line-height: 1.72;
+  font-size: 16px;
+}
+.hero-copy .lead { margin-top: 18px; max-width: 66ch; }
+.hero-copy .callout {
+  margin-top: 18px;
+  padding-left: 16px;
+  border-left: 4px solid var(--gold);
+}
+.signal {
+  border-radius: 24px;
+  padding: 18px 18px 16px;
+  background: rgba(31,38,48,0.94);
+  color: #f8f1e4;
+}
+.signal .label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  opacity: 0.72;
+}
+.signal strong { display: block; font-size: 30px; line-height: 1; }
+.signal small { display: block; margin-top: 10px; line-height: 1.55; color: rgba(248,241,228,0.72); }
+.card {
+  border-radius: 24px;
+  padding: 18px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.card strong { display: block; font-size: 18px; margin-bottom: 8px; }
+.card p, .card li { color: var(--muted); line-height: 1.68; }
+.card ul { margin: 0; padding-left: 18px; }
+.version-card {
+  border-radius: 24px;
+  padding: 18px;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.88), rgba(255,255,255,0.52)),
+    linear-gradient(180deg, var(--accent-soft), transparent);
+  border: 1px solid rgba(255,255,255,0.72);
+  position: relative;
+  overflow: hidden;
+}
+.version-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 6px;
+  background: var(--accent);
+}
+.version-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+.rank-badge {
+  min-width: 68px;
+  text-align: center;
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 800;
+}
+.version-summary {
+  min-height: 72px;
+  margin: 12px 0 16px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.mini-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.mini-grid div {
+  border-radius: 16px;
+  padding: 12px 13px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(31,38,48,0.07);
+}
+.mini-grid span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.mini-grid strong { font-size: 22px; }
+.check-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.check-card {
+  border-radius: 20px;
+  padding: 16px;
+  border: 1px solid rgba(31,38,48,0.08);
+  background: rgba(255,255,255,0.72);
+  display: grid;
+  gap: 8px;
+}
+.check-card.pass { background: rgba(15,118,110,0.12); }
+.check-card.fail { background: rgba(192,107,45,0.12); }
+.check-status {
+  width: fit-content;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(31,38,48,0.9);
+  color: #fff;
+}
+.table-shell {
+  overflow-x: auto;
+  border-radius: 20px;
+  border: 1px solid rgba(31,38,48,0.08);
+  background: rgba(255,255,255,0.54);
+}
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  padding: 14px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+thead th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 800;
+}
+tbody tr:hover { background: rgba(255,255,255,0.40); }
+.metric-cell { display: grid; gap: 8px; min-width: 140px; }
+.meter { height: 10px; border-radius: 999px; background: rgba(31,38,48,0.08); overflow: hidden; }
+.meter-fill { height: 100%; border-radius: inherit; display: block; }
+.version-dot { display: inline-block; width: 11px; height: 11px; border-radius: 999px; margin-right: 10px; vertical-align: middle; }
+.heat-100 { background: rgba(15,118,110,0.16); }
+.heat-95 { background: rgba(63, 132, 112, 0.14); }
+.heat-85 { background: rgba(212,164,63,0.18); }
+.heat-70 { background: rgba(192,107,45,0.14); }
+.heat-low { background: rgba(125, 75, 72, 0.12); }
+.note {
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(31,38,48,0.05);
+  color: var(--muted);
+  line-height: 1.72;
+}
+.note strong { color: var(--ink); }
+.note ul { margin: 10px 0 0; padding-left: 18px; }
+code, pre {
+  font-family: "SFMono-Regular", "Menlo", "Monaco", monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+code.block {
+  display: block;
+  font-size: 12px;
+  line-height: 1.65;
+  color: #24313a;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(31,38,48,0.08);
+}
+.brief-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.brief-card {
+  border-radius: 24px;
+  padding: 18px;
+  background: rgba(255,255,255,0.68);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.brief-card h3 { font-size: 22px; margin-bottom: 12px; }
+.brief-card p { color: var(--muted); line-height: 1.68; margin-top: 10px; }
+.weight-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.weight-card {
+  border-radius: 20px;
+  padding: 16px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.weight-card em { display: block; color: var(--muted); font-style: normal; margin-top: 10px; line-height: 1.65; }
+.case-brief {
+  margin-top: 24px;
+  border-radius: 30px;
+  padding: 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.90), rgba(255,255,255,0.62));
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.76);
+}
+.case-top {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 18px;
+  align-items: start;
+}
+.case-task {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px dashed rgba(31,38,48,0.14);
+}
+.case-task-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+.case-task-head strong { font-size: 20px; }
+.case-submeta {
+  margin-top: 8px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.output-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.output-card {
+  border-radius: 20px;
+  padding: 14px;
+  background: rgba(255,255,255,0.72);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.output-card header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.score-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(31,38,48,0.10);
+}
+.expected-box {
+  border-radius: 20px;
+  padding: 14px;
+  background: rgba(31,38,48,0.05);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.small { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.footer-paths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.path-card {
+  border-radius: 20px;
+  padding: 16px;
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(31,38,48,0.08);
+}
+.path-card strong { display: block; margin-bottom: 10px; }
+@media (max-width: 1220px) {
+  .brief-grid, .weight-grid, .check-grid, .three-col, .footer-paths { grid-template-columns: 1fr 1fr; }
+  .output-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 980px) {
+  .hero-grid, .two-col, .case-top, .four-col { grid-template-columns: 1fr; }
+  .brief-grid, .weight-grid, .check-grid, .footer-paths, .three-col, .output-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .wrap { width: min(100vw - 16px, 1380px); padding-top: 14px; }
+  .hero, .section, .case-brief { padding: 18px; border-radius: 24px; }
+  h1 { font-size: 42px; }
+  th, td { padding: 12px 8px; }
+}
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="top-nav"><a href="benchmark_dashboard.html">总览 Dashboard</a><a href="benchmark_casebook.html">逐题对比 Casebook</a></nav>
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Casebook / Side-by-Side Outputs / Not Hidden In My Head</p>
+          <h1>逐题逐输出对比，
+          让测评不再只是一句“我觉得”。</h1>
+          <p class="lead callout">这个页面把每个 brief 的每道下游任务都摊开：题目是什么、为什么要测、期望是什么、四种答案分别长什么样、每个版本平均拿了多少分。</p>
+          <p class="lead">如果你想检验这次排序是不是“有理有据”，这里就是最关键的证据页。</p>
+        </div>
+        <div class="two-col">
+          <div class="signal">
+            <span class="label">How To Read</span>
+            <strong>看 Avg 分数</strong>
+            <small>每个版本每道 task 的分数，都是 3 次重复运行后的平均语义分，不是单次手气。</small>
+          </div>
+          <div class="signal">
+            <span class="label">What Is Shown</span>
+            <strong>看 Repeat 1 输出</strong>
+            <small>为了页面可读性，页面里展示的是 representative output；真正总分仍以 3 次重复平均值为准。</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">Method Reminder</p>
+        <h2>为什么这里的对比是能成立的</h2>
+        <p>因为每个版本拿到的是同一个 brief、同一个 task、同一个代表性 query、同一个评分逻辑。这里不是比较文采，而是比较在同样任务压力下，哪个 creator 生成的 skill 更能把模型锁进正确轨道。</p>
+      </div>
+      <div class="card" style="margin-top:18px;">
+        <ul>
+          <li>同一 brief JSON：任务描述、artifact hint、downstream tasks、trigger query 全部相同。</li>
+          <li>同一 Codex / 同一模型 / 同一机器 / 同一运行时。</li>
+          <li>每个 task 看 3 次重复平均，不把一次偶然波动当结论。</li>
+          <li>页面里展示的是 repeat 1 输出，但分数显示的是 repeat 平均值。</li>
+        </ul>
+      </div>
+    </section>
+
+    
+            <section class="case-brief" id="conventional_commit">
+              <div class="case-top">
+                <div>
+                  <p class="eyebrow">Benchmark Brief</p>
+                  <h2>Conventional Commit</h2>
+                  <p class="small" style="margin-top:14px;"><strong>测什么：</strong>测极简高压缩输出：creator 能不能把 skill 收束到“一行 commit”这种极易跑偏的目标。</p>
+                  <p class="small" style="margin-top:10px;"><strong>为什么这题有比较意义：</strong>这是最适合测“不要啰嗦、不要乱扩写、要把边界写死”的题型。skill creator 一旦结构松，立刻会把它写胖。</p>
+                  <p class="small" style="margin-top:10px;"><strong>这题怎么打分：</strong>格式分看单行、无代码块、长度、commit 正则；语义分看 type、breaking、关键名词是否保留。</p>
+                </div>
+                <div class="three-col">
+                  
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>78.63s</strong></p>
+                  <p>平均创建 token：<strong>107,390</strong></p>
+                </div>
+                
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>74.23s</strong></p>
+                  <p>平均创建 token：<strong>103,860</strong></p>
+                </div>
+                
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>70.27s</strong></p>
+                  <p>平均创建 token：<strong>91,593</strong></p>
+                </div>
+                
+                </div>
+              </div>
+              
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task cc_docs</p>
+                      <strong>Write the commit message for this change: fix a typo in the README install curl snippet.</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;type&quot;: &quot;docs&quot;,
+  &quot;breaking&quot;: false,
+  &quot;required_keywords&quot;: [
+    &quot;readme&quot;,
+    &quot;install&quot;
+  ]
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是最适合测“不要啰嗦、不要乱扩写、要把边界写死”的题型。skill creator 一旦结构松，立刻会把它写胖。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看单行、无代码块、长度、commit 正则；语义分看 type、breaking、关键名词是否保留。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 100</span>
+                  </header>
+                  <code class="block">docs(readme): fix typo in install curl snippet</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">docs(readme): fix install curl snippet typo</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">docs(readme): fix install curl snippet typo</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">docs(readme): fix typo in install curl snippet</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task cc_fix</p>
+                      <strong>Compress this into one Conventional Commit: avoid a startup crash when WEBHOOK_SECRET is missing.</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;type&quot;: &quot;fix&quot;,
+  &quot;breaking&quot;: false,
+  &quot;required_keywords&quot;: [
+    &quot;webhook&quot;,
+    &quot;secret&quot;
+  ]
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是最适合测“不要啰嗦、不要乱扩写、要把边界写死”的题型。skill creator 一旦结构松，立刻会把它写胖。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看单行、无代码块、长度、commit 正则；语义分看 type、breaking、关键名词是否保留。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 100</span>
+                  </header>
+                  <code class="block">fix(startup): avoid crash when WEBHOOK_SECRET is missing</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">fix: avoid startup crash when webhook secret is missing</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">fix: avoid startup crash when webhook secret is missing</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">fix: avoid startup crash when WEBHOOK_SECRET is missing</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task cc_perf</p>
+                      <strong>One-line commit for my diff: cache parsed config during boot and cut cold start time by 35%.</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;type&quot;: &quot;perf&quot;,
+  &quot;breaking&quot;: false,
+  &quot;required_keywords&quot;: [
+    &quot;config&quot;,
+    &quot;boot&quot;
+  ]
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是最适合测“不要啰嗦、不要乱扩写、要把边界写死”的题型。skill creator 一旦结构松，立刻会把它写胖。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看单行、无代码块、长度、commit 正则；语义分看 type、breaking、关键名词是否保留。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 100</span>
+                  </header>
+                  <code class="block">perf(config): cache parsed config during boot to reduce cold start time by 35%</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">perf: cache parsed config during boot</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">perf: cache parsed config during boot</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">perf: cache parsed config during boot</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task cc_breaking</p>
+                      <strong>Should this be feat or fix commit? Replace the public sync flag --team with --workspace; the old flag now errors with a migration hint.</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;type&quot;: &quot;feat&quot;,
+  &quot;breaking&quot;: true,
+  &quot;required_keywords&quot;: [
+    &quot;workspace&quot;,
+    &quot;sync&quot;
+  ]
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是最适合测“不要啰嗦、不要乱扩写、要把边界写死”的题型。skill creator 一旦结构松，立刻会把它写胖。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看单行、无代码块、长度、commit 正则；语义分看 type、breaking、关键名词是否保留。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 100</span>
+                  </header>
+                  <code class="block">feat!: replace public sync flag --team with --workspace</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">feat(sync)!: replace --team with --workspace</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">feat(sync)!: replace --team with --workspace</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">feat(sync)!: replace --team with --workspace</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task cc_feat</p>
+                      <strong>Write the commit message: add a --dry-run option to the sync command.</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;type&quot;: &quot;feat&quot;,
+  &quot;breaking&quot;: false,
+  &quot;required_keywords&quot;: [
+    &quot;dry-run&quot;,
+    &quot;sync&quot;
+  ]
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是最适合测“不要啰嗦、不要乱扩写、要把边界写死”的题型。skill creator 一旦结构松，立刻会把它写胖。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看单行、无代码块、长度、commit 正则；语义分看 type、breaking、关键名词是否保留。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 100</span>
+                  </header>
+                  <code class="block">feat(sync): add --dry-run option</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">feat(sync): add --dry-run option</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">feat(sync): add --dry-run option</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">feat(sync): add --dry-run option</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+            </section>
+            
+            <section class="case-brief" id="ticket_triager_json">
+              <div class="case-top">
+                <div>
+                  <p class="eyebrow">Benchmark Brief</p>
+                  <h2>Support Ticket Triager</h2>
+                  <p class="small" style="margin-top:14px;"><strong>测什么：</strong>测严格 JSON 分类、标签体系表达、可配置结构，以及 creator 对 schema / config / interface metadata 的判断能力。</p>
+                  <p class="small" style="margin-top:10px;"><strong>为什么这题有比较意义：</strong>这类题很接近真实工作：既要准分类，又要稳定 obey 输出结构，还要考虑以后会不会改标签。</p>
+                  <p class="small" style="margin-top:10px;"><strong>这题怎么打分：</strong>格式分看能否解析 JSON 与 key 是否齐全；语义分按 severity、product_area、issue_type、customer_tier、needs_human_reply 五个字段逐项命中。</p>
+                </div>
+                <div class="three-col">
+                  
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>120.85s</strong></p>
+                  <p>平均创建 token：<strong>174,391</strong></p>
+                </div>
+                
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                  <p>平均语义准确率：<strong>94.67</strong></p>
+                  <p>平均创建耗时：<strong>98.45s</strong></p>
+                  <p>平均创建 token：<strong>113,622</strong></p>
+                </div>
+                
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>139.72s</strong></p>
+                  <p>平均创建 token：<strong>264,397</strong></p>
+                </div>
+                
+                </div>
+              </div>
+              
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task tt_sso</p>
+                      <strong>Please triage this support ticket:
+
+Tier: enterprise
+Ticket: Since yesterday&#x27;s SSO cutover, nobody at Acme can log in. About 140 seats are blocked and payroll closes in 3 hours.</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;severity&quot;: &quot;sev1&quot;,
+  &quot;product_area&quot;: &quot;auth&quot;,
+  &quot;issue_type&quot;: &quot;outage&quot;,
+  &quot;customer_tier&quot;: &quot;enterprise&quot;,
+  &quot;needs_human_reply&quot;: true
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这类题很接近真实工作：既要准分类，又要稳定 obey 输出结构，还要考虑以后会不会改标签。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看能否解析 JSON 与 key 是否齐全；语义分按 severity、product_area、issue_type、customer_tier、needs_human_reply 五个字段逐项命中。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Priority: Critical
+Category: Authentication / SSO outage
+Impact: High — org-wide login failure affecting about 140 users, time-sensitive payroll risk in 3 hours
+Route to: Enterprise support + Identity/SSO engineering immediately
+Severity: Sev-1
+Suggested handling: Treat as a production outage, open an incident now, and contact the customer on the urgent channel while investigating the SSO cutover.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev1&quot;,&quot;product_area&quot;:&quot;auth&quot;,&quot;issue_type&quot;:&quot;outage&quot;,&quot;customer_tier&quot;:&quot;enterprise&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev1&quot;,&quot;product_area&quot;:&quot;auth&quot;,&quot;issue_type&quot;:&quot;outage&quot;,&quot;customer_tier&quot;:&quot;enterprise&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev1&quot;,&quot;product_area&quot;:&quot;auth&quot;,&quot;issue_type&quot;:&quot;outage&quot;,&quot;customer_tier&quot;:&quot;enterprise&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task tt_dark_mode</p>
+                      <strong>Triage this customer ticket:
+
+Tier: free
+Ticket: Love the product. Can you add dark mode to the dashboard? The white UI is harsh at night.</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;severity&quot;: &quot;sev3&quot;,
+  &quot;product_area&quot;: &quot;ui&quot;,
+  &quot;issue_type&quot;: &quot;feature_request&quot;,
+  &quot;customer_tier&quot;: &quot;free&quot;,
+  &quot;needs_human_reply&quot;: true
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这类题很接近真实工作：既要准分类，又要稳定 obey 输出结构，还要考虑以后会不会改标签。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看能否解析 JSON 与 key 是否齐全；语义分按 severity、product_area、issue_type、customer_tier、needs_human_reply 五个字段逐项命中。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Priority: Low
+Category: Feature request / UI theming
+Impact: Low — no breakage, usability preference
+Route to: Product feedback backlog
+Severity: Sev-4
+Suggested handling: Acknowledge the request, note dashboard dark mode demand, and add it to the feature-request queue for prioritization.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev3&quot;,&quot;product_area&quot;:&quot;ui&quot;,&quot;issue_type&quot;:&quot;feature_request&quot;,&quot;customer_tier&quot;:&quot;free&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev3&quot;,&quot;product_area&quot;:&quot;ui&quot;,&quot;issue_type&quot;:&quot;feature_request&quot;,&quot;customer_tier&quot;:&quot;free&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev3&quot;,&quot;product_area&quot;:&quot;ui&quot;,&quot;issue_type&quot;:&quot;feature_request&quot;,&quot;customer_tier&quot;:&quot;free&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task tt_export_blank</p>
+                      <strong>Classify this ticket for the queue:
+
+Tier: pro
+Ticket: CSV export downloads a blank file for March invoices. I tried Chrome and Safari and both are blank.</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;severity&quot;: &quot;sev2&quot;,
+  &quot;product_area&quot;: &quot;export&quot;,
+  &quot;issue_type&quot;: &quot;bug&quot;,
+  &quot;customer_tier&quot;: &quot;pro&quot;,
+  &quot;needs_human_reply&quot;: true
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这类题很接近真实工作：既要准分类，又要稳定 obey 输出结构，还要考虑以后会不会改标签。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看能否解析 JSON 与 key 是否齐全；语义分按 severity、product_area、issue_type、customer_tier、needs_human_reply 五个字段逐项命中。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Priority: High
+Category: Billing / Export bug
+Impact: Medium-High — invoice CSV export for March is unusable across multiple browsers, likely not client-specific
+Route to: Pro support + Billing/Reporting engineering
+Severity: Sev-2
+Suggested handling: Triage as a reproducible product defect affecting financial exports and investigate March invoice export generation.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;export&quot;,&quot;issue_type&quot;:&quot;bug&quot;,&quot;customer_tier&quot;:&quot;pro&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 93.33</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;export&quot;,&quot;issue_type&quot;:&quot;data_issue&quot;,&quot;customer_tier&quot;:&quot;pro&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;export&quot;,&quot;issue_type&quot;:&quot;bug&quot;,&quot;customer_tier&quot;:&quot;pro&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task tt_invoice_question</p>
+                      <strong>Please triage:
+
+Tier: business
+Ticket: Where do I change the email address that receives our invoices?</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;severity&quot;: &quot;sev3&quot;,
+  &quot;product_area&quot;: &quot;billing&quot;,
+  &quot;issue_type&quot;: &quot;question&quot;,
+  &quot;customer_tier&quot;: &quot;business&quot;,
+  &quot;needs_human_reply&quot;: true
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这类题很接近真实工作：既要准分类，又要稳定 obey 输出结构，还要考虑以后会不会改标签。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看能否解析 JSON 与 key 是否齐全；语义分按 severity、product_area、issue_type、customer_tier、needs_human_reply 五个字段逐项命中。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Priority: Normal
+Category: Billing / Account configuration question
+Impact: Low — how-to request, no outage
+Route to: Billing support
+Severity: Sev-4
+Suggested handling: Respond with instructions for updating the billing contact email in account billing settings, and verify required admin permissions if needed.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev3&quot;,&quot;product_area&quot;:&quot;billing&quot;,&quot;issue_type&quot;:&quot;question&quot;,&quot;customer_tier&quot;:&quot;business&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev3&quot;,&quot;product_area&quot;:&quot;billing&quot;,&quot;issue_type&quot;:&quot;question&quot;,&quot;customer_tier&quot;:&quot;business&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev3&quot;,&quot;product_area&quot;:&quot;billing&quot;,&quot;issue_type&quot;:&quot;question&quot;,&quot;customer_tier&quot;:&quot;business&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task tt_duplicate_events</p>
+                      <strong>Queue this support ticket:
+
+Tier: enterprise
+Ticket: Your webhook system delivered duplicate events for about two hours this morning and our downstream system created duplicate shipments.</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;severity&quot;: &quot;sev1&quot;,
+  &quot;product_area&quot;: &quot;api&quot;,
+  &quot;issue_type&quot;: &quot;data_issue&quot;,
+  &quot;customer_tier&quot;: &quot;enterprise&quot;,
+  &quot;needs_human_reply&quot;: true
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这类题很接近真实工作：既要准分类，又要稳定 obey 输出结构，还要考虑以后会不会改标签。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看能否解析 JSON 与 key 是否齐全；语义分按 severity、product_area、issue_type、customer_tier、needs_human_reply 五个字段逐项命中。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Priority: Critical
+Category: Webhooks / Duplicate event delivery
+Impact: High — customer reports downstream duplicate shipments caused by duplicate webhook deliveries for about two hours
+Route to: Enterprise support + Integrations/Webhooks engineering immediately
+Severity: Sev-1
+Suggested handling: Open an incident, investigate delivery logs and retry behavior for the affected window, and coordinate customer mitigation guidance for duplicate processing.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev1&quot;,&quot;product_area&quot;:&quot;api&quot;,&quot;issue_type&quot;:&quot;data_issue&quot;,&quot;customer_tier&quot;:&quot;enterprise&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 80</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev2&quot;,&quot;product_area&quot;:&quot;api&quot;,&quot;issue_type&quot;:&quot;data_issue&quot;,&quot;customer_tier&quot;:&quot;enterprise&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;severity&quot;:&quot;sev1&quot;,&quot;product_area&quot;:&quot;api&quot;,&quot;issue_type&quot;:&quot;data_issue&quot;,&quot;customer_tier&quot;:&quot;enterprise&quot;,&quot;needs_human_reply&quot;:true}</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+            </section>
+            
+            <section class="case-brief" id="ops_command_risk">
+              <div class="case-top">
+                <div>
+                  <p class="eyebrow">Benchmark Brief</p>
+                  <h2>Command Risk Checker</h2>
+                  <p class="small" style="margin-top:14px;"><strong>测什么：</strong>测安全判断类 skill：creator 能否让产物既短、又硬约束、还能稳定区分 safe / confirm / refuse。</p>
+                  <p class="small" style="margin-top:10px;"><strong>为什么这题有比较意义：</strong>这是判断型 skill 的典型代表，特别适合测 creator 会不会把规则写散、写软、写到不够可执行。</p>
+                  <p class="small" style="margin-top:10px;"><strong>这题怎么打分：</strong>格式分看 JSON 与 key 完整；语义分 80% 给 verdict，20% 给 safer_alternative 是否按预期出现。</p>
+                </div>
+                <div class="three-col">
+                  
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>101.76s</strong></p>
+                  <p>平均创建 token：<strong>127,341</strong></p>
+                </div>
+                
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>95.68s</strong></p>
+                  <p>平均创建 token：<strong>131,832</strong></p>
+                </div>
+                
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>84.57s</strong></p>
+                  <p>平均创建 token：<strong>142,980</strong></p>
+                </div>
+                
+                </div>
+              </div>
+              
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task cr_ls</p>
+                      <strong>Risk-check this command before I run it: ls -la /var/log/myapp</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;verdict&quot;: &quot;safe&quot;,
+  &quot;needs_alternative&quot;: false
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是判断型 skill 的典型代表，特别适合测 creator 会不会把规则写散、写软、写到不够可执行。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看 JSON 与 key 完整；语义分 80% 给 verdict，20% 给 safer_alternative 是否按预期出现。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Low risk if you trust the path. `ls -la /var/log/myapp` only lists files and metadata; it does not modify anything. Possible concerns: it may fail with permission errors, and it could reveal sensitive log filenames if others can see your terminal output.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;safe&quot;,&quot;reason&quot;:&quot;Read-only directory listing of a specific path.&quot;,&quot;safer_alternative&quot;:&quot;&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;safe&quot;,&quot;reason&quot;:&quot;This is a read-only directory listing with low risk.&quot;,&quot;safer_alternative&quot;:&quot;&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;safe&quot;,&quot;reason&quot;:&quot;Read-only directory listing of a log path.&quot;,&quot;safer_alternative&quot;:&quot;&quot;}</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task cr_reset</p>
+                      <strong>Is this command safe? git reset --hard HEAD~3</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;verdict&quot;: &quot;confirm&quot;,
+  &quot;needs_alternative&quot;: true
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是判断型 skill 的典型代表，特别适合测 creator 会不会把规则写散、写软、写到不够可执行。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看 JSON 与 key 完整；语义分 80% 给 verdict，20% 给 safer_alternative 是否按预期出现。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Not safe if you might need those last 3 commits or any uncommitted changes. `git reset --hard HEAD~3` permanently moves your branch back three commits and discards tracked working-tree changes. Safer checks first: `git log --oneline -n 5`; safer alternatives: `git reset --soft HEAD~3` or create a backup branch with `git branch backup-before-reset`.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;confirm&quot;,&quot;reason&quot;:&quot;Irreversibly rewrites git history and discards local changes.&quot;,&quot;safer_alternative&quot;:&quot;git log --oneline HEAD~3..HEAD &amp;&amp; git branch backup-before-reset &amp;&amp; git reset --hard HEAD~3&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;confirm&quot;,&quot;reason&quot;:&quot;This rewrites Git history and discards uncommitted changes.&quot;,&quot;safer_alternative&quot;:&quot;git status &amp;&amp; git log --oneline -3&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;confirm&quot;,&quot;reason&quot;:&quot;Rewrites local git history and discards working tree changes.&quot;,&quot;safer_alternative&quot;:&quot;git status &amp;&amp; git log --oneline -n 5&quot;}</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task cr_rm_root</p>
+                      <strong>Quick safety check: rm -rf /</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;verdict&quot;: &quot;refuse&quot;,
+  &quot;needs_alternative&quot;: true
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是判断型 skill 的典型代表，特别适合测 creator 会不会把规则写散、写软、写到不够可执行。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看 JSON 与 key 完整；语义分 80% 给 verdict，20% 给 safer_alternative 是否按预期出现。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">No. `rm -rf /` is extremely dangerous because it attempts to recursively delete the entire root filesystem. On many systems it is blocked unless forced with extra flags, but you should treat it as catastrophic and never run it.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;refuse&quot;,&quot;reason&quot;:&quot;Irreversible root-level filesystem wipe.&quot;,&quot;safer_alternative&quot;:&quot;ls /&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;refuse&quot;,&quot;reason&quot;:&quot;This attempts broad filesystem deletion at the root and is catastrophically destructive.&quot;,&quot;safer_alternative&quot;:&quot;ls /&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;refuse&quot;,&quot;reason&quot;:&quot;Recursively wipes the root filesystem.&quot;,&quot;safer_alternative&quot;:&quot;Inspect the specific path first and delete only that target.&quot;}</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task cr_k8s_prod</p>
+                      <strong>Risk-check this: kubectl delete namespace prod</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;verdict&quot;: &quot;refuse&quot;,
+  &quot;needs_alternative&quot;: true
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是判断型 skill 的典型代表，特别适合测 creator 会不会把规则写散、写软、写到不够可执行。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看 JSON 与 key 完整；语义分 80% 给 verdict，20% 给 safer_alternative 是否按预期出现。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Very high risk. `kubectl delete namespace prod` deletes the entire `prod` namespace and everything in it, often including running workloads, services, config, and secrets. Only run it if you explicitly intend to destroy that environment. Safer checks: `kubectl config current-context`, `kubectl get ns`, and consider a narrower delete target instead.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;refuse&quot;,&quot;reason&quot;:&quot;Deletes a clearly production Kubernetes namespace.&quot;,&quot;safer_alternative&quot;:&quot;kubectl get namespace prod&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;refuse&quot;,&quot;reason&quot;:&quot;This deletes a production-like namespace and can remove live resources.&quot;,&quot;safer_alternative&quot;:&quot;kubectl get namespace prod&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;refuse&quot;,&quot;reason&quot;:&quot;Deletes a production namespace and all contained resources.&quot;,&quot;safer_alternative&quot;:&quot;kubectl get namespace prod &amp;&amp; kubectl delete namespace &lt;non-prod&gt; --dry-run=server&quot;}</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task cr_mkdir_copy</p>
+                      <strong>Is this command safe to run? mkdir -p tmp/build-cache &amp;&amp; cp artifact.tgz tmp/build-cache/</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;verdict&quot;: &quot;safe&quot;,
+  &quot;needs_alternative&quot;: false
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是判断型 skill 的典型代表，特别适合测 creator 会不会把规则写散、写软、写到不够可执行。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看 JSON 与 key 完整；语义分 80% 给 verdict，20% 给 safer_alternative 是否按预期出现。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Generally safe. `mkdir -p tmp/build-cache &amp;&amp; cp artifact.tgz tmp/build-cache/` creates a local directory if needed and copies `artifact.tgz` into it. Main risks: `artifact.tgz` may not exist, the copy may overwrite an existing file of the same name, and disk usage will increase.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;safe&quot;,&quot;reason&quot;:&quot;Creates a local scratch folder and copies into it.&quot;,&quot;safer_alternative&quot;:&quot;&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;safe&quot;,&quot;reason&quot;:&quot;This only creates a local directory and copies a file into it.&quot;,&quot;safer_alternative&quot;:&quot;&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;safe&quot;,&quot;reason&quot;:&quot;Creates a local cache directory and copies one file into it.&quot;,&quot;safer_alternative&quot;:&quot;&quot;}</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task cr_delete_pyc</p>
+                      <strong>Safety-check this command: find . -name &quot;*.pyc&quot; -delete</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;verdict&quot;: &quot;confirm&quot;,
+  &quot;needs_alternative&quot;: true
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是判断型 skill 的典型代表，特别适合测 creator 会不会把规则写散、写软、写到不够可执行。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看 JSON 与 key 完整；语义分 80% 给 verdict，20% 给 safer_alternative 是否按预期出现。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Usually safe, but use care. `find . -name &quot;*.pyc&quot; -delete` removes all Python bytecode files under the current directory tree. It is often fine for cleanup because `.pyc` files are regenerated, but the risk is scope: if you run it from the wrong directory, it will delete more widely than intended. Safer preview: `find . -name &quot;*.pyc&quot;`.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;confirm&quot;,&quot;reason&quot;:&quot;Broad delete pattern removes many files irreversibly.&quot;,&quot;safer_alternative&quot;:&quot;find . -name \&quot;*.pyc\&quot; -print&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;confirm&quot;,&quot;reason&quot;:&quot;This deletes matched files under the current directory tree.&quot;,&quot;safer_alternative&quot;:&quot;find . -name \&quot;*.pyc\&quot; -print&quot;}</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">{&quot;verdict&quot;:&quot;confirm&quot;,&quot;reason&quot;:&quot;Broad file deletion depends on the current directory scope.&quot;,&quot;safer_alternative&quot;:&quot;find . -name \&quot;*.pyc\&quot; -print&quot;}</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+            </section>
+            
+            <section class="case-brief" id="release_notes_markdown">
+              <div class="case-top">
+                <div>
+                  <p class="eyebrow">Benchmark Brief</p>
+                  <h2>Weekly Release Notes</h2>
+                  <p class="small" style="margin-top:14px;"><strong>测什么：</strong>测模板化 markdown 归纳、资产/模板使用意识，以及 creator 是否会把固定骨架下沉到更合适的位置。</p>
+                  <p class="small" style="margin-top:10px;"><strong>为什么这题有比较意义：</strong>这类题不是纯分类，也不是纯自由写作，而是“固定骨架 + 归类整理”的真实协作型任务。</p>
+                  <p class="small" style="margin-top:10px;"><strong>这题怎么打分：</strong>格式分看 heading 顺序、section 完整性、bullet 纪律；语义分看关键 token 是否落到正确 section，空 section 是否写 `- None`。</p>
+                </div>
+                <div class="three-col">
+                  
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>98.61s</strong></p>
+                  <p>平均创建 token：<strong>132,387</strong></p>
+                </div>
+                
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>72.89s</strong></p>
+                  <p>平均创建 token：<strong>95,011</strong></p>
+                </div>
+                
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>77.82s</strong></p>
+                  <p>平均创建 token：<strong>129,896</strong></p>
+                </div>
+                
+                </div>
+              </div>
+              
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task rn_mix_a</p>
+                      <strong>Turn these merged PR notes into the weekly release note:
+
+- Added CSV export for payouts
+- Fixed OAuth token refresh loop
+- Docs: new self-hosting guide</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;Added&quot;: [
+    [
+      &quot;csv&quot;,
+      &quot;export&quot;
+    ]
+  ],
+  &quot;Fixed&quot;: [
+    [
+      &quot;oauth&quot;,
+      &quot;refresh&quot;
+    ]
+  ],
+  &quot;Changed&quot;: [],
+  &quot;Docs&quot;: [
+    [
+      &quot;self-hosting&quot;,
+      &quot;guide&quot;
+    ]
+  ]
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这类题不是纯分类，也不是纯自由写作，而是“固定骨架 + 归类整理”的真实协作型任务。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看 heading 顺序、section 完整性、bullet 纪律；语义分看关键 token 是否落到正确 section，空 section 是否写 `- None`。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">This week’s release includes CSV export for payouts, a fix for an OAuth token refresh loop, and a new self-hosting guide in the docs.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Added
+- Added CSV export for payouts.
+## Fixed
+- Fixed the OAuth token refresh loop.
+## Changed
+- None
+## Docs
+- Added a new self-hosting guide.</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Added
+- Added CSV export for payouts.
+## Fixed
+- Fixed an OAuth token refresh loop.
+## Changed
+- None
+## Docs
+- Added a new self-hosting guide.</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Added
+- Added CSV export for payouts
+## Fixed
+- Fixed the OAuth token refresh loop
+## Changed
+- None
+## Docs
+- Added a new self-hosting guide</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task rn_mix_b</p>
+                      <strong>Please normalize these release notes:
+
+- Changed the billing page layout to group invoices by month
+- Fixed duplicate webhook deliveries
+- Added dry-run mode to sync command</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;Added&quot;: [
+    [
+      &quot;dry-run&quot;,
+      &quot;sync&quot;
+    ]
+  ],
+  &quot;Fixed&quot;: [
+    [
+      &quot;duplicate&quot;,
+      &quot;webhook&quot;
+    ]
+  ],
+  &quot;Changed&quot;: [
+    [
+      &quot;billing&quot;,
+      &quot;layout&quot;
+    ]
+  ],
+  &quot;Docs&quot;: []
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这类题不是纯分类，也不是纯自由写作，而是“固定骨架 + 归类整理”的真实协作型任务。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看 heading 顺序、section 完整性、bullet 纪律；语义分看关键 token 是否落到正确 section，空 section 是否写 `- None`。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">This release updates the billing page to group invoices by month, fixes duplicate webhook deliveries, and adds a dry-run mode to the sync command.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Added
+- Added a dry-run mode to the sync command.
+## Fixed
+- Fixed duplicate webhook deliveries.
+## Changed
+- Updated the billing page layout to group invoices by month.
+## Docs
+- None</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Added
+- Added dry-run mode to the sync command.
+## Fixed
+- Fixed duplicate webhook deliveries.
+## Changed
+- Changed the billing page layout to group invoices by month.
+## Docs
+- None</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Added
+- Added dry-run mode to the sync command
+## Fixed
+- Fixed duplicate webhook deliveries
+## Changed
+- Changed the billing page layout to group invoices by month
+## Docs
+- None</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task rn_docs_only</p>
+                      <strong>Make the weekly release note from these merged items:
+
+- Docs: clarify SSO setup steps
+- Docs: add API retry examples</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;Added&quot;: [],
+  &quot;Fixed&quot;: [],
+  &quot;Changed&quot;: [],
+  &quot;Docs&quot;: [
+    [
+      &quot;sso&quot;,
+      &quot;setup&quot;
+    ],
+    [
+      &quot;api&quot;,
+      &quot;retry&quot;
+    ]
+  ]
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这类题不是纯分类，也不是纯自由写作，而是“固定骨架 + 归类整理”的真实协作型任务。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看 heading 顺序、section 完整性、bullet 纪律；语义分看关键 token 是否落到正确 section，空 section 是否写 `- None`。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">This week’s documentation updates clarify the SSO setup steps and add API retry examples.</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Added
+- None
+## Fixed
+- None
+## Changed
+- None
+## Docs
+- Clarified the SSO setup steps.
+- Added API retry examples.</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Added
+- None
+## Fixed
+- None
+## Changed
+- None
+## Docs
+- Clarified SSO setup steps.
+- Added API retry examples.</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Added
+- None
+## Fixed
+- None
+## Changed
+- None
+## Docs
+- Clarified SSO setup steps
+- Added API retry examples</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+            </section>
+            
+            <section class="case-brief" id="interview_brief_markdown">
+              <div class="case-top">
+                <div>
+                  <p class="eyebrow">Benchmark Brief</p>
+                  <h2>Stakeholder Brief</h2>
+                  <p class="small" style="margin-top:14px;"><strong>测什么：</strong>测“脏输入 -&gt; 固定摘要结构”的抽取能力，尤其是 creator 如何处理 heuristics、模板与 body 的分工。</p>
+                  <p class="small" style="margin-top:10px;"><strong>为什么这题有比较意义：</strong>这是最能拉开 creator 水平的题：输入脏、边界多、容易凭感觉总结，特别考验 instruction 架构。</p>
+                  <p class="small" style="margin-top:10px;"><strong>这题怎么打分：</strong>格式分看固定 heading 和 bullet 结构；语义分看 Goal / Decisions / Open Questions / Next Steps 四类信息是否被准确抽出。</p>
+                </div>
+                <div class="three-col">
+                  
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                  <p>平均语义准确率：<strong>86.11</strong></p>
+                  <p>平均创建耗时：<strong>103.92s</strong></p>
+                  <p>平均创建 token：<strong>125,870</strong></p>
+                </div>
+                
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                  <p>平均语义准确率：<strong>80.55</strong></p>
+                  <p>平均创建耗时：<strong>95.45s</strong></p>
+                  <p>平均创建 token：<strong>132,610</strong></p>
+                </div>
+                
+                <div class="card">
+                  <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                  <p>平均语义准确率：<strong>100</strong></p>
+                  <p>平均创建耗时：<strong>68.43s</strong></p>
+                  <p>平均创建 token：<strong>89,581</strong></p>
+                </div>
+                
+                </div>
+              </div>
+              
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task ib_launch</p>
+                      <strong>Normalize these call notes into the standard brief:
+
+- Goal is to launch self-serve SSO in May
+- Decided to keep SCIM out of v1
+- Open question: should audit logs be enterprise-only?
+- Next step: Sara drafts rollout plan by Tuesday</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;Goal&quot;: [
+    [
+      &quot;launch&quot;,
+      &quot;sso&quot;,
+      &quot;may&quot;
+    ]
+  ],
+  &quot;Decisions&quot;: [
+    [
+      &quot;scim&quot;,
+      &quot;v1&quot;
+    ]
+  ],
+  &quot;Open Questions&quot;: [
+    [
+      &quot;audit&quot;,
+      &quot;logs&quot;,
+      &quot;enterprise&quot;
+    ]
+  ],
+  &quot;Next Steps&quot;: [
+    [
+      &quot;sara&quot;,
+      &quot;rollout&quot;,
+      &quot;tuesday&quot;
+    ]
+  ]
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是最能拉开 creator 水平的题：输入脏、边界多、容易凭感觉总结，特别考验 instruction 架构。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看固定 heading 和 bullet 结构；语义分看 Goal / Decisions / Open Questions / Next Steps 四类信息是否被准确抽出。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Goal: Launch self-serve SSO in May
+Decisions:
+- Keep SCIM out of v1
+Open Questions:
+- Should audit logs be enterprise-only?
+Next Steps:
+- Sara to draft the rollout plan by Tuesday</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Goal
+- Launch self-serve SSO in May.
+## Decisions
+- Keep SCIM out of v1.
+## Open Questions
+- Decide whether audit logs should be enterprise-only.
+## Next Steps
+- Sara drafts the rollout plan by Tuesday.</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Goal
+- Launch self-serve SSO in May.
+
+## Decisions
+- SCIM is out of scope for v1.
+
+## Open Questions
+- Should audit logs be limited to enterprise plans?
+
+## Next Steps
+- Sara drafts the rollout plan by Tuesday.</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Goal
+- Launch self-serve SSO in May
+
+## Decisions
+- Keep SCIM out of v1
+
+## Open Questions
+- Should audit logs be enterprise-only?
+
+## Next Steps
+- Sara drafts the rollout plan by Tuesday</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task ib_pricing</p>
+                      <strong>Turn this stakeholder call dump into the standard brief:
+
+- We are trying to reduce enterprise sales friction
+- Decision: show annual pricing on the website
+- Decision: legal review not needed for the copy tweak
+- Next: Max updates the pricing page tomorrow</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;Goal&quot;: [
+    [
+      &quot;reduce&quot;,
+      &quot;sales&quot;,
+      &quot;friction&quot;
+    ]
+  ],
+  &quot;Decisions&quot;: [
+    [
+      &quot;annual&quot;,
+      &quot;pricing&quot;
+    ],
+    [
+      &quot;legal&quot;,
+      &quot;review&quot;
+    ]
+  ],
+  &quot;Open Questions&quot;: [],
+  &quot;Next Steps&quot;: [
+    [
+      &quot;max&quot;,
+      &quot;pricing&quot;,
+      &quot;tomorrow&quot;
+    ]
+  ]
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是最能拉开 creator 水平的题：输入脏、边界多、容易凭感觉总结，特别考验 instruction 架构。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看固定 heading 和 bullet 结构；语义分看 Goal / Decisions / Open Questions / Next Steps 四类信息是否被准确抽出。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Goal: Reduce enterprise sales friction
+Decisions:
+- Show annual pricing on the website
+- Legal review is not needed for the copy tweak
+Next Steps:
+- Max to update the pricing page tomorrow</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Goal
+- Reduce enterprise sales friction.
+## Decisions
+- Show annual pricing on the website.
+- Legal review is not needed for the copy tweak.
+## Open Questions
+- None
+## Next Steps
+- Max updates the pricing page tomorrow.</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Goal
+- Reduce friction in the enterprise sales process.
+
+## Decisions
+- Show annual pricing on the website.
+- No legal review is needed for the pricing copy update.
+
+## Open Questions
+- None
+
+## Next Steps
+- Max updates the pricing page tomorrow.</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Goal
+- Reduce enterprise sales friction
+
+## Decisions
+- Show annual pricing on the website
+- Legal review is not needed for the copy tweak
+
+## Open Questions
+- None
+
+## Next Steps
+- Max updates the pricing page tomorrow</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+                <section class="case-task">
+                  <div class="case-task-head">
+                    <div>
+                      <p class="eyebrow">Task ib_research</p>
+                      <strong>Please standardize these notes:
+
+- Want clearer export limits for pro users
+- Open question: should we hard-cap rows or queue large exports?
+- Next step: Priya interviews 5 pro customers next week</strong>
+                    </div>
+                    <span class="pill">Representative output = repeat 1 / Score = avg across 3 repeats</span>
+                  </div>
+                  <div class="case-submeta two-col" style="margin-top:14px;">
+                    <div class="expected-box">
+                      <strong>Expected / rubric target</strong>
+                      <code class="block">{
+  &quot;Goal&quot;: [
+    [
+      &quot;clearer&quot;,
+      &quot;export&quot;,
+      &quot;pro&quot;
+    ]
+  ],
+  &quot;Decisions&quot;: [],
+  &quot;Open Questions&quot;: [
+    [
+      &quot;hard-cap&quot;,
+      &quot;queue&quot;,
+      &quot;exports&quot;
+    ]
+  ],
+  &quot;Next Steps&quot;: [
+    [
+      &quot;priya&quot;,
+      &quot;5&quot;,
+      &quot;next week&quot;
+    ]
+  ]
+}</code>
+                    </div>
+                    <div class="expected-box">
+                      <strong>Why this task is in the benchmark</strong>
+                      <p class="small">这是最能拉开 creator 水平的题：输入脏、边界多、容易凭感觉总结，特别考验 instruction 架构。</p>
+                      <p class="small" style="margin-top:10px;"><strong>Scoring rule:</strong> 格式分看固定 heading 和 bullet 结构；语义分看 Goal / Decisions / Open Questions / Next Steps 四类信息是否被准确抽出。</p>
+                    </div>
+                  </div>
+                  <div class="output-grid">
+                    
+                <article class="output-card">
+                  <header>
+                    <strong>Baseline</strong>
+                    <span class="score-badge">Avg 0</span>
+                  </header>
+                  <code class="block">Goal: Clarify export limits for pro users
+Open Questions:
+- Should exports have a hard row cap or queue large exports?
+Next Steps:
+- Priya to interview 5 pro customers next week</code>
+                </article>
+                
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#5b667f;"></span>官方原版</strong>
+                        <span class="score-badge">Avg 58.33</span>
+                      </header>
+                      <code class="block">## Goal
+- Clarify export limits for pro users.
+## Decisions
+- None
+## Open Questions
+- Decide whether to hard-cap rows or queue large exports.
+## Next Steps
+- Priya interviews five pro customers next week.</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#c06b2d;"></span>My Skill Creator Copy</strong>
+                        <span class="score-badge">Avg 41.67</span>
+                      </header>
+                      <code class="block">## Goal
+- Clarify export limits for pro users.
+
+## Decisions
+- None
+
+## Open Questions
+- Should large exports have a hard row cap or be handled through a queue?
+
+## Next Steps
+- Priya interviews five pro customers next week.</code>
+                    </article>
+                    
+                    <article class="output-card">
+                      <header>
+                        <strong><span class="version-dot" style="background:#0f766e;"></span>Dazhuang Skill Creator</strong>
+                        <span class="score-badge">Avg 100</span>
+                      </header>
+                      <code class="block">## Goal
+- Clearer export limits for pro users
+
+## Decisions
+- None
+
+## Open Questions
+- Should exports hard-cap rows or queue large exports?
+
+## Next Steps
+- Priya interviews 5 pro customers next week</code>
+                    </article>
+                    
+                  </div>
+                </section>
+                
+            </section>
+            
+
+    <section class="section">
+      <div class="section-copy">
+        <p class="eyebrow">File Paths</p>
+        <h2>相关原始文件</h2>
+        <p>如果你想继续深挖，可以直接看这些源数据。</p>
+      </div>
+      <div class="footer-paths" style="margin-top:18px;">
+        <div class="path-card"><strong>Dashboard</strong><code class="block">benchmark_skill_creator_20260403/reports/benchmark_dashboard.html</code></div>
+        <div class="path-card"><strong>All run results</strong><code class="block">benchmark_skill_creator_20260403/reports/all_run_results.json</code></div>
+        <div class="path-card"><strong>Benchmark spec</strong><code class="block">benchmark_skill_creator_20260403/briefs/benchmark_spec.json</code></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

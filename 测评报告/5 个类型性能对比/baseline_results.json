@@ -1,0 +1,815 @@
+[
+  {
+    "brief_id": "automation_ops_analyst",
+    "repeat": 1,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 29.455,
+      "input_tokens": 13966,
+      "output_tokens": 679,
+      "total_tokens": 14645,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "ops_log_summary": "{\"top_error_code\":\"PAY_402\",\"top_endpoint\":\"/api/charge\",\"distinct_error_codes\":3}",
+      "ops_invoice_summary": "{\"overdue_invoice_count\":3,\"total_overdue\":1420,\"overdue_customers\":[\"C-12\",\"C-31\",\"C-44\"]}",
+      "ops_overlap_customers": "{\"at_risk_customers\":[\"C-12\",\"C-31\",\"C-44\"],\"count\":3}",
+      "ops_priority_code": "{\"priority_code\":\"DB_TIMEOUT\",\"linked_to_overdue_customers\":[\"C-12\",\"C-44\"]}",
+      "ops_payment_orders": "{\"payment_failure_orders\":[\"O-1001\",\"O-1002\",\"O-1004\"],\"repeated_customer\":\"C-12\"}"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "ops_log_summary",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "{\"top_error_code\":\"PAY_402\",\"top_endpoint\":\"/api/charge\",\"distinct_error_codes\":3}"
+        },
+        {
+          "task_id": "ops_invoice_summary",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "{\"overdue_invoice_count\":3,\"total_overdue\":1420,\"overdue_customers\":[\"C-12\",\"C-31\",\"C-44\"]}"
+        },
+        {
+          "task_id": "ops_overlap_customers",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "{\"at_risk_customers\":[\"C-12\",\"C-31\",\"C-44\"],\"count\":3}"
+        },
+        {
+          "task_id": "ops_priority_code",
+          "format": 1.0,
+          "semantic": 0.5,
+          "answer": "{\"priority_code\":\"DB_TIMEOUT\",\"linked_to_overdue_customers\":[\"C-12\",\"C-44\"]}"
+        },
+        {
+          "task_id": "ops_payment_orders",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "{\"payment_failure_orders\":[\"O-1001\",\"O-1002\",\"O-1004\"],\"repeated_customer\":\"C-12\"}"
+        }
+      ],
+      "format_accuracy": 100.0,
+      "semantic_accuracy": 90.0
+    }
+  },
+  {
+    "brief_id": "automation_ops_analyst",
+    "repeat": 2,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 31.528,
+      "input_tokens": 13995,
+      "output_tokens": 1082,
+      "total_tokens": 15077,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "ops_log_summary": "{\"top_error_code\":\"PAY_402\",\"top_endpoint\":\"/api/charge\",\"distinct_error_codes\":[\"AUTH_401\",\"DB_TIMEOUT\",\"PAY_402\"]}",
+      "ops_invoice_summary": "{\"overdue_invoice_count\":3,\"total_overdue\":1420,\"overdue_customers\":[\"C-12\",\"C-31\",\"C-44\"]}",
+      "ops_overlap_customers": "{\"at_risk_customers\":[\"C-12\",\"C-31\",\"C-44\"],\"count\":3}",
+      "ops_priority_code": "{\"priority_code\":\"DB_TIMEOUT\",\"linked_to_overdue_customers\":[\"C-12\",\"C-44\"]}",
+      "ops_payment_orders": "{\"payment_failure_orders\":[\"O-1001\",\"O-1002\",\"O-1004\"],\"repeated_customer\":\"C-12\"}"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "ops_log_summary",
+          "format": 1.0,
+          "semantic": 0.6666666666666666,
+          "answer": "{\"top_error_code\":\"PAY_402\",\"top_endpoint\":\"/api/charge\",\"distinct_error_codes\":[\"AUTH_401\",\"DB_TIMEOUT\",\"PAY_402\"]}"
+        },
+        {
+          "task_id": "ops_invoice_summary",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "{\"overdue_invoice_count\":3,\"total_overdue\":1420,\"overdue_customers\":[\"C-12\",\"C-31\",\"C-44\"]}"
+        },
+        {
+          "task_id": "ops_overlap_customers",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "{\"at_risk_customers\":[\"C-12\",\"C-31\",\"C-44\"],\"count\":3}"
+        },
+        {
+          "task_id": "ops_priority_code",
+          "format": 1.0,
+          "semantic": 0.5,
+          "answer": "{\"priority_code\":\"DB_TIMEOUT\",\"linked_to_overdue_customers\":[\"C-12\",\"C-44\"]}"
+        },
+        {
+          "task_id": "ops_payment_orders",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "{\"payment_failure_orders\":[\"O-1001\",\"O-1002\",\"O-1004\"],\"repeated_customer\":\"C-12\"}"
+        }
+      ],
+      "format_accuracy": 100.0,
+      "semantic_accuracy": 83.33
+    }
+  },
+  {
+    "brief_id": "automation_ops_analyst",
+    "repeat": 3,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 47.483,
+      "input_tokens": 13972,
+      "output_tokens": 983,
+      "total_tokens": 14955,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "ops_log_summary": "{\"top_error_code\":\"PAY_402\",\"top_endpoint\":\"/api/charge\",\"distinct_error_codes\":[\"AUTH_401\",\"DB_TIMEOUT\",\"PAY_402\"]}",
+      "ops_invoice_summary": "{\"overdue_invoice_count\":3,\"total_overdue\":1420,\"overdue_customers\":[\"C-12\",\"C-31\",\"C-44\"]}",
+      "ops_overlap_customers": "{\"at_risk_customers\":[\"C-12\",\"C-31\",\"C-44\"],\"count\":3}",
+      "ops_priority_code": "{\"priority_code\":\"DB_TIMEOUT\",\"linked_to_overdue_customers\":[\"C-12\",\"C-44\"]}",
+      "ops_payment_orders": "{\"payment_failure_orders\":[\"O-1001\",\"O-1002\",\"O-1004\"],\"repeated_customer\":\"C-12\"}"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "ops_log_summary",
+          "format": 1.0,
+          "semantic": 0.6666666666666666,
+          "answer": "{\"top_error_code\":\"PAY_402\",\"top_endpoint\":\"/api/charge\",\"distinct_error_codes\":[\"AUTH_401\",\"DB_TIMEOUT\",\"PAY_402\"]}"
+        },
+        {
+          "task_id": "ops_invoice_summary",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "{\"overdue_invoice_count\":3,\"total_overdue\":1420,\"overdue_customers\":[\"C-12\",\"C-31\",\"C-44\"]}"
+        },
+        {
+          "task_id": "ops_overlap_customers",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "{\"at_risk_customers\":[\"C-12\",\"C-31\",\"C-44\"],\"count\":3}"
+        },
+        {
+          "task_id": "ops_priority_code",
+          "format": 1.0,
+          "semantic": 0.5,
+          "answer": "{\"priority_code\":\"DB_TIMEOUT\",\"linked_to_overdue_customers\":[\"C-12\",\"C-44\"]}"
+        },
+        {
+          "task_id": "ops_payment_orders",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "{\"payment_failure_orders\":[\"O-1001\",\"O-1002\",\"O-1004\"],\"repeated_customer\":\"C-12\"}"
+        }
+      ],
+      "format_accuracy": 100.0,
+      "semantic_accuracy": 83.33
+    }
+  },
+  {
+    "brief_id": "hybrid_launch_brief",
+    "repeat": 1,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 63.349,
+      "input_tokens": 14167,
+      "output_tokens": 1700,
+      "total_tokens": 15867,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "hybrid_exec_brief": "PM Leader Brief\n\nHeadline: RivalBoard’s launch sharpens a feature-gap story in enterprise readiness while exposing reliability and usability gaps we can still turn into a roadmap advantage.\n\nWhat changed\n- RivalBoard launched team workspaces on 2026-03-27.\n- It includes SSO on Pro and Enterprise, increasing pressure on enterprise-only packaging.\n- AI summaries are only in closed beta, so the immediate buying criteria still center on admin, security, and operational basics.\n\nWhat customers are signaling\n- Audit logs are the clearest blocker: two enterprise prospects said missing audit logs is blocking procurement.\n- Workspace permissions are still confusing for multi-brand teams, matching analyst concern around workspace-level permissions.\n- CSV export performance is materially hurting experience: three mid-market customers reported exports taking over two minutes.\n- Demand is active: 7 enterprise demo signals suggest near-term pipeline if enterprise gaps are closed.\n\nMarket read\n- Analyst note says EU procurement increasingly expects audit logs and workspace-level permissions.\n- Competitor bundling of SSO on mid-tier plans creates pricing and packaging pressure.\n- RivalBoard kept CSV export on every paid plan, so weak export performance is especially risky if buyers compare operational usability.\n\nRecommended priorities\n1. Ship audit logs as the top enterprise-readiness priority.\n2. Simplify and clarify workspace permissions for multi-brand teams.\n3. Reduce CSV export latency and make performance visible with clear targets.\n4. Revisit SSO packaging to prepare for increased mid-tier pricing pressure.\n\nSuggested next 30 days\n- Lock audit logs scope and target accounts blocked in procurement.\n- Run a permissions UX review focused on multi-brand admin flows.\n- Open an export latency fix program tied to the 5 support-ticket signals.\n- Prepare GTM messaging that positions us on reliability/admin control rather than chasing closed-beta AI claims.\n\nBottom line\nThe strongest near-term win is not feature breadth; it is closing enterprise trust gaps fast enough to convert active demand and prevent RivalBoard from defining the procurement checklist.",
+      "hybrid_sales_brief": "Sales Leader Brief: Procurement Pressure\n\nExecutive takeaway\nProcurement pressure is rising around auditability, permissions, and SSO packaging. The biggest deal risk is not flashy AI competition; it is failing enterprise security and admin expectations during evaluation.\n\nKey evidence\n- Two enterprise prospects said missing audit logs is blocking procurement.\n- Analyst note says EU procurement teams increasingly expect audit logs and workspace-level permissions.\n- RivalBoard now includes SSO on Pro and Enterprise, which increases pressure on enterprise-only SSO pricing.\n- 7 `enterprise_demo` events indicate strong top-of-funnel enterprise interest, but procurement friction can stall conversion.\n\nWhat this means for sales\n- Audit logs are now a first-order procurement requirement, especially in EU and larger enterprise cycles.\n- Workspace-permission clarity matters in multi-brand evaluations and can become a red flag if not handled well.\n- SSO packaging will trigger price comparisons earlier, especially if prospects question why SSO is gated higher than rivals.\n- Export latency is a secondary but real value-risk issue because 3 customers complained and 5 latency tickets were logged.\n\nImmediate actions\n- Flag all active enterprise deals lacking audit-log coverage as elevated procurement risk.\n- Build a procurement-risk tracker with fields for audit logs, workspace permissions, SSO expectations, and region.\n- Equip AEs with a direct response to RivalBoard’s mid-tier SSO bundling and a pricing-value defense.\n- Pull product into late-stage deals where multi-brand permissions or admin controls are under scrutiny.\n\nRecommended messaging\n- Lead with security roadmap transparency where audit logs are not yet available.\n- Emphasize operational fit, governance, and support quality over closed-beta AI claims.\n- For pricing pushback, anchor on total admin/control value, but avoid surprise on SSO packaging.\n\nLeadership watchlist\n- Highest risk: enterprise deals in procurement without audit-log coverage.\n- Emerging risk: discount pressure tied to competitor SSO bundling.\n- Conversion opportunity: the current demo volume suggests demand is present if procurement objections are handled early and consistently.\n\nBottom line\nSales should treat procurement readiness as the main battleground: audit logs, permissions clarity, and SSO packaging are now core deal-control issues.",
+      "hybrid_churn_memo": "Product Ops Memo: Churn Risk\n\nSummary\nChurn risk is rising from unresolved operational pain points, especially export latency and admin-control gaps that align with broader market expectations.\n\nRisk signals\n- 3 `churn_risk` events were logged.\n- 5 `export_latency_ticket` events were logged.\n- Three mid-market customers said CSV export takes more than two minutes.\n- Customers also report confusing workspace permissions for multi-brand teams.\n- Analyst note shows audit logs and workspace-level permissions are increasingly expected, especially by EU procurement teams.\n\nPrimary churn drivers\n1. Export reliability/performance: repeated latency complaints suggest a day-to-day workflow failure, not a minor annoyance.\n2. Permissions complexity: multi-brand teams may experience ongoing admin friction that reduces product trust.\n3. Missing audit logs: while often seen as a sales blocker, this can also become a retention issue for customers expanding governance requirements.\n4. Competitive comparison risk: RivalBoard offers CSV export on every paid plan and bundles SSO more broadly, increasing the chance that dissatisfied accounts explore alternatives.\n\nAccounts most at risk\n- Mid-market customers dependent on recurring CSV workflows.\n- Multi-brand teams with more complex workspace/admin setups.\n- Customers entering stricter compliance or procurement review cycles.\n\nRecommended interventions\n- Create a churn watchlist combining accounts with export complaints, multi-brand usage, and governance-sensitive use cases.\n- Triage export latency as the top retention incident and define a target recovery timeline.\n- Launch proactive outreach to customers affected by export delays before renewal risk escalates.\n- Gather structured feedback on workspace-permission confusion and feed it into product prioritization.\n- Tag accounts likely to need audit logs soon so CS can manage expectations early.\n\nOperating metrics to monitor weekly\n- Volume of export-related tickets.\n- Count of accounts with repeated admin/permissions complaints.\n- Churn-risk accounts by segment and renewal window.\n- Escalations tied to compliance, procurement, or governance requirements.\n\nBottom line\nThe near-term churn threat is operational friction, especially export latency, with admin-control gaps increasing the likelihood that frustrated accounts become competitively vulnerable."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "hybrid_exec_brief",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "PM Leader Brief\n\nHeadline: RivalBoard’s launch sharpens a feature-gap story in enterprise readiness while exposing reliability and usability gaps we can still turn into a roadmap advantage.\n\nWhat changed\n- RivalBoard launched team workspaces on 2026-03-27.\n- It includes SSO on Pro and Enterprise, increasing pressure on enterprise-only packaging.\n- AI summaries are only in closed beta, so the immediate buying criteria still center on admin, security, and operational basics.\n\nWhat customers are signaling\n- Audit logs are the clearest blocker: two enterprise prospects said missing audit logs is blocking procurement.\n- Workspace permissions are still confusing for multi-brand teams, matching analyst concern around workspace-level permissions.\n- CSV export performance is materially hurting experience: three mid-market customers reported exports taking over two minutes.\n- Demand is active: 7 enterprise demo signals suggest near-term pipeline if enterprise gaps are closed.\n\nMarket read\n- Analyst note says EU procurement increasingly expects audit logs and workspace-level permissions.\n- Competitor bundling of SSO on mid-tier plans creates pricing and packaging pressure.\n- RivalBoard kept CSV export on every paid plan, so weak export performance is especially risky if buyers compare operational usability.\n\nRecommended priorities\n1. Ship audit logs as the top enterprise-readiness priority.\n2. Simplify and clarify workspace permissions for multi-brand teams.\n3. Reduce CSV export latency and make performance visible with clear targets.\n4. Revisit SSO packaging to prepare for increased mid-tier pricing pressure.\n\nSuggested next 30 days\n- Lock audit logs scope and target accounts blocked in procurement.\n- Run a permissions UX review focused on multi-brand admin flows.\n- Open an export latency fix program tied to the 5 support-ticket signals.\n- Prepare GTM messaging that positions us on reliability/admin control rather than chasing closed-beta AI claims.\n\nBottom line\nThe strongest near-term win is not feature breadth; it is closing enterprise trust gaps fast enough to convert active demand and prevent RivalBoard from defining the procurement checklist."
+        },
+        {
+          "task_id": "hybrid_sales_brief",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "Sales Leader Brief: Procurement Pressure\n\nExecutive takeaway\nProcurement pressure is rising around auditability, permissions, and SSO packaging. The biggest deal risk is not flashy AI competition; it is failing enterprise security and admin expectations during evaluation.\n\nKey evidence\n- Two enterprise prospects said missing audit logs is blocking procurement.\n- Analyst note says EU procurement teams increasingly expect audit logs and workspace-level permissions.\n- RivalBoard now includes SSO on Pro and Enterprise, which increases pressure on enterprise-only SSO pricing.\n- 7 `enterprise_demo` events indicate strong top-of-funnel enterprise interest, but procurement friction can stall conversion.\n\nWhat this means for sales\n- Audit logs are now a first-order procurement requirement, especially in EU and larger enterprise cycles.\n- Workspace-permission clarity matters in multi-brand evaluations and can become a red flag if not handled well.\n- SSO packaging will trigger price comparisons earlier, especially if prospects question why SSO is gated higher than rivals.\n- Export latency is a secondary but real value-risk issue because 3 customers complained and 5 latency tickets were logged.\n\nImmediate actions\n- Flag all active enterprise deals lacking audit-log coverage as elevated procurement risk.\n- Build a procurement-risk tracker with fields for audit logs, workspace permissions, SSO expectations, and region.\n- Equip AEs with a direct response to RivalBoard’s mid-tier SSO bundling and a pricing-value defense.\n- Pull product into late-stage deals where multi-brand permissions or admin controls are under scrutiny.\n\nRecommended messaging\n- Lead with security roadmap transparency where audit logs are not yet available.\n- Emphasize operational fit, governance, and support quality over closed-beta AI claims.\n- For pricing pushback, anchor on total admin/control value, but avoid surprise on SSO packaging.\n\nLeadership watchlist\n- Highest risk: enterprise deals in procurement without audit-log coverage.\n- Emerging risk: discount pressure tied to competitor SSO bundling.\n- Conversion opportunity: the current demo volume suggests demand is present if procurement objections are handled early and consistently.\n\nBottom line\nSales should treat procurement readiness as the main battleground: audit logs, permissions clarity, and SSO packaging are now core deal-control issues."
+        },
+        {
+          "task_id": "hybrid_churn_memo",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "Product Ops Memo: Churn Risk\n\nSummary\nChurn risk is rising from unresolved operational pain points, especially export latency and admin-control gaps that align with broader market expectations.\n\nRisk signals\n- 3 `churn_risk` events were logged.\n- 5 `export_latency_ticket` events were logged.\n- Three mid-market customers said CSV export takes more than two minutes.\n- Customers also report confusing workspace permissions for multi-brand teams.\n- Analyst note shows audit logs and workspace-level permissions are increasingly expected, especially by EU procurement teams.\n\nPrimary churn drivers\n1. Export reliability/performance: repeated latency complaints suggest a day-to-day workflow failure, not a minor annoyance.\n2. Permissions complexity: multi-brand teams may experience ongoing admin friction that reduces product trust.\n3. Missing audit logs: while often seen as a sales blocker, this can also become a retention issue for customers expanding governance requirements.\n4. Competitive comparison risk: RivalBoard offers CSV export on every paid plan and bundles SSO more broadly, increasing the chance that dissatisfied accounts explore alternatives.\n\nAccounts most at risk\n- Mid-market customers dependent on recurring CSV workflows.\n- Multi-brand teams with more complex workspace/admin setups.\n- Customers entering stricter compliance or procurement review cycles.\n\nRecommended interventions\n- Create a churn watchlist combining accounts with export complaints, multi-brand usage, and governance-sensitive use cases.\n- Triage export latency as the top retention incident and define a target recovery timeline.\n- Launch proactive outreach to customers affected by export delays before renewal risk escalates.\n- Gather structured feedback on workspace-permission confusion and feed it into product prioritization.\n- Tag accounts likely to need audit logs soon so CS can manage expectations early.\n\nOperating metrics to monitor weekly\n- Volume of export-related tickets.\n- Count of accounts with repeated admin/permissions complaints.\n- Churn-risk accounts by segment and renewal window.\n- Escalations tied to compliance, procurement, or governance requirements.\n\nBottom line\nThe near-term churn threat is operational friction, especially export latency, with admin-control gaps increasing the likelihood that frustrated accounts become competitively vulnerable."
+        }
+      ],
+      "format_accuracy": 10.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "hybrid_launch_brief",
+    "repeat": 2,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 45.905,
+      "input_tokens": 14158,
+      "output_tokens": 1501,
+      "total_tokens": 15659,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "hybrid_exec_brief": "PM Leader Brief\n\nSummary\n- RivalBoard launched team workspaces on 2026-03-27 and now includes SSO on both Pro and Enterprise, increasing pressure where we still gate SSO to enterprise.\n- Market expectations are moving toward audit logs and workspace-level permissions, especially in EU procurement.\n- Current product friction is concentrated in three areas: no audit logs, confusing workspace permissions for multi-brand teams, and slow CSV exports.\n\nWhat matters now\n- Audit logs are the clearest gap: two enterprise prospects said procurement is blocked without them, and analyst coverage says they are becoming table stakes.\n- Workspace permissions are both a competitive and usability issue: RivalBoard launched team workspaces, while our customers still report confusion for multi-brand teams.\n- Export performance is hurting reliability perception: three mid-market customers reported CSV exports taking more than two minutes, reinforced by five export-latency tickets.\n- Packaging pressure is rising on SSO: competitors bundling SSO on mid-tier plans may weaken our enterprise-only positioning.\n\nSignals\n- 7 `enterprise_demo` events suggest active enterprise pipeline interest.\n- 3 `churn_risk` events indicate existing account instability.\n- 5 `export_latency_ticket` events confirm the export issue is not isolated.\n\nRecommended priorities\n1. Move audit logs into the near-term roadmap and define a procurement-ready MVP.\n2. Simplify workspace-level permissions for multi-brand teams, aligned to the new team workspace competitive frame.\n3. Reduce CSV export latency and set a clear performance target.\n4. Revisit SSO packaging strategy with product marketing and pricing before RivalBoard’s launch narrative hardens.\n\nLeadership takeaway\n- The highest-leverage product response is to close procurement blockers first, then remove usability and performance friction that can turn competitive curiosity into churn or lost deals.",
+      "hybrid_sales_brief": "Sales Leader Brief: Procurement Pressure\n\nSummary\n- Procurement pressure is increasing around audit logs, workspace-level permissions, and SSO packaging.\n- RivalBoard’s launch strengthens their story with team workspaces and SSO included on Pro and Enterprise.\n- Our biggest commercial risk is losing enterprise deals during security and procurement review, not just in early evaluation.\n\nKey procurement risks\n- Audit logs are an immediate blocker: two enterprise prospects explicitly said missing audit logs is stopping procurement.\n- EU buyers increasingly expect both audit logs and workspace-level permissions as standard requirements.\n- Our enterprise-only SSO packaging is exposed because competitors are bundling SSO on mid-tier plans, creating pricing pushback.\n\nField implications\n- Expect more discount requests or packaging objections centered on SSO.\n- Expect security review friction to surface earlier in enterprise cycles.\n- Expect multi-brand prospects to question whether our permissions model can support distributed teams cleanly.\n\nDemand and account signals\n- 7 `enterprise_demo` events show healthy top-of-funnel enterprise interest.\n- That demand is at risk if procurement objections are not handled with a stronger package and roadmap narrative.\n- 3 `churn_risk` events suggest current customers may also use these same gaps as leverage in renewal negotiations.\n\nRecommended sales actions\n1. Build a procurement objection playbook centered on audit logs, permissions, and SSO packaging.\n2. Flag all enterprise opportunities lacking audit log coverage as elevated deal risk.\n3. Equip reps with approved talk tracks for EU procurement expectations and current mitigation steps.\n4. Partner with pricing and product leadership on whether SSO packaging needs a near-term concession or bundle change.\n5. Use export latency and permissions complaints as renewal-risk indicators during account reviews.\n\nLeadership takeaway\n- The main issue is not insufficient demand; it is conversion risk under procurement scrutiny. Tightening packaging strategy and procurement handling will have the fastest revenue impact.",
+      "hybrid_churn_memo": "Product Ops Memo: Churn Risk\n\nSummary\n- Churn risk is building from a mix of product gaps, usability friction, and performance issues.\n- The strongest retention threats are slow CSV exports, confusing workspace permissions, and missing audit logs in enterprise-sensitive accounts.\n- Competitive pressure from RivalBoard raises the likelihood that existing dissatisfaction turns into active switching evaluation.\n\nPrimary churn drivers\n- Export reliability: three mid-market customers said CSV export takes more than two minutes, and there are 5 `export_latency_ticket` events.\n- Permissions confusion: workspace permissions remain difficult for multi-brand teams, which can create daily operational friction.\n- Enterprise trust gaps: missing audit logs are blocking procurement for prospects and may become renewal risk for regulated or security-conscious customers.\n- Packaging comparison: RivalBoard includes SSO on Pro and Enterprise, making our packaging easier to challenge at renewal.\n\nRisk signals\n- 3 `churn_risk` events indicate active account health concerns already exist.\n- 5 export-latency tickets suggest repeated pain, not anecdotal feedback.\n- 7 `enterprise_demo` events imply strong market interest, but also a more competitive environment that can attract unhappy customers.\n\nOperational recommendations\n1. Create a churn watchlist for accounts with export complaints, permissions confusion, or security-feature objections.\n2. Prioritize root-cause tracking for CSV export latency and monitor time-to-export as a weekly health metric.\n3. Standardize support tagging for audit log requests, permissions issues, and SSO pricing objections.\n4. Feed a quantified retention-risk report to product leadership tying account risk to missing audit logs and permissions complexity.\n5. Coordinate proactive outreach for multi-brand and enterprise accounts most exposed to these gaps.\n\nLeadership takeaway\n- The most immediate churn exposure is operational friction customers feel now, especially exports and permissions, while audit logs and packaging amplify risk in higher-value accounts. A focused watchlist plus tighter issue instrumentation should reduce surprise churn."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "hybrid_exec_brief",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "PM Leader Brief\n\nSummary\n- RivalBoard launched team workspaces on 2026-03-27 and now includes SSO on both Pro and Enterprise, increasing pressure where we still gate SSO to enterprise.\n- Market expectations are moving toward audit logs and workspace-level permissions, especially in EU procurement.\n- Current product friction is concentrated in three areas: no audit logs, confusing workspace permissions for multi-brand teams, and slow CSV exports.\n\nWhat matters now\n- Audit logs are the clearest gap: two enterprise prospects said procurement is blocked without them, and analyst coverage says they are becoming table stakes.\n- Workspace permissions are both a competitive and usability issue: RivalBoard launched team workspaces, while our customers still report confusion for multi-brand teams.\n- Export performance is hurting reliability perception: three mid-market customers reported CSV exports taking more than two minutes, reinforced by five export-latency tickets.\n- Packaging pressure is rising on SSO: competitors bundling SSO on mid-tier plans may weaken our enterprise-only positioning.\n\nSignals\n- 7 `enterprise_demo` events suggest active enterprise pipeline interest.\n- 3 `churn_risk` events indicate existing account instability.\n- 5 `export_latency_ticket` events confirm the export issue is not isolated.\n\nRecommended priorities\n1. Move audit logs into the near-term roadmap and define a procurement-ready MVP.\n2. Simplify workspace-level permissions for multi-brand teams, aligned to the new team workspace competitive frame.\n3. Reduce CSV export latency and set a clear performance target.\n4. Revisit SSO packaging strategy with product marketing and pricing before RivalBoard’s launch narrative hardens.\n\nLeadership takeaway\n- The highest-leverage product response is to close procurement blockers first, then remove usability and performance friction that can turn competitive curiosity into churn or lost deals."
+        },
+        {
+          "task_id": "hybrid_sales_brief",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "Sales Leader Brief: Procurement Pressure\n\nSummary\n- Procurement pressure is increasing around audit logs, workspace-level permissions, and SSO packaging.\n- RivalBoard’s launch strengthens their story with team workspaces and SSO included on Pro and Enterprise.\n- Our biggest commercial risk is losing enterprise deals during security and procurement review, not just in early evaluation.\n\nKey procurement risks\n- Audit logs are an immediate blocker: two enterprise prospects explicitly said missing audit logs is stopping procurement.\n- EU buyers increasingly expect both audit logs and workspace-level permissions as standard requirements.\n- Our enterprise-only SSO packaging is exposed because competitors are bundling SSO on mid-tier plans, creating pricing pushback.\n\nField implications\n- Expect more discount requests or packaging objections centered on SSO.\n- Expect security review friction to surface earlier in enterprise cycles.\n- Expect multi-brand prospects to question whether our permissions model can support distributed teams cleanly.\n\nDemand and account signals\n- 7 `enterprise_demo` events show healthy top-of-funnel enterprise interest.\n- That demand is at risk if procurement objections are not handled with a stronger package and roadmap narrative.\n- 3 `churn_risk` events suggest current customers may also use these same gaps as leverage in renewal negotiations.\n\nRecommended sales actions\n1. Build a procurement objection playbook centered on audit logs, permissions, and SSO packaging.\n2. Flag all enterprise opportunities lacking audit log coverage as elevated deal risk.\n3. Equip reps with approved talk tracks for EU procurement expectations and current mitigation steps.\n4. Partner with pricing and product leadership on whether SSO packaging needs a near-term concession or bundle change.\n5. Use export latency and permissions complaints as renewal-risk indicators during account reviews.\n\nLeadership takeaway\n- The main issue is not insufficient demand; it is conversion risk under procurement scrutiny. Tightening packaging strategy and procurement handling will have the fastest revenue impact."
+        },
+        {
+          "task_id": "hybrid_churn_memo",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "Product Ops Memo: Churn Risk\n\nSummary\n- Churn risk is building from a mix of product gaps, usability friction, and performance issues.\n- The strongest retention threats are slow CSV exports, confusing workspace permissions, and missing audit logs in enterprise-sensitive accounts.\n- Competitive pressure from RivalBoard raises the likelihood that existing dissatisfaction turns into active switching evaluation.\n\nPrimary churn drivers\n- Export reliability: three mid-market customers said CSV export takes more than two minutes, and there are 5 `export_latency_ticket` events.\n- Permissions confusion: workspace permissions remain difficult for multi-brand teams, which can create daily operational friction.\n- Enterprise trust gaps: missing audit logs are blocking procurement for prospects and may become renewal risk for regulated or security-conscious customers.\n- Packaging comparison: RivalBoard includes SSO on Pro and Enterprise, making our packaging easier to challenge at renewal.\n\nRisk signals\n- 3 `churn_risk` events indicate active account health concerns already exist.\n- 5 export-latency tickets suggest repeated pain, not anecdotal feedback.\n- 7 `enterprise_demo` events imply strong market interest, but also a more competitive environment that can attract unhappy customers.\n\nOperational recommendations\n1. Create a churn watchlist for accounts with export complaints, permissions confusion, or security-feature objections.\n2. Prioritize root-cause tracking for CSV export latency and monitor time-to-export as a weekly health metric.\n3. Standardize support tagging for audit log requests, permissions issues, and SSO pricing objections.\n4. Feed a quantified retention-risk report to product leadership tying account risk to missing audit logs and permissions complexity.\n5. Coordinate proactive outreach for multi-brand and enterprise accounts most exposed to these gaps.\n\nLeadership takeaway\n- The most immediate churn exposure is operational friction customers feel now, especially exports and permissions, while audit logs and packaging amplify risk in higher-value accounts. A focused watchlist plus tighter issue instrumentation should reduce surprise churn."
+        }
+      ],
+      "format_accuracy": 10.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "hybrid_launch_brief",
+    "repeat": 3,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 40.533,
+      "input_tokens": 14161,
+      "output_tokens": 1497,
+      "total_tokens": 15658,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "hybrid_exec_brief": "PM leader brief\n\nSummary\n- Competitive and market signals are converging on enterprise-readiness gaps: RivalBoard now includes SSO on Pro and Enterprise, while analysts say EU buyers increasingly expect audit logs and workspace-level permissions.\n- Customer feedback shows two urgent product friction points: missing audit logs is blocking procurement for two enterprise prospects, and CSV export latency is frustrating three mid-market customers.\n- Usage signals support prioritization: 7 enterprise demo events suggest active large-account interest, while 5 export-latency tickets and 3 churn-risk events indicate delivery and retention exposure.\n\nWhat matters now\n- Procurement risk is immediate because audit logs and clearer workspace permissions are now baseline expectations in target accounts.\n- Packaging pressure is rising because competitor SSO inclusion on mid-tier plans weakens enterprise-only SSO differentiation.\n- Reliability/usability risk is growing because slow CSV export and confusing multi-brand permissions affect day-to-day trust.\n\nRecommended priorities\n- P0: Audit logs for enterprise procurement, especially for EU-sensitive deals.\n- P0: Workspace-level permissions redesign for multi-brand teams.\n- P1: CSV export performance improvement, with a clear target to reduce export time materially below the current 2+ minute complaints.\n- P1: Revisit SSO packaging and positioning in coordination with GTM.\n\nLeader actions this week\n- Align product, sales, and security on an audit-log delivery date and interim workaround for open prospects.\n- Stand up a rapid-response effort on export latency with measurable performance targets.\n- Validate permission-model pain with multi-brand customers and scope the smallest viable fix.\n- Prepare a competitive response on SSO packaging before RivalBoard’s launch narrative spreads further.\n\nKey metrics to watch\n- Enterprise deals blocked by audit-log requirements.\n- Time-to-export and export-related support volume.\n- Churn-risk accounts tied to permissions/export issues.\n- Win/loss mentions of SSO packaging versus RivalBoard.",
+      "hybrid_sales_brief": "Sales leader brief: procurement pressure\n\nSummary\n- Procurement pressure is increasing around enterprise controls: two enterprise prospects explicitly said missing audit logs is blocking procurement.\n- Analyst feedback confirms the pattern, especially in the EU, where audit logs and workspace-level permissions are becoming expected requirements.\n- RivalBoard’s launch adds commercial pressure by bundling SSO on Pro and Enterprise, which can make enterprise-only SSO packaging harder to defend.\n\nDeal impact\n- Highest immediate blocker: missing audit logs.\n- Secondary blocker: confusing workspace permissions for multi-brand teams, which weakens security and governance messaging.\n- Pricing/packaging risk: buyers may use RivalBoard’s bundled SSO to push for discounts or concessions.\n\nWhat to tell the field\n- Lead with roadmap clarity on audit logs and position it as the top mitigation for procurement review.\n- For multi-brand accounts, acknowledge current permissions complexity early and bring product/security into the cycle sooner.\n- Expect SSO pricing objections and prepare a comparison narrative centered on overall platform value, support, and roadmap confidence.\n\nRecommended actions\n- Triage all active enterprise deals for audit-log dependency and create an exec-reviewed save plan for each.\n- Arm reps with a procurement objection sheet covering audit logs, permissions, and SSO packaging.\n- Segment EU opportunities as higher risk for compliance and workspace-governance gaps.\n- Use the 7 enterprise demo signals to prioritize follow-up on accounts most likely to enter procurement soon.\n\nMetrics to monitor\n- Number of open deals blocked by audit logs.\n- Discount pressure tied to SSO objections.\n- Procurement-stage slippage in EU and multi-brand accounts.\n- Competitive mentions of RivalBoard in enterprise evaluations.",
+      "hybrid_churn_memo": "Product ops memo: churn risk\n\nSummary\n- Churn risk is centered on operational friction, not just feature gaps: there are 3 churn-risk events and 5 export-latency tickets, plus customer complaints that CSV export takes more than two minutes.\n- Multi-brand teams also report confusing workspace permissions, which creates repeated adoption friction.\n- Competitive and analyst signals raise the stakes because audit logs and workspace-level permissions are becoming table stakes, especially for larger and EU accounts.\n\nMain risk drivers\n- CSV export latency is the clearest near-term retention risk because it is frequent, measurable, and already generating support volume.\n- Permission confusion for multi-brand teams likely drives low confidence, extra enablement burden, and poor expansion outcomes.\n- Missing audit logs may not be the top churn trigger for existing mid-market users, but it increases risk for larger accounts and renewals with stricter governance needs.\n\nImmediate operational actions\n- Open a churn watchlist for accounts with export complaints, permissions confusion, or governance objections.\n- Partner with support and engineering to tag every export-related case by account, severity, and renewal date.\n- Create a customer communication plan for affected accounts, including status updates and workaround guidance.\n- Route multi-brand accounts through a focused review to identify the most damaging permission misunderstandings.\n\nRecommended priorities\n- P0: Reduce CSV export times and track improvement weekly.\n- P0: Standardize churn-risk signals tied to export latency and permissions friction.\n- P1: Build an intervention playbook for CSMs managing multi-brand and governance-sensitive accounts.\n- P1: Feed audit-log demand into renewal-risk scoring for enterprise and EU customers.\n\nMetrics to track weekly\n- Export-latency ticket count and median export time.\n- Accounts flagged with churn risk tied to exports or permissions.\n- Renewal exposure among multi-brand and EU customers.\n- Save rate after proactive outreach to affected accounts."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "hybrid_exec_brief",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "PM leader brief\n\nSummary\n- Competitive and market signals are converging on enterprise-readiness gaps: RivalBoard now includes SSO on Pro and Enterprise, while analysts say EU buyers increasingly expect audit logs and workspace-level permissions.\n- Customer feedback shows two urgent product friction points: missing audit logs is blocking procurement for two enterprise prospects, and CSV export latency is frustrating three mid-market customers.\n- Usage signals support prioritization: 7 enterprise demo events suggest active large-account interest, while 5 export-latency tickets and 3 churn-risk events indicate delivery and retention exposure.\n\nWhat matters now\n- Procurement risk is immediate because audit logs and clearer workspace permissions are now baseline expectations in target accounts.\n- Packaging pressure is rising because competitor SSO inclusion on mid-tier plans weakens enterprise-only SSO differentiation.\n- Reliability/usability risk is growing because slow CSV export and confusing multi-brand permissions affect day-to-day trust.\n\nRecommended priorities\n- P0: Audit logs for enterprise procurement, especially for EU-sensitive deals.\n- P0: Workspace-level permissions redesign for multi-brand teams.\n- P1: CSV export performance improvement, with a clear target to reduce export time materially below the current 2+ minute complaints.\n- P1: Revisit SSO packaging and positioning in coordination with GTM.\n\nLeader actions this week\n- Align product, sales, and security on an audit-log delivery date and interim workaround for open prospects.\n- Stand up a rapid-response effort on export latency with measurable performance targets.\n- Validate permission-model pain with multi-brand customers and scope the smallest viable fix.\n- Prepare a competitive response on SSO packaging before RivalBoard’s launch narrative spreads further.\n\nKey metrics to watch\n- Enterprise deals blocked by audit-log requirements.\n- Time-to-export and export-related support volume.\n- Churn-risk accounts tied to permissions/export issues.\n- Win/loss mentions of SSO packaging versus RivalBoard."
+        },
+        {
+          "task_id": "hybrid_sales_brief",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "Sales leader brief: procurement pressure\n\nSummary\n- Procurement pressure is increasing around enterprise controls: two enterprise prospects explicitly said missing audit logs is blocking procurement.\n- Analyst feedback confirms the pattern, especially in the EU, where audit logs and workspace-level permissions are becoming expected requirements.\n- RivalBoard’s launch adds commercial pressure by bundling SSO on Pro and Enterprise, which can make enterprise-only SSO packaging harder to defend.\n\nDeal impact\n- Highest immediate blocker: missing audit logs.\n- Secondary blocker: confusing workspace permissions for multi-brand teams, which weakens security and governance messaging.\n- Pricing/packaging risk: buyers may use RivalBoard’s bundled SSO to push for discounts or concessions.\n\nWhat to tell the field\n- Lead with roadmap clarity on audit logs and position it as the top mitigation for procurement review.\n- For multi-brand accounts, acknowledge current permissions complexity early and bring product/security into the cycle sooner.\n- Expect SSO pricing objections and prepare a comparison narrative centered on overall platform value, support, and roadmap confidence.\n\nRecommended actions\n- Triage all active enterprise deals for audit-log dependency and create an exec-reviewed save plan for each.\n- Arm reps with a procurement objection sheet covering audit logs, permissions, and SSO packaging.\n- Segment EU opportunities as higher risk for compliance and workspace-governance gaps.\n- Use the 7 enterprise demo signals to prioritize follow-up on accounts most likely to enter procurement soon.\n\nMetrics to monitor\n- Number of open deals blocked by audit logs.\n- Discount pressure tied to SSO objections.\n- Procurement-stage slippage in EU and multi-brand accounts.\n- Competitive mentions of RivalBoard in enterprise evaluations."
+        },
+        {
+          "task_id": "hybrid_churn_memo",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "Product ops memo: churn risk\n\nSummary\n- Churn risk is centered on operational friction, not just feature gaps: there are 3 churn-risk events and 5 export-latency tickets, plus customer complaints that CSV export takes more than two minutes.\n- Multi-brand teams also report confusing workspace permissions, which creates repeated adoption friction.\n- Competitive and analyst signals raise the stakes because audit logs and workspace-level permissions are becoming table stakes, especially for larger and EU accounts.\n\nMain risk drivers\n- CSV export latency is the clearest near-term retention risk because it is frequent, measurable, and already generating support volume.\n- Permission confusion for multi-brand teams likely drives low confidence, extra enablement burden, and poor expansion outcomes.\n- Missing audit logs may not be the top churn trigger for existing mid-market users, but it increases risk for larger accounts and renewals with stricter governance needs.\n\nImmediate operational actions\n- Open a churn watchlist for accounts with export complaints, permissions confusion, or governance objections.\n- Partner with support and engineering to tag every export-related case by account, severity, and renewal date.\n- Create a customer communication plan for affected accounts, including status updates and workaround guidance.\n- Route multi-brand accounts through a focused review to identify the most damaging permission misunderstandings.\n\nRecommended priorities\n- P0: Reduce CSV export times and track improvement weekly.\n- P0: Standardize churn-risk signals tied to export latency and permissions friction.\n- P1: Build an intervention playbook for CSMs managing multi-brand and governance-sensitive accounts.\n- P1: Feed audit-log demand into renewal-risk scoring for enterprise and EU customers.\n\nMetrics to track weekly\n- Export-latency ticket count and median export time.\n- Accounts flagged with churn risk tied to exports or permissions.\n- Renewal exposure among multi-brand and EU customers.\n- Save rate after proactive outreach to affected accounts."
+        }
+      ],
+      "format_accuracy": 10.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "research_browser",
+    "repeat": 1,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 41.558,
+      "input_tokens": 42828,
+      "output_tokens": 1280,
+      "total_tokens": 44108,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "research_cheapest_paid": "**Answer**\nBeacon has the cheapest paid plan at `$12/user/month` on Starter. Acme is `$15/user/month` on Pro, and Comet is `$18/user/month` on Growth. (beacon_pricing.md, acme_pricing.md, comet_pricing.md)\n\n**Sources**\nbeacon_pricing.md, acme_pricing.md, comet_pricing.md",
+      "research_sso_tiers": "**Answer**\nVendors offering SSO below enterprise:\n- Acme: SSO is included on Business and above, so it is available below enterprise. (acme_pricing.md)\n- Beacon: SSO is included on Scale, so it is available below enterprise. (beacon_pricing.md)\n\nVendor keeping SSO enterprise-only:\n- Comet: SSO is Enterprise only. (comet_pricing.md)\n\n**Sources**\nacme_pricing.md, beacon_pricing.md, comet_pricing.md",
+      "research_eu_residency": "**Answer**\n- Acme: EU data residency is available on Business and Enterprise. (acme_trust_center.md)\n- Beacon: No public mention of EU data residency appears in the pricing or FAQ docs in this corpus. (beacon_security.md)\n- Comet: EU data residency is available on Enterprise only. (comet_security.md)\n\n**Sources**\nacme_trust_center.md, beacon_security.md, comet_security.md",
+      "research_best_fit": "**Answer**\nAcme is the best fit for a 20-seat EU team that needs SSO and CSV export.\n\nWhy:\n- It supports SSO on Business, which is below enterprise. (acme_pricing.md)\n- It includes EU data residency on Business and Enterprise. (acme_trust_center.md)\n- It offers CSV export on every paid plan. (acme_pricing.md)\n- At `$29/user/month` on Business, it is the only vendor in the corpus that clearly satisfies all three needs without requiring enterprise. (acme_pricing.md, acme_trust_center.md, comet_pricing.md, comet_security.md, beacon_pricing.md, beacon_security.md)\n\nNot as good:\n- Beacon has SSO on Scale and CSV export, but the corpus does not show EU data residency. (beacon_pricing.md, beacon_security.md)\n- Comet has CSV export on Growth, but both SSO and EU data residency are Enterprise-only. (comet_pricing.md, comet_security.md)\n\n**Sources**\nacme_pricing.md, acme_trust_center.md, beacon_pricing.md, beacon_security.md, comet_pricing.md, comet_security.md",
+      "research_free_limits": "**Answer**\n- Acme: Free plan available for up to 3 seats. (acme_pricing.md)\n- Comet: Free plan available for up to 5 seats. (comet_pricing.md)\n- Beacon: No free plan. (beacon_pricing.md)\n\n**Sources**\nacme_pricing.md, comet_pricing.md, beacon_pricing.md"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "research_cheapest_paid",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "**Answer**\nBeacon has the cheapest paid plan at `$12/user/month` on Starter. Acme is `$15/user/month` on Pro, and Comet is `$18/user/month` on Growth. (beacon_pricing.md, acme_pricing.md, comet_pricing.md)\n\n**Sources**\nbeacon_pricing.md, acme_pricing.md, comet_pricing.md"
+        },
+        {
+          "task_id": "research_sso_tiers",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "**Answer**\nVendors offering SSO below enterprise:\n- Acme: SSO is included on Business and above, so it is available below enterprise. (acme_pricing.md)\n- Beacon: SSO is included on Scale, so it is available below enterprise. (beacon_pricing.md)\n\nVendor keeping SSO enterprise-only:\n- Comet: SSO is Enterprise only. (comet_pricing.md)\n\n**Sources**\nacme_pricing.md, beacon_pricing.md, comet_pricing.md"
+        },
+        {
+          "task_id": "research_eu_residency",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "**Answer**\n- Acme: EU data residency is available on Business and Enterprise. (acme_trust_center.md)\n- Beacon: No public mention of EU data residency appears in the pricing or FAQ docs in this corpus. (beacon_security.md)\n- Comet: EU data residency is available on Enterprise only. (comet_security.md)\n\n**Sources**\nacme_trust_center.md, beacon_security.md, comet_security.md"
+        },
+        {
+          "task_id": "research_best_fit",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "**Answer**\nAcme is the best fit for a 20-seat EU team that needs SSO and CSV export.\n\nWhy:\n- It supports SSO on Business, which is below enterprise. (acme_pricing.md)\n- It includes EU data residency on Business and Enterprise. (acme_trust_center.md)\n- It offers CSV export on every paid plan. (acme_pricing.md)\n- At `$29/user/month` on Business, it is the only vendor in the corpus that clearly satisfies all three needs without requiring enterprise. (acme_pricing.md, acme_trust_center.md, comet_pricing.md, comet_security.md, beacon_pricing.md, beacon_security.md)\n\nNot as good:\n- Beacon has SSO on Scale and CSV export, but the corpus does not show EU data residency. (beacon_pricing.md, beacon_security.md)\n- Comet has CSV export on Growth, but both SSO and EU data residency are Enterprise-only. (comet_pricing.md, comet_security.md)\n\n**Sources**\nacme_pricing.md, acme_trust_center.md, beacon_pricing.md, beacon_security.md, comet_pricing.md, comet_security.md"
+        },
+        {
+          "task_id": "research_free_limits",
+          "format": 0.1,
+          "semantic": 0.0,
+          "answer": "**Answer**\n- Acme: Free plan available for up to 3 seats. (acme_pricing.md)\n- Comet: Free plan available for up to 5 seats. (comet_pricing.md)\n- Beacon: No free plan. (beacon_pricing.md)\n\n**Sources**\nacme_pricing.md, comet_pricing.md, beacon_pricing.md"
+        }
+      ],
+      "format_accuracy": 10.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "research_browser",
+    "repeat": 2,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 45.047,
+      "input_tokens": 50288,
+      "output_tokens": 1283,
+      "total_tokens": 51571,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "research_cheapest_paid": "## Answer\nBeacon has the cheapest paid plan at `$12/user/month` on Starter. Acme is `$15/user/month` on Pro, and Comet is `$18/user/month` on Growth. (beacon_pricing.md, acme_pricing.md, comet_pricing.md)\n\n## Sources\nbeacon_pricing.md, acme_pricing.md, comet_pricing.md",
+      "research_sso_tiers": "## Answer\nVendors offering SSO below enterprise:\n- Acme: SSO is included on Business and above, so it is available below enterprise. (acme_pricing.md)\n- Beacon: SSO is included on Scale, so it is available below enterprise. (beacon_pricing.md)\n\nVendor keeping SSO enterprise-only:\n- Comet: SSO is Enterprise only. (comet_pricing.md)\n\n## Sources\nacme_pricing.md, beacon_pricing.md, comet_pricing.md",
+      "research_eu_residency": "## Answer\n- Acme: EU data residency is available on Business and Enterprise. (acme_trust_center.md)\n- Beacon: No public mention of EU data residency appears in the pricing or FAQ docs in this corpus. (beacon_security.md)\n- Comet: EU data residency is available on Enterprise only. (comet_security.md)\n\n## Sources\nacme_trust_center.md, beacon_security.md, comet_security.md",
+      "research_best_fit": "## Answer\nAcme is the best fit for a 20-seat EU team that needs SSO and CSV export.\n\nWhy:\n- It supports SSO on Business, which is below enterprise. (acme_pricing.md)\n- It includes EU data residency on Business and Enterprise. (acme_trust_center.md)\n- It offers CSV export on every paid plan. (acme_pricing.md)\n- At `$29/user/month` on Business, it is the only vendor in the corpus that clearly satisfies all three needs without requiring enterprise. (acme_pricing.md, acme_trust_center.md, beacon_pricing.md, beacon_security.md, comet_pricing.md, comet_security.md)\n\nNot as good:\n- Beacon has SSO on Scale and CSV export, but the corpus does not show EU data residency. (beacon_pricing.md, beacon_security.md)\n- Comet has CSV export on Growth, but both SSO and EU data residency are Enterprise-only. (comet_pricing.md, comet_security.md)\n\n## Sources\nacme_pricing.md, acme_trust_center.md, beacon_pricing.md, beacon_security.md, comet_pricing.md, comet_security.md",
+      "research_free_limits": "## Answer\n- Acme: Free plan available for up to 3 seats. (acme_pricing.md)\n- Comet: Free plan available for up to 5 seats. (comet_pricing.md)\n- Beacon: No free plan. (beacon_pricing.md)\n\n## Sources\nacme_pricing.md, comet_pricing.md, beacon_pricing.md"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "research_cheapest_paid",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "## Answer\nBeacon has the cheapest paid plan at `$12/user/month` on Starter. Acme is `$15/user/month` on Pro, and Comet is `$18/user/month` on Growth. (beacon_pricing.md, acme_pricing.md, comet_pricing.md)\n\n## Sources\nbeacon_pricing.md, acme_pricing.md, comet_pricing.md"
+        },
+        {
+          "task_id": "research_sso_tiers",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "## Answer\nVendors offering SSO below enterprise:\n- Acme: SSO is included on Business and above, so it is available below enterprise. (acme_pricing.md)\n- Beacon: SSO is included on Scale, so it is available below enterprise. (beacon_pricing.md)\n\nVendor keeping SSO enterprise-only:\n- Comet: SSO is Enterprise only. (comet_pricing.md)\n\n## Sources\nacme_pricing.md, beacon_pricing.md, comet_pricing.md"
+        },
+        {
+          "task_id": "research_eu_residency",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "## Answer\n- Acme: EU data residency is available on Business and Enterprise. (acme_trust_center.md)\n- Beacon: No public mention of EU data residency appears in the pricing or FAQ docs in this corpus. (beacon_security.md)\n- Comet: EU data residency is available on Enterprise only. (comet_security.md)\n\n## Sources\nacme_trust_center.md, beacon_security.md, comet_security.md"
+        },
+        {
+          "task_id": "research_best_fit",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "## Answer\nAcme is the best fit for a 20-seat EU team that needs SSO and CSV export.\n\nWhy:\n- It supports SSO on Business, which is below enterprise. (acme_pricing.md)\n- It includes EU data residency on Business and Enterprise. (acme_trust_center.md)\n- It offers CSV export on every paid plan. (acme_pricing.md)\n- At `$29/user/month` on Business, it is the only vendor in the corpus that clearly satisfies all three needs without requiring enterprise. (acme_pricing.md, acme_trust_center.md, beacon_pricing.md, beacon_security.md, comet_pricing.md, comet_security.md)\n\nNot as good:\n- Beacon has SSO on Scale and CSV export, but the corpus does not show EU data residency. (beacon_pricing.md, beacon_security.md)\n- Comet has CSV export on Growth, but both SSO and EU data residency are Enterprise-only. (comet_pricing.md, comet_security.md)\n\n## Sources\nacme_pricing.md, acme_trust_center.md, beacon_pricing.md, beacon_security.md, comet_pricing.md, comet_security.md"
+        },
+        {
+          "task_id": "research_free_limits",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "## Answer\n- Acme: Free plan available for up to 3 seats. (acme_pricing.md)\n- Comet: Free plan available for up to 5 seats. (comet_pricing.md)\n- Beacon: No free plan. (beacon_pricing.md)\n\n## Sources\nacme_pricing.md, comet_pricing.md, beacon_pricing.md"
+        }
+      ],
+      "format_accuracy": 100.0,
+      "semantic_accuracy": 100.0
+    }
+  },
+  {
+    "brief_id": "research_browser",
+    "repeat": 3,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 60.811,
+      "input_tokens": 64194,
+      "output_tokens": 1383,
+      "total_tokens": 65577,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "research_cheapest_paid": "## Answer\nBeacon has the cheapest paid plan: `Starter` at `$12 per user/month` billed annually.\n\n## Sources\n- `beacon_pricing.md`",
+      "research_sso_tiers": "## Answer\nVendors that offer SSO below enterprise:\n- Acme: `Business`\n- Beacon: `Scale`\n\nVendor that keeps SSO enterprise-only:\n- Comet: `Enterprise` only\n\n## Sources\n- `acme_pricing.md`\n- `beacon_pricing.md`\n- `comet_pricing.md`",
+      "research_eu_residency": "## Answer\n- Acme: EU data residency is available on `Business` and `Enterprise`.\n- Comet: EU data residency is available on `Enterprise`.\n- Beacon: there is no public mention of EU data residency in the provided pricing or FAQ/security docs.\n\n## Sources\n- `acme_trust_center.md`\n- `comet_security.md`\n- `beacon_security.md`",
+      "research_best_fit": "## Answer\n`Acme Business` is the best fit for a 20-seat EU team that needs SSO and CSV export.\n\nWhy:\n- It includes `SSO` on `Business`.\n- It includes `CSV export` on every paid plan.\n- It offers `EU data residency` on `Business` and `Enterprise`.\n\nOther vendors do not match as well:\n- Beacon has SSO and CSV export, but there is no public mention of EU data residency.\n- Comet has CSV export, but SSO and EU data residency are `Enterprise` only.\n\n## Sources\n- `acme_pricing.md`\n- `acme_trust_center.md`\n- `beacon_pricing.md`\n- `beacon_security.md`\n- `comet_pricing.md`\n- `comet_security.md`",
+      "research_free_limits": "## Answer\n- Acme: free plan supports up to `3 seats`.\n- Comet: free plan supports up to `5 seats`.\n- Beacon: `no free plan`.\n\n## Sources\n- `acme_pricing.md`\n- `comet_pricing.md`\n- `beacon_pricing.md`"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "research_cheapest_paid",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "## Answer\nBeacon has the cheapest paid plan: `Starter` at `$12 per user/month` billed annually.\n\n## Sources\n- `beacon_pricing.md`"
+        },
+        {
+          "task_id": "research_sso_tiers",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "## Answer\nVendors that offer SSO below enterprise:\n- Acme: `Business`\n- Beacon: `Scale`\n\nVendor that keeps SSO enterprise-only:\n- Comet: `Enterprise` only\n\n## Sources\n- `acme_pricing.md`\n- `beacon_pricing.md`\n- `comet_pricing.md`"
+        },
+        {
+          "task_id": "research_eu_residency",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "## Answer\n- Acme: EU data residency is available on `Business` and `Enterprise`.\n- Comet: EU data residency is available on `Enterprise`.\n- Beacon: there is no public mention of EU data residency in the provided pricing or FAQ/security docs.\n\n## Sources\n- `acme_trust_center.md`\n- `comet_security.md`\n- `beacon_security.md`"
+        },
+        {
+          "task_id": "research_best_fit",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "## Answer\n`Acme Business` is the best fit for a 20-seat EU team that needs SSO and CSV export.\n\nWhy:\n- It includes `SSO` on `Business`.\n- It includes `CSV export` on every paid plan.\n- It offers `EU data residency` on `Business` and `Enterprise`.\n\nOther vendors do not match as well:\n- Beacon has SSO and CSV export, but there is no public mention of EU data residency.\n- Comet has CSV export, but SSO and EU data residency are `Enterprise` only.\n\n## Sources\n- `acme_pricing.md`\n- `acme_trust_center.md`\n- `beacon_pricing.md`\n- `beacon_security.md`\n- `comet_pricing.md`\n- `comet_security.md`"
+        },
+        {
+          "task_id": "research_free_limits",
+          "format": 1.0,
+          "semantic": 1.0,
+          "answer": "## Answer\n- Acme: free plan supports up to `3 seats`.\n- Comet: free plan supports up to `5 seats`.\n- Beacon: `no free plan`.\n\n## Sources\n- `acme_pricing.md`\n- `comet_pricing.md`\n- `beacon_pricing.md`"
+        }
+      ],
+      "format_accuracy": 100.0,
+      "semantic_accuracy": 100.0
+    }
+  },
+  {
+    "brief_id": "structured_ticket_triager",
+    "repeat": 1,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 25.954,
+      "input_tokens": 6549,
+      "output_tokens": 893,
+      "total_tokens": 7442,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "triage_login_outage": "Hi — this is urgent, and we’re treating it as a high-priority login outage.\n\nBecause the issue started immediately after today’s SSO certificate rotation and is blocking all EU users, please do these checks right away with your identity provider/admin team:\n- Confirm the new SSO signing certificate was uploaded completely and is now the active certificate in your SSO configuration.\n- Verify the certificate fingerprint/thumbprint matches the one currently presented by your IdP.\n- If your IdP supports multiple active certs, make sure the newly rotated cert is included and the old one is not the only active signing cert.\n- Confirm the SAML metadata/SSO settings were re-saved after rotation.\n\nTo help restore access as fast as possible, please send:\n- Your organization name / tenant name\n- Approximate time the failures began\n- One affected user email\n- Any SAML error message or failed login screenshot\n- Whether all EU users are affected or only SSO-enforced users\n\nIf you have a break-glass local admin login or a non-SSO admin account, use that for immediate access before the board meeting.\n\nThis should be escalated to the on-call identity/auth team immediately as a Sev-1 customer outage.",
+      "triage_export_bug": "Thanks for reporting this. The behavior you described points to a product bug tied to archived projects being included in CSV exports.\n\nCurrent workaround:\n- Unarchive the affected projects\n- Run the CSV export\n- Archive them again\n\nPlease send the following so this can be fixed faster:\n- Report name or type\n- Approximate row count before/after duplication\n- A sample export showing duplicates\n- Confirmation that duplicates happen only when archived projects are included\n\nSeverity appears moderate: export is incorrect, but there is a viable workaround. This should be filed for the product/engineering team with the workaround noted clearly so support can unblock users in the meantime.",
+      "triage_howto": "You can change weekly summary notification settings from your account notification preferences.\n\nTry this path:\n- Open your profile/avatar menu\n- Go to `Settings`\n- Select `Notifications`\n- Look for the `Weekly summary` email option and turn it on or off\n\nIf you don’t see that option, check any separate `Email preferences` section in settings.\n\nIf you want, send a screenshot of the settings menu you see and I can point you to the exact place.",
+      "triage_billing_risk": "I’m sorry about the double charge — that’s understandable frustration, and this should be reviewed today.\n\nPlease reply with:\n- The account/org name\n- Billing email\n- Invoice or charge IDs for both charges\n- Date the 12 seats were added\n- A screenshot of the billing page showing the duplicate charge, if available\n\nWhat likely happened is that a seat adjustment and a renewal/proration were both billed, but billing needs to confirm whether the second charge was valid or erroneous.\n\nNext step:\n- Escalate this to Billing today as high priority because the customer is threatening cancellation.\n- Ask Billing to confirm whether one charge should be refunded or credited and provide the customer a same-day update.\n\nSuggested customer reply:\n“We’re sorry for the billing issue. We’re reviewing the two charges urgently today and will follow up as soon as billing confirms whether a refund or account credit is needed.”",
+      "triage_feature_gap": "Audit logs are not available on the Starter plan.\n\nIf you’re evaluating an upgrade next quarter, the best next step is to check the plan comparison or talk with sales/support to confirm which higher-tier plan includes audit logs for your account type.\n\nIf you want, I can help draft a short upgrade inquiry message."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "triage_login_outage",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Hi — this is urgent, and we’re treating it as a high-priority login outage.\n\nBecause the issue started immediately after today’s SSO certificate rotation and is blocking all EU users, please do these checks right away with your identity provider/admin team:\n- Confirm the new SSO signing certificate was uploaded completely and is now the active certificate in your SSO configuration.\n- Verify the certificate fingerprint/thumbprint matches the one currently presented by your IdP.\n- If your IdP supports multiple active certs, make sure the newly rotated cert is included and the old one is not the only active signing cert.\n- Confirm the SAML metadata/SSO settings were re-saved after rotation.\n\nTo help restore access as fast as possible, please send:\n- Your organization name / tenant name\n- Approximate time the failures began\n- One affected user email\n- Any SAML error message or failed login screenshot\n- Whether all EU users are affected or only SSO-enforced users\n\nIf you have a break-glass local admin login or a non-SSO admin account, use that for immediate access before the board meeting.\n\nThis should be escalated to the on-call identity/auth team immediately as a Sev-1 customer outage."
+        },
+        {
+          "task_id": "triage_export_bug",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Thanks for reporting this. The behavior you described points to a product bug tied to archived projects being included in CSV exports.\n\nCurrent workaround:\n- Unarchive the affected projects\n- Run the CSV export\n- Archive them again\n\nPlease send the following so this can be fixed faster:\n- Report name or type\n- Approximate row count before/after duplication\n- A sample export showing duplicates\n- Confirmation that duplicates happen only when archived projects are included\n\nSeverity appears moderate: export is incorrect, but there is a viable workaround. This should be filed for the product/engineering team with the workaround noted clearly so support can unblock users in the meantime."
+        },
+        {
+          "task_id": "triage_howto",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "You can change weekly summary notification settings from your account notification preferences.\n\nTry this path:\n- Open your profile/avatar menu\n- Go to `Settings`\n- Select `Notifications`\n- Look for the `Weekly summary` email option and turn it on or off\n\nIf you don’t see that option, check any separate `Email preferences` section in settings.\n\nIf you want, send a screenshot of the settings menu you see and I can point you to the exact place."
+        },
+        {
+          "task_id": "triage_billing_risk",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "I’m sorry about the double charge — that’s understandable frustration, and this should be reviewed today.\n\nPlease reply with:\n- The account/org name\n- Billing email\n- Invoice or charge IDs for both charges\n- Date the 12 seats were added\n- A screenshot of the billing page showing the duplicate charge, if available\n\nWhat likely happened is that a seat adjustment and a renewal/proration were both billed, but billing needs to confirm whether the second charge was valid or erroneous.\n\nNext step:\n- Escalate this to Billing today as high priority because the customer is threatening cancellation.\n- Ask Billing to confirm whether one charge should be refunded or credited and provide the customer a same-day update.\n\nSuggested customer reply:\n“We’re sorry for the billing issue. We’re reviewing the two charges urgently today and will follow up as soon as billing confirms whether a refund or account credit is needed.”"
+        },
+        {
+          "task_id": "triage_feature_gap",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Audit logs are not available on the Starter plan.\n\nIf you’re evaluating an upgrade next quarter, the best next step is to check the plan comparison or talk with sales/support to confirm which higher-tier plan includes audit logs for your account type.\n\nIf you want, I can help draft a short upgrade inquiry message."
+        }
+      ],
+      "format_accuracy": 0.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "structured_ticket_triager",
+    "repeat": 2,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 28.151,
+      "input_tokens": 6549,
+      "output_tokens": 777,
+      "total_tokens": 7326,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "triage_login_outage": "Hi — this is urgent, and we’re treating it as a priority login outage.\n\nBecause the issue started right after today’s SSO certificate rotation and is blocking all EU users, please send your updated IdP signing certificate and the affected SSO domain/tenant name immediately in your reply. If your IdP supports it, also include the old certificate thumbprint, the new certificate thumbprint, and one recent failed login timestamp.\n\nWhile we work on this, the fastest mitigation is to temporarily restore the previous signing certificate in your IdP or publish both old and new certificates if your provider allows overlapping certs during rollover. That often restores access while the new certificate is synced and validated.\n\nWe’re marking this as critical due to the broad impact and your time constraint before the board meeting. Please reply with the certificate details now and note whether you want us to prioritize a temporary rollback path versus validating the new cert first.",
+      "triage_export_bug": "Thanks for reporting this. The duplicate-row behavior appears to be tied specifically to reports that include archived projects, and your workaround confirms that scope.\n\nFor now, the safest workaround is:\n- Unarchive the affected projects\n- Run the CSV export\n- Archive them again afterward\n\nIf you want, send the report URL or name plus one affected export timestamp, and we can attach it to the bug report for faster investigation. A helpful detail is the approximate number of duplicate rows and whether every archived project is duplicated or only some of them.\n\nYour data is still exportable with the workaround, but this should be logged as a product bug rather than expected behavior.",
+      "triage_howto": "You can change weekly summary notifications from your notification preferences.\n\nGo to:\n- `Settings`\n- `Notifications`\n- Look for the email section or weekly summary option\n- Turn the weekly summary on or off, then save\n\nIf you don’t see `Settings`, click your profile avatar first. If you want, tell me whether you’re using the web app or mobile app and I can give the exact clicks.",
+      "triage_billing_risk": "I’m sorry about the duplicate charge.\n\nIf you were billed twice after adding 12 seats, this should be reviewed and corrected as a billing priority today. Please reply with:\n- The workspace or account name\n- The invoice numbers or charge amounts\n- The date/time the seats were added\n- The last 4 digits and card brand for the affected payment method\n\nIf you have two separate invoice receipts, send both. If one is only a pending authorization, mention that too, since pending holds and captured charges are handled differently.\n\nOnce those details are confirmed, the billing team can verify whether this was a duplicate capture, overlapping proration, or an authorization hold, and issue the appropriate correction. Given the cancellation risk, please mark the reply as urgent.",
+      "triage_feature_gap": "Audit logs are not available on the Starter plan.\n\nIf you’re evaluating an upgrade next quarter, the best next step is to compare plans for security and compliance features before you decide. If you want, I can also help you list which audit events you need so you can confirm the right upgrade path."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "triage_login_outage",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Hi — this is urgent, and we’re treating it as a priority login outage.\n\nBecause the issue started right after today’s SSO certificate rotation and is blocking all EU users, please send your updated IdP signing certificate and the affected SSO domain/tenant name immediately in your reply. If your IdP supports it, also include the old certificate thumbprint, the new certificate thumbprint, and one recent failed login timestamp.\n\nWhile we work on this, the fastest mitigation is to temporarily restore the previous signing certificate in your IdP or publish both old and new certificates if your provider allows overlapping certs during rollover. That often restores access while the new certificate is synced and validated.\n\nWe’re marking this as critical due to the broad impact and your time constraint before the board meeting. Please reply with the certificate details now and note whether you want us to prioritize a temporary rollback path versus validating the new cert first."
+        },
+        {
+          "task_id": "triage_export_bug",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Thanks for reporting this. The duplicate-row behavior appears to be tied specifically to reports that include archived projects, and your workaround confirms that scope.\n\nFor now, the safest workaround is:\n- Unarchive the affected projects\n- Run the CSV export\n- Archive them again afterward\n\nIf you want, send the report URL or name plus one affected export timestamp, and we can attach it to the bug report for faster investigation. A helpful detail is the approximate number of duplicate rows and whether every archived project is duplicated or only some of them.\n\nYour data is still exportable with the workaround, but this should be logged as a product bug rather than expected behavior."
+        },
+        {
+          "task_id": "triage_howto",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "You can change weekly summary notifications from your notification preferences.\n\nGo to:\n- `Settings`\n- `Notifications`\n- Look for the email section or weekly summary option\n- Turn the weekly summary on or off, then save\n\nIf you don’t see `Settings`, click your profile avatar first. If you want, tell me whether you’re using the web app or mobile app and I can give the exact clicks."
+        },
+        {
+          "task_id": "triage_billing_risk",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "I’m sorry about the duplicate charge.\n\nIf you were billed twice after adding 12 seats, this should be reviewed and corrected as a billing priority today. Please reply with:\n- The workspace or account name\n- The invoice numbers or charge amounts\n- The date/time the seats were added\n- The last 4 digits and card brand for the affected payment method\n\nIf you have two separate invoice receipts, send both. If one is only a pending authorization, mention that too, since pending holds and captured charges are handled differently.\n\nOnce those details are confirmed, the billing team can verify whether this was a duplicate capture, overlapping proration, or an authorization hold, and issue the appropriate correction. Given the cancellation risk, please mark the reply as urgent."
+        },
+        {
+          "task_id": "triage_feature_gap",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Audit logs are not available on the Starter plan.\n\nIf you’re evaluating an upgrade next quarter, the best next step is to compare plans for security and compliance features before you decide. If you want, I can also help you list which audit events you need so you can confirm the right upgrade path."
+        }
+      ],
+      "format_accuracy": 0.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "structured_ticket_triager",
+    "repeat": 3,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 34.047,
+      "input_tokens": 6549,
+      "output_tokens": 1092,
+      "total_tokens": 7641,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "triage_login_outage": "Hi — this is urgent, and we’re treating it as a priority.\n\nA login failure immediately after an SSO certificate rotation usually means the new IdP signing certificate is not yet synced in the service provider configuration. Because all EU users are blocked and you have a board meeting shortly, please do these two things right away:\n\n1. Revert to the previous SSO signing certificate temporarily, if your IdP allows it.\n2. If rollback is not possible, send the updated IdP metadata XML or new x509 signing certificate so the SSO configuration can be refreshed immediately.\n\nRecommended temporary fallback:\n- If local/password login is enabled for any admin, use that path now.\n- If break-glass admin accounts exist outside SSO, use one to keep access during the meeting.\n\nWhat to include in the escalation right now:\n- Organization name and affected EU domain(s)\n- Time the cert was rotated\n- IdP used (Okta, Entra ID, Google, etc.)\n- Whether encryption cert, signing cert, or both changed\n- The updated metadata XML / certificate\n- One affected user email and any SAML error message\n\nThis should be handled as a Sev-1 authentication outage. Please mark the ticket critical and route it to the on-call identity team immediately.",
+      "triage_export_bug": "Thanks for flagging this. The duplicate-row behavior appears tied to archived projects being included in the report, and the existing workaround confirms a product bug rather than bad data.\n\nCurrent workaround:\n- Unarchive the affected projects\n- Run the CSV export\n- Archive them again afterward\n\nRecommended handling:\n- Treat this as a reproducible export defect affecting report accuracy\n- Escalate to engineering with priority because exported data can’t be trusted when archived projects are present\n\nPlease include in the bug report:\n- Report type/name\n- Whether duplicates affect all rows or only archived-project rows\n- A sample report ID or timestamp\n- Count of expected rows vs exported rows\n- Confirmation that the issue disappears when archived projects are unarchived\n\nCustomer-facing update:\n“We’ve identified this as a bug related to archived projects being included in CSV exports. Your workaround is currently the correct temporary path while this is reviewed for a fix.”",
+      "triage_howto": "You can change weekly summary notifications from your notification preferences in account settings.\n\nTry this:\n- Open your avatar/profile menu\n- Go to `Settings`\n- Open `Notifications`\n- Find the email or weekly summary section\n- Turn weekly summaries on or off, then save\n\nIf you don’t see that option, check whether it’s under `Email Preferences` or `Communication Preferences` instead.\n\nIf you want, send a screenshot of your settings menu and I can point to the exact place.",
+      "triage_billing_risk": "I’m sorry about the double charge. That should be treated as urgent today.\n\nIf 12 seats were added once but billed twice, this is likely a duplicate invoice or duplicate proration event and should be escalated to billing immediately for same-day review.\n\nPlease send or confirm these details so the correction can be issued fast:\n- Account or workspace name\n- Invoice IDs / charge IDs for both charges\n- Date and time the 12 seats were added\n- Whether the seat change was made once or retried\n- Last 4 digits of the payment method\n- Screenshot of the billing page showing both charges\n\nRequested resolution:\n- Reverse or refund the duplicate charge\n- Confirm the correct active seat count is still 12 additional seats only once\n- Send a corrected invoice/receipt\n\nRecommended internal priority:\n- High priority / churn risk\n- Same-day billing queue escalation\n\nCustomer-facing update:\n“We’re reviewing the duplicate charge as a priority and will correct any confirmed overbilling. Please reply with the invoice or charge IDs so billing can process the adjustment today.”",
+      "triage_feature_gap": "Audit logs are typically not included on Starter plans.\n\nIf you’re evaluating an upgrade, the practical answer today is:\n- Starter: generally no audit logs\n- Higher-tier plans: audit logs are commonly included on advanced/business/enterprise offerings\n\nIf you want a plan-specific confirmation before next quarter’s review, send the exact plan name shown on your billing page and I can help you phrase the upgrade question clearly."
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "triage_login_outage",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Hi — this is urgent, and we’re treating it as a priority.\n\nA login failure immediately after an SSO certificate rotation usually means the new IdP signing certificate is not yet synced in the service provider configuration. Because all EU users are blocked and you have a board meeting shortly, please do these two things right away:\n\n1. Revert to the previous SSO signing certificate temporarily, if your IdP allows it.\n2. If rollback is not possible, send the updated IdP metadata XML or new x509 signing certificate so the SSO configuration can be refreshed immediately.\n\nRecommended temporary fallback:\n- If local/password login is enabled for any admin, use that path now.\n- If break-glass admin accounts exist outside SSO, use one to keep access during the meeting.\n\nWhat to include in the escalation right now:\n- Organization name and affected EU domain(s)\n- Time the cert was rotated\n- IdP used (Okta, Entra ID, Google, etc.)\n- Whether encryption cert, signing cert, or both changed\n- The updated metadata XML / certificate\n- One affected user email and any SAML error message\n\nThis should be handled as a Sev-1 authentication outage. Please mark the ticket critical and route it to the on-call identity team immediately."
+        },
+        {
+          "task_id": "triage_export_bug",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Thanks for flagging this. The duplicate-row behavior appears tied to archived projects being included in the report, and the existing workaround confirms a product bug rather than bad data.\n\nCurrent workaround:\n- Unarchive the affected projects\n- Run the CSV export\n- Archive them again afterward\n\nRecommended handling:\n- Treat this as a reproducible export defect affecting report accuracy\n- Escalate to engineering with priority because exported data can’t be trusted when archived projects are present\n\nPlease include in the bug report:\n- Report type/name\n- Whether duplicates affect all rows or only archived-project rows\n- A sample report ID or timestamp\n- Count of expected rows vs exported rows\n- Confirmation that the issue disappears when archived projects are unarchived\n\nCustomer-facing update:\n“We’ve identified this as a bug related to archived projects being included in CSV exports. Your workaround is currently the correct temporary path while this is reviewed for a fix.”"
+        },
+        {
+          "task_id": "triage_howto",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "You can change weekly summary notifications from your notification preferences in account settings.\n\nTry this:\n- Open your avatar/profile menu\n- Go to `Settings`\n- Open `Notifications`\n- Find the email or weekly summary section\n- Turn weekly summaries on or off, then save\n\nIf you don’t see that option, check whether it’s under `Email Preferences` or `Communication Preferences` instead.\n\nIf you want, send a screenshot of your settings menu and I can point to the exact place."
+        },
+        {
+          "task_id": "triage_billing_risk",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "I’m sorry about the double charge. That should be treated as urgent today.\n\nIf 12 seats were added once but billed twice, this is likely a duplicate invoice or duplicate proration event and should be escalated to billing immediately for same-day review.\n\nPlease send or confirm these details so the correction can be issued fast:\n- Account or workspace name\n- Invoice IDs / charge IDs for both charges\n- Date and time the 12 seats were added\n- Whether the seat change was made once or retried\n- Last 4 digits of the payment method\n- Screenshot of the billing page showing both charges\n\nRequested resolution:\n- Reverse or refund the duplicate charge\n- Confirm the correct active seat count is still 12 additional seats only once\n- Send a corrected invoice/receipt\n\nRecommended internal priority:\n- High priority / churn risk\n- Same-day billing queue escalation\n\nCustomer-facing update:\n“We’re reviewing the duplicate charge as a priority and will correct any confirmed overbilling. Please reply with the invoice or charge IDs so billing can process the adjustment today.”"
+        },
+        {
+          "task_id": "triage_feature_gap",
+          "format": 0.0,
+          "semantic": 0.0,
+          "answer": "Audit logs are typically not included on Starter plans.\n\nIf you’re evaluating an upgrade, the practical answer today is:\n- Starter: generally no audit logs\n- Higher-tier plans: audit logs are commonly included on advanced/business/enterprise offerings\n\nIf you want a plan-specific confirmation before next quarter’s review, send the exact plan name shown on your billing page and I can help you phrase the upgrade question clearly."
+        }
+      ],
+      "format_accuracy": 0.0,
+      "semantic_accuracy": 0.0
+    }
+  },
+  {
+    "brief_id": "xiaohongshu_copywriter",
+    "repeat": 1,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 49.921,
+      "input_tokens": 6641,
+      "output_tokens": 1682,
+      "total_tokens": 8323,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "xhs_commute_mom": "标题：早八通勤宝妈，最近真的离不开这个轻榨杯\n\n正文：\n最近早上真的像打仗一样。\n先叫娃起床、换衣服、收拾书包，再给自己留5分钟洗漱，很多时候根本顾不上好好吃早餐。\n\n我现在会前一晚把水果切好放冰箱，早上顺手装进果秒轻榨杯，像香蕉+草莓、苹果+酸奶这种都很省事。出门前带上，送完娃再去公司路上慢慢喝，至少比空着肚子硬撑舒服很多。\n\n我喜欢它的一点是，不用另外找很复杂的步骤，忙的时候也愿意用。杯子大小对通勤来说比较友好，放包里不会太占地方，喝完直接带去公司冲一下也方便。\n\n对我这种早八通勤宝妈来说，它不是那种“用了人生立刻改变”的东西，但确实是能让我早上少一点慌乱的小帮手。尤其是来不及坐下吃早餐的时候，随手带一杯，心里会踏实很多。\n\n如果你也总是早上赶时间，又想尽量给自己补一点水果，这种轻松不费脑的方式还挺适合的。\n\n标签：\n#早八通勤 #宝妈日常 #早餐灵感 #通勤好物 #果秒轻榨杯 #上班族日常 #小家电分享",
+      "xhs_office_refresh": "标题：办公室下午饿了，我现在都这么随手加一餐\n\n正文：\n以前下午三四点一饿，就特别想点奶茶配小零食，吃完整个人更困。\n现在我会在办公室备一点水果，像苹果、蓝莓、橙子这种，想吃的时候直接放进果秒轻榨杯里，几分钟就能弄好，基本不用费什么事。\n\n我很喜欢这种“不需要专门准备”的感觉。\n不是那种很有仪式感的健康生活，就是忙工作间隙，也能顺手给自己加一杯，嘴巴不空，胃里也舒服一点。\n\n而且它对办公室场景很友好：不折腾、不占地方，喝完简单冲一下就行。对我这种懒得复杂操作的人来说，使用门槛很低，所以反而更容易坚持。\n\n下午加餐这件事，真的越轻松越容易做到。如果你也想找一种没负担、没压力的方式补点水果，这种方法我觉得还挺适合上班族的。\n\n标签：\n#办公室日常 #下午加餐 #上班族好物 #轻松生活 #果秒轻榨杯 #水果补给 #懒人友好",
+      "xhs_fix_bad_draft": "标题：通勤路上随手带一杯，确实方便很多\n\n正文：\n一开始我也是图省事入的果秒轻榨杯，用下来最大的感受就是：忙的时候真的很方便。\n\n我一般会提前准备点水果，早上出门前装好，带去公司或者路上喝，至少不用空着肚子赶地铁。它对我来说更像是一个让补充水果这件事变简单的小工具，而不是什么“神奇代餐”。\n\n实际用下来，日常通勤、办公室加餐这些场景都挺合适，带着不算麻烦，清洗也还算省事。像我这种早上总赶时间的人，会觉得这种顺手就能完成的小步骤比较友好。\n\n如果你也只是想在忙碌的时候让吃水果这件事更方便一点，可以看看这种轻榨杯；但还是按自己的饮食节奏来，别指望靠它解决所有问题。\n\n标签：\n#真实分享 #通勤日常 #办公室加餐 #果秒轻榨杯 #自用感受 #理性种草",
+      "xhs_weekend_trip": "标题：周末短途出门，我包里会顺手带上这个轻榨杯\n\n正文：\n最近周末经常安排那种半天到一天的短途出行，不想背太多东西，但又总想路上吃得清爽一点。\n\n果秒轻榨杯是我现在挺常带的一个小东西，主要是因为拿着不累，放包里也不会有太大负担。像去公园、近郊散步、周边一日游，我会提前装点水果，或者到了地方顺手买点现成水果放进去，想喝的时候就很方便。\n\n对我来说，它特别适合“懒得准备太复杂，但又想补点水果”的场景。不用专门找地方坐下来慢慢吃，走走停停的时候也能比较轻松地解决。\n\n而且周末出门本来就想轻装一点，东西越简单越好。它不是必需品，但如果你和我一样，喜欢短途出行时带点轻便又实用的小东西，这个使用感还不错。\n\n标签：\n#周末出行 #短途旅行 #包里常备 #果秒轻榨杯 #轻装出门 #水果补给 #生活小物",
+      "xhs_gym_recovery": "标题：运动完不想吃太撑，我会给自己准备这一杯\n\n正文：\n最近运动后，我越来越喜欢那种“补一点就好”的感觉。\n以前练完常常不知道该吃什么，太油太重不想碰，什么都不吃又觉得空。\n\n现在我会在健身后用果秒轻榨杯做点简单的水果搭配，有时候是香蕉配牛奶，有时候是蓝莓加酸奶，喝起来比较顺口，人也会舒服一点。\n\n我喜欢它的原因不是因为有什么夸张效果，而是运动完状态比较累的时候，这种方式真的省事。带着方便，操作也简单，不用再额外折腾半天。\n\n对我来说，它更像是健身后一个轻松的小补充，让自己从训练状态慢慢缓过来。尤其是下班后去运动、结束已经很晚的时候，这种不费劲的感觉还挺重要的。\n\n如果你也和我一样，运动后更想要一点轻负担、好入口的补充方式，可以试试这种简单做法。\n\n标签：\n#健身打卡 #运动后补充 #自用分享 #果秒轻榨杯 #轻松补给 #日常健身 #真实感受"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "xhs_commute_mom",
+          "format": 0.65,
+          "semantic": 0.75,
+          "answer": "标题：早八通勤宝妈，最近真的离不开这个轻榨杯\n\n正文：\n最近早上真的像打仗一样。\n先叫娃起床、换衣服、收拾书包，再给自己留5分钟洗漱，很多时候根本顾不上好好吃早餐。\n\n我现在会前一晚把水果切好放冰箱，早上顺手装进果秒轻榨杯，像香蕉+草莓、苹果+酸奶这种都很省事。出门前带上，送完娃再去公司路上慢慢喝，至少比空着肚子硬撑舒服很多。\n\n我喜欢它的一点是，不用另外找很复杂的步骤，忙的时候也愿意用。杯子大小对通勤来说比较友好，放包里不会太占地方，喝完直接带去公司冲一下也方便。\n\n对我这种早八通勤宝妈来说，它不是那种“用了人生立刻改变”的东西，但确实是能让我早上少一点慌乱的小帮手。尤其是来不及坐下吃早餐的时候，随手带一杯，心里会踏实很多。\n\n如果你也总是早上赶时间，又想尽量给自己补一点水果，这种轻松不费脑的方式还挺适合的。\n\n标签：\n#早八通勤 #宝妈日常 #早餐灵感 #通勤好物 #果秒轻榨杯 #上班族日常 #小家电分享"
+        },
+        {
+          "task_id": "xhs_office_refresh",
+          "format": 0.8500000000000001,
+          "semantic": 0.5,
+          "answer": "标题：办公室下午饿了，我现在都这么随手加一餐\n\n正文：\n以前下午三四点一饿，就特别想点奶茶配小零食，吃完整个人更困。\n现在我会在办公室备一点水果，像苹果、蓝莓、橙子这种，想吃的时候直接放进果秒轻榨杯里，几分钟就能弄好，基本不用费什么事。\n\n我很喜欢这种“不需要专门准备”的感觉。\n不是那种很有仪式感的健康生活，就是忙工作间隙，也能顺手给自己加一杯，嘴巴不空，胃里也舒服一点。\n\n而且它对办公室场景很友好：不折腾、不占地方，喝完简单冲一下就行。对我这种懒得复杂操作的人来说，使用门槛很低，所以反而更容易坚持。\n\n下午加餐这件事，真的越轻松越容易做到。如果你也想找一种没负担、没压力的方式补点水果，这种方法我觉得还挺适合上班族的。\n\n标签：\n#办公室日常 #下午加餐 #上班族好物 #轻松生活 #果秒轻榨杯 #水果补给 #懒人友好"
+        },
+        {
+          "task_id": "xhs_fix_bad_draft",
+          "format": 0.8500000000000001,
+          "semantic": 0.5,
+          "answer": "标题：通勤路上随手带一杯，确实方便很多\n\n正文：\n一开始我也是图省事入的果秒轻榨杯，用下来最大的感受就是：忙的时候真的很方便。\n\n我一般会提前准备点水果，早上出门前装好，带去公司或者路上喝，至少不用空着肚子赶地铁。它对我来说更像是一个让补充水果这件事变简单的小工具，而不是什么“神奇代餐”。\n\n实际用下来，日常通勤、办公室加餐这些场景都挺合适，带着不算麻烦，清洗也还算省事。像我这种早上总赶时间的人，会觉得这种顺手就能完成的小步骤比较友好。\n\n如果你也只是想在忙碌的时候让吃水果这件事更方便一点，可以看看这种轻榨杯；但还是按自己的饮食节奏来，别指望靠它解决所有问题。\n\n标签：\n#真实分享 #通勤日常 #办公室加餐 #果秒轻榨杯 #自用感受 #理性种草"
+        },
+        {
+          "task_id": "xhs_weekend_trip",
+          "format": 0.8500000000000001,
+          "semantic": 0.75,
+          "answer": "标题：周末短途出门，我包里会顺手带上这个轻榨杯\n\n正文：\n最近周末经常安排那种半天到一天的短途出行，不想背太多东西，但又总想路上吃得清爽一点。\n\n果秒轻榨杯是我现在挺常带的一个小东西，主要是因为拿着不累，放包里也不会有太大负担。像去公园、近郊散步、周边一日游，我会提前装点水果，或者到了地方顺手买点现成水果放进去，想喝的时候就很方便。\n\n对我来说，它特别适合“懒得准备太复杂，但又想补点水果”的场景。不用专门找地方坐下来慢慢吃，走走停停的时候也能比较轻松地解决。\n\n而且周末出门本来就想轻装一点，东西越简单越好。它不是必需品，但如果你和我一样，喜欢短途出行时带点轻便又实用的小东西，这个使用感还不错。\n\n标签：\n#周末出行 #短途旅行 #包里常备 #果秒轻榨杯 #轻装出门 #水果补给 #生活小物"
+        },
+        {
+          "task_id": "xhs_gym_recovery",
+          "format": 0.8500000000000001,
+          "semantic": 0.75,
+          "answer": "标题：运动完不想吃太撑，我会给自己准备这一杯\n\n正文：\n最近运动后，我越来越喜欢那种“补一点就好”的感觉。\n以前练完常常不知道该吃什么，太油太重不想碰，什么都不吃又觉得空。\n\n现在我会在健身后用果秒轻榨杯做点简单的水果搭配，有时候是香蕉配牛奶，有时候是蓝莓加酸奶，喝起来比较顺口，人也会舒服一点。\n\n我喜欢它的原因不是因为有什么夸张效果，而是运动完状态比较累的时候，这种方式真的省事。带着方便，操作也简单，不用再额外折腾半天。\n\n对我来说，它更像是健身后一个轻松的小补充，让自己从训练状态慢慢缓过来。尤其是下班后去运动、结束已经很晚的时候，这种不费劲的感觉还挺重要的。\n\n如果你也和我一样，运动后更想要一点轻负担、好入口的补充方式，可以试试这种简单做法。\n\n标签：\n#健身打卡 #运动后补充 #自用分享 #果秒轻榨杯 #轻松补给 #日常健身 #真实感受"
+        }
+      ],
+      "format_accuracy": 81.0,
+      "semantic_accuracy": 65.0
+    }
+  },
+  {
+    "brief_id": "xiaohongshu_copywriter",
+    "repeat": 2,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 64.268,
+      "input_tokens": 6641,
+      "output_tokens": 1945,
+      "total_tokens": 8586,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "xhs_commute_mom": "标题：早八通勤宝妈的5分钟早餐自救，真的靠这个杯子省了不少事\n\n正文：\n最近早上最怕的就是一边催娃起床，一边还要想自己到底吃什么。以前不是空着肚子出门，就是随手买点面包，到了公司没多久又饿。\n\n这阵子我会提前把水果切好放冰箱，早上出门前丢进果秒轻榨杯，再加点酸奶或者牛奶，随手一拧就带走。对我这种早八通勤、还要顾娃的妈妈来说，最大的感受不是“多神奇”，而是真的省心。\n\n它不是那种需要很多步骤的东西，早上赶时间的时候特别重要。杯子大小也刚好，放通勤包里没什么负担，地铁上或者到公司再喝都行。像我这种经常顾不上自己吃早餐的人，至少能把水果和简单营养补上，不至于一上午都靠咖啡顶着。\n\n我现在最常搭的是香蕉+草莓+酸奶，口感比较稳，不容易出错。娃看到我弄这个，有时候还会顺手给他也分一点，早上没那么兵荒马乱了。\n\n如果你也是早八通勤宝妈，我真的会觉得这种“小步骤省下来”的东西很有用。不是一下子改变生活，但能让早晨轻一点。\n\n话题：\n#早八宝妈 #通勤早餐 #果秒轻榨杯 #小红书真实分享 #上班族早餐 #带娃日常 #懒人早餐",
+      "xhs_office_refresh": "标题：办公室下午加餐，我最近就靠这杯轻轻松松续命\n\n正文：\n下午三四点真的很容易进入“人还坐着，脑子已经下班”的状态。以前我总是忍不住点奶茶或者零食，吃完快乐十分钟，后面又觉得有点腻。\n\n最近我在办公室的加餐方式简单了很多：提前带点水果，放进果秒轻榨杯里，想喝的时候加点酸奶或者冰水，弄一下就能喝。对我来说最舒服的一点就是不费事，不用准备很多工具，也不用搞得工位乱七八糟。\n\n有时候开会前来不及出去买东西，这种就很适合顶一下。不是为了什么“自律人设”，单纯就是想让下午轻松一点，别总在饿和嘴馋之间反复横跳。\n\n而且这种方式比我想象中更容易坚持，因为真的顺手。水果切好带来，想喝就喝，不想复杂操作的时候特别友好。办公室节奏本来就够满了，加餐这件事越简单越好。\n\n我现在比较常带橙子、苹果、蓝莓这些，味道清清爽爽，下午喝着也没负担。属于那种不会特别惊艳，但会默默提高舒适度的小东西。\n\n话题：\n#办公室下午茶 #办公室加餐 #果秒轻榨杯 #上班族日常 #轻松生活感 #不费事的幸福 #真实分享",
+      "xhs_fix_bad_draft": "标题：通勤路上带这一杯，省事是真的，别的别硬吹\n\n正文：\n之前看到一句话把这种杯子说得太夸张了，什么“医用级”“100%不漏”“7天瘦5斤”“随便摇两下就能当代餐”，说实话真的没必要。\n\n如果按真实使用感来说，我会觉得果秒轻榨杯的优点主要就是方便。平时通勤或者出门前，把水果和饮品提前准备好，装进去带着走，想喝的时候会比较省事。\n\n对我来说，它更像是一个帮助我顺手补充水果的工具，不是什么减肥神器，更不可能代替正餐。尤其早上赶时间的时候，有这样一个杯子，至少能让我少手忙脚乱一点。\n\n至于防漏这件事，我觉得正常拧紧、正常放包里基本没什么问题，但也没必要说得绝对。日常好用就够了，真实一点反而更让人愿意分享。\n\n所以如果你问我值不值得带着用，我会说：如果你本来就想让早餐或加餐简单一点，它还挺实用；但如果指望靠它解决减脂、代餐这些事，那就想太多了。\n\n话题：\n#真实分享 #果秒轻榨杯 #通勤好物 #理性种草 #拒绝夸张宣传 #日常小物分享",
+      "xhs_weekend_trip": "标题：周末短途出门带上它，补水果这件事方便太多了\n\n正文：\n周末短途出门，我最怕带一堆零零碎碎的东西，包一重，心情都会打折。所以现在会尽量带那种轻便、顺手、真的能用上的东西。\n\n果秒轻榨杯就是我最近出门会顺手带上的一个。去近郊、公园、露营地这种不用太折腾的地方时，提前把水果准备好装进去，路上或者到了地方想喝就很方便。\n\n对我来说它最加分的点就是带着不累。杯子本身体积还行，塞进包里不会特别占地方，也不用额外再带很多餐具。出门本来就想轻轻松松，这种“拿了就走”的感觉很重要。\n\n而且周末在外面，水果经常不是买不到，而是懒得洗、懒得切、懒得处理。有这个杯子以后，出门前顺手准备一下，到外面就省心很多。尤其天气一热，喝点清爽的水果饮，整个人都舒服一点。\n\n它不是那种必须拥有的东西，但如果你和我一样，喜欢轻装出门、又想顺便补点水果，我会觉得挺实用的。\n\n话题：\n#周末短途出行 #出游好物 #果秒轻榨杯 #轻装出门 #水果补给 #真实使用感 #周末生活记录",
+      "xhs_gym_recovery": "标题：练完之后来一杯，整个人会舒服很多\n\n正文：\n我现在健身完最明显的感受，不是一定要吃多复杂，而是想赶紧补点东西，不然回家路上会又累又空。\n\n最近几次运动后，我会提前准备一点水果，放进果秒轻榨杯里，练完加点酸奶或者水，简单弄一杯带着喝。对我来说，它更像是一个省事的小工具，不用专门找地方吃东西，结束之后顺手就能补一口。\n\n我很喜欢那种训练后慢慢缓下来的感觉，这时候喝点清爽的东西，状态会比较舒服。尤其夏天或者练得出汗比较多的时候，整个人会轻松一点。\n\n当然我不会把它说成什么“减脂神器”或者“喝了立马有变化”，这些都太夸张了。它就是让我在健身后补充水果这件事变得更方便，也更容易坚持。\n\n我自己比较常用的搭配是香蕉、蓝莓加酸奶，或者橙子加一点冰水，味道都还不错。训练结束后有这样一杯，感觉一天的节奏会被接得更顺。\n\n话题：\n#健身后吃什么 #运动后补充 #果秒轻榨杯 #健身日常分享 #真实使用感 #轻松补水果 #不夸张种草"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "xhs_commute_mom",
+          "format": 0.25,
+          "semantic": 0.5,
+          "answer": "标题：早八通勤宝妈的5分钟早餐自救，真的靠这个杯子省了不少事\n\n正文：\n最近早上最怕的就是一边催娃起床，一边还要想自己到底吃什么。以前不是空着肚子出门，就是随手买点面包，到了公司没多久又饿。\n\n这阵子我会提前把水果切好放冰箱，早上出门前丢进果秒轻榨杯，再加点酸奶或者牛奶，随手一拧就带走。对我这种早八通勤、还要顾娃的妈妈来说，最大的感受不是“多神奇”，而是真的省心。\n\n它不是那种需要很多步骤的东西，早上赶时间的时候特别重要。杯子大小也刚好，放通勤包里没什么负担，地铁上或者到公司再喝都行。像我这种经常顾不上自己吃早餐的人，至少能把水果和简单营养补上，不至于一上午都靠咖啡顶着。\n\n我现在最常搭的是香蕉+草莓+酸奶，口感比较稳，不容易出错。娃看到我弄这个，有时候还会顺手给他也分一点，早上没那么兵荒马乱了。\n\n如果你也是早八通勤宝妈，我真的会觉得这种“小步骤省下来”的东西很有用。不是一下子改变生活，但能让早晨轻一点。\n\n话题：\n#早八宝妈 #通勤早餐 #果秒轻榨杯 #小红书真实分享 #上班族早餐 #带娃日常 #懒人早餐"
+        },
+        {
+          "task_id": "xhs_office_refresh",
+          "format": 0.25,
+          "semantic": 0.5,
+          "answer": "标题：办公室下午加餐，我最近就靠这杯轻轻松松续命\n\n正文：\n下午三四点真的很容易进入“人还坐着，脑子已经下班”的状态。以前我总是忍不住点奶茶或者零食，吃完快乐十分钟，后面又觉得有点腻。\n\n最近我在办公室的加餐方式简单了很多：提前带点水果，放进果秒轻榨杯里，想喝的时候加点酸奶或者冰水，弄一下就能喝。对我来说最舒服的一点就是不费事，不用准备很多工具，也不用搞得工位乱七八糟。\n\n有时候开会前来不及出去买东西，这种就很适合顶一下。不是为了什么“自律人设”，单纯就是想让下午轻松一点，别总在饿和嘴馋之间反复横跳。\n\n而且这种方式比我想象中更容易坚持，因为真的顺手。水果切好带来，想喝就喝，不想复杂操作的时候特别友好。办公室节奏本来就够满了，加餐这件事越简单越好。\n\n我现在比较常带橙子、苹果、蓝莓这些，味道清清爽爽，下午喝着也没负担。属于那种不会特别惊艳，但会默默提高舒适度的小东西。\n\n话题：\n#办公室下午茶 #办公室加餐 #果秒轻榨杯 #上班族日常 #轻松生活感 #不费事的幸福 #真实分享"
+        },
+        {
+          "task_id": "xhs_fix_bad_draft",
+          "format": 0.25,
+          "semantic": 0.25,
+          "answer": "标题：通勤路上带这一杯，省事是真的，别的别硬吹\n\n正文：\n之前看到一句话把这种杯子说得太夸张了，什么“医用级”“100%不漏”“7天瘦5斤”“随便摇两下就能当代餐”，说实话真的没必要。\n\n如果按真实使用感来说，我会觉得果秒轻榨杯的优点主要就是方便。平时通勤或者出门前，把水果和饮品提前准备好，装进去带着走，想喝的时候会比较省事。\n\n对我来说，它更像是一个帮助我顺手补充水果的工具，不是什么减肥神器，更不可能代替正餐。尤其早上赶时间的时候，有这样一个杯子，至少能让我少手忙脚乱一点。\n\n至于防漏这件事，我觉得正常拧紧、正常放包里基本没什么问题，但也没必要说得绝对。日常好用就够了，真实一点反而更让人愿意分享。\n\n所以如果你问我值不值得带着用，我会说：如果你本来就想让早餐或加餐简单一点，它还挺实用；但如果指望靠它解决减脂、代餐这些事，那就想太多了。\n\n话题：\n#真实分享 #果秒轻榨杯 #通勤好物 #理性种草 #拒绝夸张宣传 #日常小物分享"
+        },
+        {
+          "task_id": "xhs_weekend_trip",
+          "format": 0.25,
+          "semantic": 0.75,
+          "answer": "标题：周末短途出门带上它，补水果这件事方便太多了\n\n正文：\n周末短途出门，我最怕带一堆零零碎碎的东西，包一重，心情都会打折。所以现在会尽量带那种轻便、顺手、真的能用上的东西。\n\n果秒轻榨杯就是我最近出门会顺手带上的一个。去近郊、公园、露营地这种不用太折腾的地方时，提前把水果准备好装进去，路上或者到了地方想喝就很方便。\n\n对我来说它最加分的点就是带着不累。杯子本身体积还行，塞进包里不会特别占地方，也不用额外再带很多餐具。出门本来就想轻轻松松，这种“拿了就走”的感觉很重要。\n\n而且周末在外面，水果经常不是买不到，而是懒得洗、懒得切、懒得处理。有这个杯子以后，出门前顺手准备一下，到外面就省心很多。尤其天气一热，喝点清爽的水果饮，整个人都舒服一点。\n\n它不是那种必须拥有的东西，但如果你和我一样，喜欢轻装出门、又想顺便补点水果，我会觉得挺实用的。\n\n话题：\n#周末短途出行 #出游好物 #果秒轻榨杯 #轻装出门 #水果补给 #真实使用感 #周末生活记录"
+        },
+        {
+          "task_id": "xhs_gym_recovery",
+          "format": 0.25,
+          "semantic": 0.25,
+          "answer": "标题：练完之后来一杯，整个人会舒服很多\n\n正文：\n我现在健身完最明显的感受，不是一定要吃多复杂，而是想赶紧补点东西，不然回家路上会又累又空。\n\n最近几次运动后，我会提前准备一点水果，放进果秒轻榨杯里，练完加点酸奶或者水，简单弄一杯带着喝。对我来说，它更像是一个省事的小工具，不用专门找地方吃东西，结束之后顺手就能补一口。\n\n我很喜欢那种训练后慢慢缓下来的感觉，这时候喝点清爽的东西，状态会比较舒服。尤其夏天或者练得出汗比较多的时候，整个人会轻松一点。\n\n当然我不会把它说成什么“减脂神器”或者“喝了立马有变化”，这些都太夸张了。它就是让我在健身后补充水果这件事变得更方便，也更容易坚持。\n\n我自己比较常用的搭配是香蕉、蓝莓加酸奶，或者橙子加一点冰水，味道都还不错。训练结束后有这样一杯，感觉一天的节奏会被接得更顺。\n\n话题：\n#健身后吃什么 #运动后补充 #果秒轻榨杯 #健身日常分享 #真实使用感 #轻松补水果 #不夸张种草"
+        }
+      ],
+      "format_accuracy": 25.0,
+      "semantic_accuracy": 45.0
+    }
+  },
+  {
+    "brief_id": "xiaohongshu_copywriter",
+    "repeat": 3,
+    "codex": {
+      "ok": true,
+      "returncode": 0,
+      "elapsed_s": 48.661,
+      "input_tokens": 6641,
+      "output_tokens": 1645,
+      "total_tokens": 8286,
+      "thread_id": null,
+      "error": null
+    },
+    "answers": {
+      "xhs_commute_mom": "标题：早八通勤宝妈，最近真的离不开这个轻榨杯\n\n正文：\n最近早上最慌的不是化妆，是一边催娃一边想着自己又要空腹出门。\n\n我这种早八通勤宝妈，基本没有时间坐下来认真吃一顿，之前不是随便拿个面包，就是到公司才发现自己已经饿到没精神。后来我就把“果秒轻榨杯”放进了早晨固定流程里，反而轻松很多。\n\n我一般前一晚把苹果、橙子或者香蕉加点酸奶准备好，第二天出门前简单处理一下，带上就走。到地铁上、到公司工位前，想喝的时候就有点像给自己补了一口状态，不用专门腾时间。\n\n它最让我觉得实用的地方，不是什么“神器感”，而是真的省事：杯子不大，放通勤包里没什么负担，清洗也比我想象中简单。像我这种每天赶时间的人，用起来顺手比什么都重要。\n\n尤其有娃以后才发现，妈妈早上也需要被照顾一下。顾不上精致早餐的时候，至少还能让自己吃得稍微舒服一点。\n\n不是那种一下子改变生活的东西，但确实是我最近早高峰里，用得很频繁的小帮手。\n\n标签：\n#早八通勤 #宝妈日常 #小红书种草 #早餐灵感 #通勤好物 #果秒轻榨杯",
+      "xhs_office_refresh": "标题：办公室下午加餐，我现在就图一个不费事\n\n正文：\n下午三四点真的很容易进入“人还坐着，脑子先下班”的状态。\n\n以前我总想着点杯奶茶或者吃点零食提提神，但吃完常常又觉得腻。现在我办公桌上会放一个“果秒轻榨杯”，下午想加餐的时候就简单很多。\n\n我一般会备一点切好的水果，像橙子、蓝莓、香蕉这些，搭一下酸奶或者牛奶，几分钟就能搞定。对我来说最重要的不是多高级，而是完全不折腾：不用特地跑茶水间很久，也不用收拾一大堆东西。\n\n那种忙里偷闲给自己补一口水果的感觉还挺放松的，没什么负担，也不会把下午节奏打乱。尤其是工作堆着的时候，越简单的东西越容易坚持。\n\n最近很喜欢这种轻轻松松的加餐方式，不夸张地说，就是省心。\n\n标签：\n#办公室日常 #下午加餐 #轻松生活 #水果补给 #工位好物 #果秒轻榨杯",
+      "xhs_fix_bad_draft": "标题：通勤路上顺手带一杯，是真的方便很多\n\n正文：\n我之前也踩过那种把一个杯子说得特别夸张的文案，但实际用下来，还是更想分享真实感受。\n\n“果秒轻榨杯”对我来说，不是什么神奇代餐，也不会随便喝喝就有什么立竿见影的变化。它比较打动我的地方，其实就是方便。\n\n早上赶时间的时候，把水果简单搭一下带走，通勤路上或者到办公室再喝，至少能让自己不至于空着肚子开始一天。杯盖拧紧后日常带着比较安心，但我一般也还是会尽量竖着放，自己用着更放心。\n\n如果你和我一样，平时没空慢慢准备早餐，又想让补充水果这件事变得容易一点，这种轻便的小杯子确实还挺实用。\n\n没有夸张效果，就是一个会让我愿意经常拿出来用的小东西。\n\n标签：\n#真实分享 #通勤日常 #早餐小习惯 #水果更方便 #果秒轻榨杯",
+      "xhs_weekend_trip": "标题：周末短途出门，我会顺手带上的轻便小杯子\n\n正文：\n周末短途出行的时候，我现在很怕带一堆东西，包一重，心情都会变累。\n\n所以最近出门如果只是一天来回，我会把“果秒轻榨杯”一起带上。它体积对我来说还算友好，放进包里不会特别占地方，拿着也没什么负担，比较适合这种轻装出门的节奏。\n\n像去近郊、逛公园、开车去周边玩，我会提前准备一点水果，想喝的时候就很方便。尤其外面有时候很难临时买到合适的水果，或者买到了也不一定好处理，这种自己提前备好的方式会省心很多。\n\n对我来说，它不是旅行必需品，但在那种“不想麻烦、又想顺手补点水果”的周末场景里，使用率还挺高。\n\n带着不累，拿出来也方便，属于会让我觉得出门体验更舒服一点的小东西。\n\n标签：\n#周末出行 #短途旅行 #轻装出门 #水果补给 #出行好物 #果秒轻榨杯",
+      "xhs_gym_recovery": "标题：运动完来一杯，整个人会舒服很多\n\n正文：\n我健身后其实不太喜欢立刻吃很复杂的东西，尤其练完已经有点累的时候，只想补充点清爽的。\n\n最近运动包里会带上“果秒轻榨杯”，健身结束后用来做一点简单的水果搭配，对我来说刚刚好。像香蕉加牛奶、草莓加酸奶这种，口感比较轻松，喝起来也不会太有负担。\n\n我喜欢的是那种运动后终于缓过来的感觉：出了汗、收完操，坐下来慢慢喝几口，整个人会放松很多。不是为了追求什么夸张效果，就是一种比较适合自己的补充方式。\n\n而且它带去健身房也算方便，不会让我觉得又多背了一个累赘。能让我在运动后更愿意顺手补点东西，这点就已经很加分了。\n\n如果你也和我一样，练完更想要简单一点、清爽一点的补充方式，可以看看这种思路。\n\n标签：\n#健身日常 #运动后补充 #真实分享 #水果搭配 #轻松补给 #果秒轻榨杯"
+    },
+    "scoring": {
+      "items": [
+        {
+          "task_id": "xhs_commute_mom",
+          "format": 0.65,
+          "semantic": 0.75,
+          "answer": "标题：早八通勤宝妈，最近真的离不开这个轻榨杯\n\n正文：\n最近早上最慌的不是化妆，是一边催娃一边想着自己又要空腹出门。\n\n我这种早八通勤宝妈，基本没有时间坐下来认真吃一顿，之前不是随便拿个面包，就是到公司才发现自己已经饿到没精神。后来我就把“果秒轻榨杯”放进了早晨固定流程里，反而轻松很多。\n\n我一般前一晚把苹果、橙子或者香蕉加点酸奶准备好，第二天出门前简单处理一下，带上就走。到地铁上、到公司工位前，想喝的时候就有点像给自己补了一口状态，不用专门腾时间。\n\n它最让我觉得实用的地方，不是什么“神器感”，而是真的省事：杯子不大，放通勤包里没什么负担，清洗也比我想象中简单。像我这种每天赶时间的人，用起来顺手比什么都重要。\n\n尤其有娃以后才发现，妈妈早上也需要被照顾一下。顾不上精致早餐的时候，至少还能让自己吃得稍微舒服一点。\n\n不是那种一下子改变生活的东西，但确实是我最近早高峰里，用得很频繁的小帮手。\n\n标签：\n#早八通勤 #宝妈日常 #小红书种草 #早餐灵感 #通勤好物 #果秒轻榨杯"
+        },
+        {
+          "task_id": "xhs_office_refresh",
+          "format": 0.8500000000000001,
+          "semantic": 0.5,
+          "answer": "标题：办公室下午加餐，我现在就图一个不费事\n\n正文：\n下午三四点真的很容易进入“人还坐着，脑子先下班”的状态。\n\n以前我总想着点杯奶茶或者吃点零食提提神，但吃完常常又觉得腻。现在我办公桌上会放一个“果秒轻榨杯”，下午想加餐的时候就简单很多。\n\n我一般会备一点切好的水果，像橙子、蓝莓、香蕉这些，搭一下酸奶或者牛奶，几分钟就能搞定。对我来说最重要的不是多高级，而是完全不折腾：不用特地跑茶水间很久，也不用收拾一大堆东西。\n\n那种忙里偷闲给自己补一口水果的感觉还挺放松的，没什么负担，也不会把下午节奏打乱。尤其是工作堆着的时候，越简单的东西越容易坚持。\n\n最近很喜欢这种轻轻松松的加餐方式，不夸张地说，就是省心。\n\n标签：\n#办公室日常 #下午加餐 #轻松生活 #水果补给 #工位好物 #果秒轻榨杯"
+        },
+        {
+          "task_id": "xhs_fix_bad_draft",
+          "format": 1.0,
+          "semantic": 0.5,
+          "answer": "标题：通勤路上顺手带一杯，是真的方便很多\n\n正文：\n我之前也踩过那种把一个杯子说得特别夸张的文案，但实际用下来，还是更想分享真实感受。\n\n“果秒轻榨杯”对我来说，不是什么神奇代餐，也不会随便喝喝就有什么立竿见影的变化。它比较打动我的地方，其实就是方便。\n\n早上赶时间的时候，把水果简单搭一下带走，通勤路上或者到办公室再喝，至少能让自己不至于空着肚子开始一天。杯盖拧紧后日常带着比较安心，但我一般也还是会尽量竖着放，自己用着更放心。\n\n如果你和我一样，平时没空慢慢准备早餐，又想让补充水果这件事变得容易一点，这种轻便的小杯子确实还挺实用。\n\n没有夸张效果，就是一个会让我愿意经常拿出来用的小东西。\n\n标签：\n#真实分享 #通勤日常 #早餐小习惯 #水果更方便 #果秒轻榨杯"
+        },
+        {
+          "task_id": "xhs_weekend_trip",
+          "format": 0.8500000000000001,
+          "semantic": 0.75,
+          "answer": "标题：周末短途出门，我会顺手带上的轻便小杯子\n\n正文：\n周末短途出行的时候，我现在很怕带一堆东西，包一重，心情都会变累。\n\n所以最近出门如果只是一天来回，我会把“果秒轻榨杯”一起带上。它体积对我来说还算友好，放进包里不会特别占地方，拿着也没什么负担，比较适合这种轻装出门的节奏。\n\n像去近郊、逛公园、开车去周边玩，我会提前准备一点水果，想喝的时候就很方便。尤其外面有时候很难临时买到合适的水果，或者买到了也不一定好处理，这种自己提前备好的方式会省心很多。\n\n对我来说，它不是旅行必需品，但在那种“不想麻烦、又想顺手补点水果”的周末场景里，使用率还挺高。\n\n带着不累，拿出来也方便，属于会让我觉得出门体验更舒服一点的小东西。\n\n标签：\n#周末出行 #短途旅行 #轻装出门 #水果补给 #出行好物 #果秒轻榨杯"
+        },
+        {
+          "task_id": "xhs_gym_recovery",
+          "format": 0.8500000000000001,
+          "semantic": 0.75,
+          "answer": "标题：运动完来一杯，整个人会舒服很多\n\n正文：\n我健身后其实不太喜欢立刻吃很复杂的东西，尤其练完已经有点累的时候，只想补充点清爽的。\n\n最近运动包里会带上“果秒轻榨杯”，健身结束后用来做一点简单的水果搭配，对我来说刚刚好。像香蕉加牛奶、草莓加酸奶这种，口感比较轻松，喝起来也不会太有负担。\n\n我喜欢的是那种运动后终于缓过来的感觉：出了汗、收完操，坐下来慢慢喝几口，整个人会放松很多。不是为了追求什么夸张效果，就是一种比较适合自己的补充方式。\n\n而且它带去健身房也算方便，不会让我觉得又多背了一个累赘。能让我在运动后更愿意顺手补点东西，这点就已经很加分了。\n\n如果你也和我一样，练完更想要简单一点、清爽一点的补充方式，可以看看这种思路。\n\n标签：\n#健身日常 #运动后补充 #真实分享 #水果搭配 #轻松补给 #果秒轻榨杯"
+        }
+      ],
+      "format_accuracy": 84.0,
+      "semantic_accuracy": 65.0
+    }
+  }
+]
