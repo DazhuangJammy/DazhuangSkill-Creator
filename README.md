@@ -1,6 +1,6 @@
 # Dazhuang Skill Creator
 
-[中文文档](README.zh-CN.md) | English
+[中文文档](README.zh-CN.md) | English | [Changelog](CHANGELOG.md)
 
 ![Dazhuang Skill Creator benchmark overview](assets/benchmark-overview.png)
 
@@ -110,6 +110,16 @@ Compared with the original version, this repo puts more emphasis on maintainable
 
 That makes follow-up iteration much easier. The original version can become hard to modify once generated, while this version is designed to remain editable and team-friendly over time.
 
+## Default Strategy For Existing Skills
+
+This repo no longer treats "optimize an existing skill" as "just tweak the `description`", and it does not treat refactoring as a separate methodology either.
+
+- Creation and refactoring follow the same blueprint; the difference is whether you start from scratch or reorganize material from an old skill
+- First diagnose whether the real issue is triggering, structure, or both
+- If the old skill is bloated, scattered, or easy to derail across long contexts, default to structural refactoring so it realigns with the Dazhuang architecture
+- Only run trigger eval / description optimization after the skill body itself is structurally sound
+- The goal is alignment with the same blueprint, not mechanically forcing every skill into the same template; simple skills can still stay single-file
+
 ## Project Structure
 
 - `SKILL.md` - the final Dazhuang Skill Creator skill definition
@@ -134,6 +144,13 @@ python3 scripts/init_skill.py my-skill --path ./out
 python3 scripts/quick_validate.py ./out/my-skill
 ```
 
+### Refactor an existing skill
+
+- The refactor still follows the same blueprint used for new skills; it just starts by extracting what is worth keeping from the old skill
+- First classify the intervention level as `light optimization`, `structural refactor`, or `full overhaul`
+- If the problem is structural bloat, path drift, or losing the main line in long contexts, refactor `SKILL.md` and rebalance `references/`, `assets/`, and `scripts/` first
+- Only move on to the trigger workflow after the structure is stable
+
 ### Evaluate triggering behavior
 
 ```bash
@@ -143,6 +160,8 @@ python3 scripts/run_eval.py \
 ```
 
 ### Run the optimization loop
+
+Use this only after the skill body is already structurally sound:
 
 ```bash
 python3 scripts/run_loop.py \
