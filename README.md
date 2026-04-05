@@ -14,7 +14,10 @@ This is not just a wording tweak. I reworked the workflow, structure, bundled re
 
 For evaluation, I used Codex in headless mode - no GUI, no need to open the CLI page, just terminal execution - and ran at least 3 independent conversation tests per benchmark item. The full benchmark standards and archived reports are included in `测评报告/`.
 
-If this project is useful to you, please consider giving it a star. For contact or collaboration, add WeChat: `yinyinGyL`.
+If this project is useful to you, please consider giving it a star. For contact or collaboration:
+
+- WeChat: `yinyinGyL`
+- Email: `372749817@qq.com`
 
 ## What Was Benchmarked
 
