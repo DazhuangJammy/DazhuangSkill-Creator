@@ -29,6 +29,10 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 默认交付物也要轻。不要因为“以后可能有用”就顺手创建 `evals/`、workspace、`config.yaml`、`agents/openai.yaml`；只有当前任务真的需要，才把它们带进最终 skill。
 - skill 内部文件指针默认写成可移植形式，例如 `<skill-base>/references/...`。不要把一次运行中的绝对路径写进最终交付物，除非用户明确要求做成只在当前机器使用的临时版本。
 - 文件指针和命令都尽量写死、写全，例如 `cd "<skill-base>" && python3 scripts/...`。
+- 当前 creator 自带轻量更新检查。只要本地脚本可用且已经进入真实执行，不是纯讨论产品形态，就在 Step 1 开头运行 `cd "<skill-base>" && python3 scripts/check_update.py --json`。
+- 更新检查、联网失败、或自动更新失败都不阻断当前任务；只有脚本返回 `should_notify = true` 时，才用 1-2 句告诉用户版本差异和下一动作。
+- 自动更新默认关闭；只有 `<skill-base>/config.yaml` 的 `update_check.auto_update = true`，并且当前安装是干净的 git clone 工作区时，才允许脚本尝试 `git pull --ff-only`。
+- 如果更新脚本返回 `status = updated`，说明本地文件已经拉到新版本，但这次调用仍沿当前已加载版本继续；新版本从下一次调用这个 skill 起完整生效。
 - 根据用户技术水平调整术语密度；必要时简短解释，不要炫术语。
 - 修改已有 skill 时，除非用户明确要求，否则保留原名。
 - 给别人做优化时，默认先判断这次是同一套蓝图下的哪种力度：`轻优化`、`结构重构`、`完整改造`；不要把它们当成三套不同方法论。
@@ -56,6 +60,9 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
   - `current_path` = 上面五种路径之一
   - `current_step` = `Step 1`
   - `next_action` = 用一句话说明接下来要做什么
+- 如果本地脚本可用且已经进入真实执行，先按需读取 `<skill-base>/config.yaml` 里的 `update_check`，再运行 `cd "<skill-base>" && python3 scripts/check_update.py --json`。
+- 如果脚本返回 `should_notify = true`，只简短说明：当前版本、最新版本、是仅提醒还是已自动更新，然后继续当前任务。
+- 如果脚本返回 `status = updated`，明确告诉用户“本地文件已更新，但这次调用继续沿当前已加载版本执行；下次调用会使用新版本”。
 - 如果用户还在探索或讨论阶段，就停留在结构判断/评审模式，不要强行进入实现或重型评测。
 - 如果路径不清楚，先做最轻的结构判断，再决定是否继续下钻。
 - 如果用户说的是“优化一个现有 skill”，默认先停在 `修改现有 skill`，不要直接跳进 `优化触发行为`。

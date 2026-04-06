@@ -2,6 +2,14 @@
 
 按版本记录主要更新，保持简洁，方便后续追踪。
 
+## v1.3.0 - 2026-04-06
+
+1. 新增根目录 `VERSION` 和 `scripts/check_update.py`，让 creator 在启用时能读取 GitHub 上的远端版本号并做轻量更新检查。
+2. 扩充 `config.yaml` 的 `update_check` 配置块，支持开关、检测频率、远端仓库、提醒频率和可选自动更新。
+3. 更新主 `SKILL.md` 的 Step 1，把“启用即检查更新”接进默认工作流，并明确更新失败不阻断主任务。
+4. 自动更新默认仍关闭；只有在显式开启 `update_check.auto_update` 且当前安装是干净的 git clone 工作区时，才尝试 `git pull --ff-only`。
+5. 更新 `README.md` 与 `README.zh-CN.md`，补充运行时更新检查、手动检查命令和自动更新的适用边界。
+
 ## v1.2.0 - 2026-04-06
 
 1. 收紧单文件 skill 的结构规范，明确顶级 section 白名单只允许 `角色`、`规则`、`工作流程`、`例子`、`输出格式`、`索引`，并补充各 section 的使用边界。

@@ -128,11 +128,12 @@ This repo no longer treats "optimize an existing skill" as "just tweak the `desc
 ## Project Structure
 
 - `SKILL.md` - the final Dazhuang Skill Creator skill definition
+- `VERSION` - the local creator version marker used by the runtime update check
 - `agents/` - benchmark and comparison agent prompts
 - `references/` - architecture notes, evaluation workflow, packaging guidance, internal examples, and schemas
 - `assets/` - model-facing templates, reusable assets, and report templates
-- `scripts/` - initialization, validation, evaluation, optimization, reporting, and packaging tools
-- `config.yaml` - editable defaults for init, evaluation, optimization, and packaging
+- `scripts/` - initialization, validation, update checking, evaluation, optimization, reporting, and packaging tools
+- `config.yaml` - editable defaults for init, update checking, evaluation, optimization, and packaging
 - `测评报告/` - archived benchmark reports and screenshots
 
 ## Quick Start
@@ -153,6 +154,12 @@ python3 scripts/init_skill.py my-judge-skill --path ./out --sections role,output
 
 ```bash
 python3 scripts/quick_validate.py ./out/my-skill
+```
+
+### Manually check creator updates
+
+```bash
+python3 scripts/check_update.py --force
 ```
 
 ### Refactor an existing skill
@@ -184,6 +191,35 @@ python3 scripts/run_loop.py \
 
 ```bash
 python3 scripts/package_skill.py ./out/my-skill ./dist
+```
+
+## Runtime Update Check
+
+This repo now ships with a lightweight self-update path that hangs off Step 1 of the creator skill:
+
+- Every real invocation of the skill starts by running `scripts/check_update.py`
+- By default it checks the network at most once every `24` hours
+- When a new version is found, it reminds once, then stays quiet until an even newer version appears
+- If `update_check.auto_update: true` is enabled in `config.yaml` and the current install is a clean git clone, the script will try `git pull --ff-only`
+- If the skill was installed by manually copying the folder, or the working tree has local edits, the script falls back to reminder-only mode
+- Even after a successful auto-update, the refreshed files fully apply on the next invocation of the skill; the current run continues with the already loaded version
+
+Minimal config:
+
+```yaml
+update_check:
+  enabled: true
+  interval_hours: 24
+  auto_update: false
+```
+
+If you know your install is a clean `git clone`, you can opt into auto-update:
+
+```yaml
+update_check:
+  enabled: true
+  auto_update: true
+  interval_hours: 24
 ```
 
 ## Benchmark Reports
