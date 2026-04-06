@@ -10,6 +10,7 @@
 4. 自动更新默认仍关闭；只有在显式开启 `update_check.auto_update` 且当前安装是干净的 git clone 工作区时，才尝试 `git pull --ff-only`。
 5. 更新 `README.md` 与 `README.zh-CN.md`，补充运行时更新检查、手动检查命令和自动更新的适用边界。
 6. 把更新检查的默认网络超时放宽到 `10` 秒，降低首次访问 GitHub Raw 时的误报概率。
+7. 远端版本读取改成优先 GitHub Contents API、失败再回退 GitHub Raw，提升不同网络环境下的可用性。
 
 ## v1.2.0 - 2026-04-06
 

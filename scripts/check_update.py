@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import os
 import re
@@ -190,6 +191,11 @@ def derive_default_version_url(repo: str, branch: str, version_file: str) -> str
     return f"https://raw.githubusercontent.com/{repo}/{branch}/{safe_version_file}"
 
 
+def derive_github_api_version_url(repo: str, branch: str, version_file: str) -> str:
+    safe_version_file = version_file.lstrip("/")
+    return f"https://api.github.com/repos/{repo}/contents/{safe_version_file}?ref={branch}"
+
+
 def derive_repo_url(repo: str) -> str:
     return f"https://github.com/{repo}"
 
@@ -206,13 +212,7 @@ def build_settings(args: argparse.Namespace, config: dict[str, Any]) -> UpdateSe
     repo = str(coalesce(args.repo, get_config_value(config, "update_check.repo", DEFAULT_REPO)))
     branch = str(coalesce(args.branch, get_config_value(config, "update_check.branch", DEFAULT_BRANCH)))
     version_file = str(coalesce(getattr(args, "version_file", None), get_config_value(config, "update_check.version_file", DEFAULT_VERSION_FILE)))
-    version_url = str(
-        coalesce(
-            args.version_url,
-            get_config_value(config, "update_check.version_url", ""),
-            derive_default_version_url(repo, branch, version_file),
-        )
-    )
+    version_url = str(coalesce(args.version_url, get_config_value(config, "update_check.version_url", ""), "") or "")
     manual_update_url = str(
         coalesce(
             get_config_value(config, "update_check.manual_update_url", ""),
@@ -259,6 +259,45 @@ def resolve_update_command(settings: UpdateSettings, git_info: dict[str, Any]) -
     if git_info.get("mode") == "git" and git_info.get("remote_matches"):
         return "git pull --ff-only"
     return ""
+
+
+def candidate_version_urls(settings: UpdateSettings) -> list[str]:
+    if settings.version_url:
+        return [settings.version_url]
+    return [
+        derive_github_api_version_url(settings.repo, settings.branch, settings.version_file),
+        derive_default_version_url(settings.repo, settings.branch, settings.version_file),
+    ]
+
+
+def extract_version_payload(payload: str) -> str:
+    stripped = payload.strip()
+    try:
+        parsed = json.loads(stripped)
+    except json.JSONDecodeError:
+        return stripped
+
+    if isinstance(parsed, dict):
+        encoded_content = parsed.get("content")
+        encoding = parsed.get("encoding")
+        if isinstance(encoded_content, str) and encoding == "base64":
+            return base64.b64decode(encoded_content).decode("utf-8").strip()
+        if isinstance(parsed.get("version"), str):
+            return parsed["version"].strip()
+
+    return stripped
+
+
+def fetch_remote_version(settings: UpdateSettings) -> str:
+    last_error: Exception | None = None
+    for url in candidate_version_urls(settings):
+        try:
+            return normalize_version(extract_version_payload(fetch_text(url, settings.timeout_seconds)))
+        except (HTTPError, URLError, OSError, ValueError) as exc:
+            last_error = exc
+    if last_error is None:
+        raise OSError("没有可用的远端版本地址。")
+    raise last_error
 
 
 def attempt_auto_update(
@@ -333,7 +372,7 @@ def evaluate_update(args: argparse.Namespace) -> dict[str, Any]:
         return result
 
     try:
-        latest_version = normalize_version(fetch_text(settings.version_url, settings.timeout_seconds))
+        latest_version = fetch_remote_version(settings)
     except HTTPError as exc:
         result["status"] = "error"
         result["message"] = f"更新检查失败：远端 VERSION 不可用（HTTP {exc.code}）。"
