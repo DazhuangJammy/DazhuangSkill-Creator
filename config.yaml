@@ -19,6 +19,7 @@ optimization:
 init_skill:
   output_path: ""
   resources: []
+  sections: []
   include_examples: false
   create_config: false
   create_openai_yaml: false

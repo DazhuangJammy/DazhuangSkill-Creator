@@ -2,6 +2,15 @@
 
 按版本记录主要更新，保持简洁，方便后续追踪。
 
+## v1.2.0 - 2026-04-06
+
+1. 收紧单文件 skill 的结构规范，明确顶级 section 白名单只允许 `角色`、`规则`、`工作流程`、`例子`、`输出格式`、`索引`，并补充各 section 的使用边界。
+2. 更新 `scripts/init_skill.py`，新增 `--sections` 参数和 `init_skill.sections` 配置，支持按需生成 `角色`、`例子`、`输出格式`、`索引` 这些可选 section。
+3. 调整初始化脚手架与示例资源，统一把长例子下沉到 `references/examples.md`，把输出模板下沉到 `assets/output-format.md`，避免主 `SKILL.md` 继续膨胀。
+4. 强化 `scripts/quick_validate.py`，新增对顶级 section 名称、顺序、必选项、内联长度和 `<skill-base>` 资源锚点的校验。
+5. 更新 `SKILL.md`、`references/skill-architecture.md`、`README.md` 和 `README.zh-CN.md`，同步说明单文件闭集、下沉阈值以及新脚手架用法。
+6. 扩充 `config.yaml` 初始化项，为新脚手架提供默认 `sections` 配置入口。
+
 ## v1.1.0 - 2026-04-05
 
 1. 补充改已有 skill 的默认策略，明确 `轻优化`、`结构重构`、`完整改造` 三档力度。

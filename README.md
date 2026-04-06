@@ -105,7 +105,9 @@ Additional head-to-head results:
 
 Compared with the original version, this repo puts more emphasis on maintainable structure:
 
-- Keep durable rules in the main `SKILL.md`
+- Keep the main `SKILL.md` centered on durable rules and workflow
+- Keep single-file skills inside a fixed section whitelist: `角色`, `规则`, `工作流程`, `例子`, `输出格式`, `索引`
+- Treat `例子` as model-facing internal references, not user prompt examples; treat `输出格式` as model-facing templates
 - Push long explanations into `references/`
 - Put reusable templates into `assets/`
 - Put deterministic or repetitive work into `scripts/`
@@ -127,8 +129,8 @@ This repo no longer treats "optimize an existing skill" as "just tweak the `desc
 
 - `SKILL.md` - the final Dazhuang Skill Creator skill definition
 - `agents/` - benchmark and comparison agent prompts
-- `references/` - architecture notes, evaluation workflow, packaging guidance, and schemas
-- `assets/` - reusable assets and report templates
+- `references/` - architecture notes, evaluation workflow, packaging guidance, internal examples, and schemas
+- `assets/` - model-facing templates, reusable assets, and report templates
 - `scripts/` - initialization, validation, evaluation, optimization, reporting, and packaging tools
 - `config.yaml` - editable defaults for init, evaluation, optimization, and packaging
 - `测评报告/` - archived benchmark reports and screenshots
@@ -139,6 +141,12 @@ This repo no longer treats "optimize an existing skill" as "just tweak the `desc
 
 ```bash
 python3 scripts/init_skill.py my-skill --path ./out
+```
+
+If a single-file skill needs extra inline modules, declare them explicitly:
+
+```bash
+python3 scripts/init_skill.py my-judge-skill --path ./out --sections role,output-format
 ```
 
 ### Validate a skill
