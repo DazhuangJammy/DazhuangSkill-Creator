@@ -85,6 +85,58 @@ def _strip_inline_comment(line: str) -> str:
     return line.rstrip()
 
 
+def _split_inline_yaml_sequence(value: str) -> list[str]:
+    """Split a flow-style YAML sequence body into item strings."""
+    items: list[str] = []
+    current: list[str] = []
+    in_single = False
+    in_double = False
+    escaped = False
+    bracket_depth = 0
+    brace_depth = 0
+
+    for char in value:
+        if char == "\\" and in_double and not escaped:
+            escaped = True
+            current.append(char)
+            continue
+        if char == "'" and not in_double and not escaped:
+            in_single = not in_single
+        elif char == '"' and not in_single and not escaped:
+            in_double = not in_double
+        elif not in_single and not in_double:
+            if char == "[":
+                bracket_depth += 1
+            elif char == "]":
+                if bracket_depth == 0:
+                    raise ValueError(f"Invalid inline YAML sequence: [{value}]")
+                bracket_depth -= 1
+            elif char == "{":
+                brace_depth += 1
+            elif char == "}":
+                if brace_depth == 0:
+                    raise ValueError(f"Invalid inline YAML sequence: [{value}]")
+                brace_depth -= 1
+            elif char == "," and bracket_depth == 0 and brace_depth == 0:
+                item = "".join(current).strip()
+                if not item:
+                    raise ValueError(f"Empty item in inline YAML sequence: [{value}]")
+                items.append(item)
+                current = []
+                continue
+        current.append(char)
+        escaped = False
+
+    if in_single or in_double or bracket_depth != 0 or brace_depth != 0:
+        raise ValueError(f"Unterminated inline YAML sequence: [{value}]")
+
+    tail = "".join(current).strip()
+    if not tail:
+        raise ValueError(f"Empty item in inline YAML sequence: [{value}]")
+    items.append(tail)
+    return items
+
+
 def _parse_scalar(value: str) -> Any:
     """Parse a scalar from a small YAML subset."""
     value = value.strip()
@@ -97,6 +149,12 @@ def _parse_scalar(value: str) -> Any:
         if quote == '"':
             inner = bytes(inner, "utf-8").decode("unicode_escape")
         return inner
+
+    if value.startswith("[") and value.endswith("]"):
+        inner = value[1:-1].strip()
+        if inner == "":
+            return []
+        return [_parse_scalar(item) for item in _split_inline_yaml_sequence(inner)]
 
     lowered = value.lower()
     if lowered in {"true", "yes", "on"}:
