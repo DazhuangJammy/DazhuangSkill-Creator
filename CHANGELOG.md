@@ -2,6 +2,13 @@
 
 按版本记录主要更新，保持简洁，方便后续追踪。
 
+## v1.3.1 - 2026-04-06
+
+1. 把 `config.yaml` 的 `update_check.auto_update` 默认值改成 `true`，让干净的 git clone 安装默认尝试自动更新。
+2. 更新 `README.md` 与 `README.zh-CN.md`，明确要求用户和安装型 AI 用 `git clone https://github.com/DazhuangJammy/DazhuangSkill-Creator.git` 安装，而不是手动复制文件夹。
+3. 同步更新主 `SKILL.md` 的自更新规则，明确当前 creator 的推荐安装方式是 git clone，并把默认更新策略改成“默认自动更新，可显式关闭”。
+4. 版本号提升到 `1.3.1`，让现有更新检查链路能把这次行为调整识别成一个新版本。
+
 ## v1.3.0 - 2026-04-06
 
 1. 新增根目录 `VERSION` 和 `scripts/check_update.py`，让 creator 在启用时能读取 GitHub 上的远端版本号并做轻量更新检查。

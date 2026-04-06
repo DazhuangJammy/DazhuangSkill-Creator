@@ -138,6 +138,22 @@ This repo no longer treats "optimize an existing skill" as "just tweak the `desc
 
 ## Quick Start
 
+### Install into a Claude Code / Codex / Open Claude skill directory
+
+The recommended install path is `git clone`, because runtime update checks and auto-update both rely on a real git working tree.
+
+```bash
+cd <your-skill-dir>
+git clone https://github.com/DazhuangJammy/DazhuangSkill-Creator.git
+```
+
+If you ask another AI to install this repo for you, be explicit:
+
+- use `git clone https://github.com/DazhuangJammy/DazhuangSkill-Creator.git`
+- do not just download a zip
+- do not just copy the folder contents
+- do not remove `.git`
+
 ### Create a new skill scaffold
 
 ```bash
@@ -197,10 +213,12 @@ python3 scripts/package_skill.py ./out/my-skill ./dist
 
 This repo now ships with a lightweight self-update path that hangs off Step 1 of the creator skill:
 
+- Recommended source: `https://github.com/DazhuangJammy/DazhuangSkill-Creator.git`
+- Recommended install mode: `git clone` into the target skill directory
 - Every real invocation of the skill starts by running `scripts/check_update.py`
 - By default it checks the network at most once every `24` hours
 - When a new version is found, it reminds once, then stays quiet until an even newer version appears
-- If `update_check.auto_update: true` is enabled in `config.yaml` and the current install is a clean git clone, the script will try `git pull --ff-only`
+- The default config already enables `update_check.auto_update: true`; as long as the current install is a clean git clone, the script will try `git pull --ff-only`
 - If the skill was installed by manually copying the folder, or the working tree has local edits, the script falls back to reminder-only mode
 - Even after a successful auto-update, the refreshed files fully apply on the next invocation of the skill; the current run continues with the already loaded version
 
@@ -210,15 +228,15 @@ Minimal config:
 update_check:
   enabled: true
   interval_hours: 24
-  auto_update: false
+  auto_update: true
 ```
 
-If you know your install is a clean `git clone`, you can opt into auto-update:
+If you prefer to disable auto-update explicitly:
 
 ```yaml
 update_check:
   enabled: true
-  auto_update: true
+  auto_update: false
   interval_hours: 24
 ```
 

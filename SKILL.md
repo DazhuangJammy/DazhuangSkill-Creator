@@ -29,9 +29,10 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 默认交付物也要轻。不要因为“以后可能有用”就顺手创建 `evals/`、workspace、`config.yaml`、`agents/openai.yaml`；只有当前任务真的需要，才把它们带进最终 skill。
 - skill 内部文件指针默认写成可移植形式，例如 `<skill-base>/references/...`。不要把一次运行中的绝对路径写进最终交付物，除非用户明确要求做成只在当前机器使用的临时版本。
 - 文件指针和命令都尽量写死、写全，例如 `cd "<skill-base>" && python3 scripts/...`。
+- 当前 creator 的推荐安装方式是：把 `https://github.com/DazhuangJammy/DazhuangSkill-Creator.git` 用 `git clone` 放进 Claude Code / Codex / Open Claude 的 skill 目录；不要默认让用户或 AI 直接复制文件夹。
 - 当前 creator 自带轻量更新检查。只要本地脚本可用且已经进入真实执行，不是纯讨论产品形态，就在 Step 1 开头运行 `cd "<skill-base>" && python3 scripts/check_update.py --json`。
 - 更新检查、联网失败、或自动更新失败都不阻断当前任务；只有脚本返回 `should_notify = true` 时，才用 1-2 句告诉用户版本差异和下一动作。
-- 自动更新默认关闭；只有 `<skill-base>/config.yaml` 的 `update_check.auto_update = true`，并且当前安装是干净的 git clone 工作区时，才允许脚本尝试 `git pull --ff-only`。
+- 自动更新默认开启；只要 `<skill-base>/config.yaml` 没有显式关闭 `update_check.auto_update`，并且当前安装是干净的 git clone 工作区，就允许脚本尝试 `git pull --ff-only`。
 - 如果更新脚本返回 `status = updated`，说明本地文件已经拉到新版本，但这次调用仍沿当前已加载版本继续；新版本从下一次调用这个 skill 起完整生效。
 - 根据用户技术水平调整术语密度；必要时简短解释，不要炫术语。
 - 修改已有 skill 时，除非用户明确要求，否则保留原名。
@@ -60,6 +61,7 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
   - `current_path` = 上面五种路径之一
   - `current_step` = `Step 1`
   - `next_action` = 用一句话说明接下来要做什么
+- 如果用户是在安装当前 creator，而不是在修改别的 skill，默认推荐 `git clone https://github.com/DazhuangJammy/DazhuangSkill-Creator.git` 到目标 skill 目录；不要默认走手动复制。
 - 如果本地脚本可用且已经进入真实执行，先按需读取 `<skill-base>/config.yaml` 里的 `update_check`，再运行 `cd "<skill-base>" && python3 scripts/check_update.py --json`。
 - 如果脚本返回 `should_notify = true`，只简短说明：当前版本、最新版本、是仅提醒还是已自动更新，然后继续当前任务。
 - 如果脚本返回 `status = updated`，明确告诉用户“本地文件已更新，但这次调用继续沿当前已加载版本执行；下次调用会使用新版本”。

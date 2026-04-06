@@ -41,7 +41,7 @@ update_check:
   version_url: ""
   interval_hours: 24
   timeout_seconds: 10
-  auto_update: false
+  auto_update: true
   remind_once_per_version: true
   manual_update_command: ""
   manual_update_url: ""
