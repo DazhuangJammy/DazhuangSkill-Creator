@@ -154,6 +154,22 @@ If you ask another AI to install this repo for you, be explicit:
 - do not just copy the folder contents
 - do not remove `.git`
 
+Standard prompt for Claude / Codex / other installation-oriented AIs:
+
+```text
+Please install this skill into my skill directory, and you must use git clone.
+
+Repository:
+https://github.com/DazhuangJammy/DazhuangSkill-Creator.git
+
+Requirements:
+1. Use git clone, not a zip download
+2. Do not just copy the folder contents
+3. Keep the .git directory intact
+4. Confirm the installed directory is a normal git working tree
+5. If the target directory already exists, tell me first before deciding whether to pull or reinstall
+```
+
 ### Create a new skill scaffold
 
 ```bash

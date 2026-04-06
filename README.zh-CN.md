@@ -152,6 +152,22 @@ git clone https://github.com/DazhuangJammy/DazhuangSkill-Creator.git
 - 不要只复制文件夹内容
 - 不要删掉 `.git`
 
+给 Claude / Codex / 其他安装型 AI 的标准提示词：
+
+```text
+请把这个 skill 安装到我的 skill 目录里，并且必须使用 git clone：
+
+仓库地址：
+https://github.com/DazhuangJammy/DazhuangSkill-Creator.git
+
+要求：
+1. 用 git clone 安装，不要下载 zip
+2. 不要只复制文件夹内容
+3. 保留 .git 目录
+4. 安装完成后确认当前目录是一个正常的 git 工作区
+5. 如果已经存在同名目录，优先先告诉我，再决定是 pull 还是重装
+```
+
 ### 新建一个 skill 脚手架
 
 ```bash
