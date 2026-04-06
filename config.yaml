@@ -40,7 +40,7 @@ update_check:
   version_file: "VERSION"
   version_url: ""
   interval_hours: 24
-  timeout_seconds: 5
+  timeout_seconds: 10
   auto_update: false
   remind_once_per_version: true
   manual_update_command: ""

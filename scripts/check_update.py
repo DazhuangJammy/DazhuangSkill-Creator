@@ -25,7 +25,7 @@ DEFAULT_REPO = "DazhuangJammy/DazhuangSkill-Creator"
 DEFAULT_BRANCH = "main"
 DEFAULT_VERSION_FILE = "VERSION"
 DEFAULT_INTERVAL_HOURS = 24
-DEFAULT_TIMEOUT_SECONDS = 5
+DEFAULT_TIMEOUT_SECONDS = 10
 USER_AGENT = "dazhuangskill-creator-update-check/1.0"
 VERSION_RE = re.compile(r"^[vV]?(\d+)(?:\.(\d+))?(?:\.(\d+))?(?:[-+.]?([0-9A-Za-z.-]+))?$")
 
