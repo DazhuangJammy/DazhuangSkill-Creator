@@ -4,12 +4,38 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG_PATH = REPO_ROOT / "config.yaml"
+TEXT_READ_ENCODING = "utf-8-sig"
+TEXT_WRITE_ENCODING = "utf-8"
+
+
+def configure_utf8_stdio() -> None:
+    """Prefer UTF-8 console output so localized messages survive on Windows."""
+    for stream_name in ("stdout", "stderr"):
+        stream = getattr(sys, stream_name, None)
+        if not hasattr(stream, "reconfigure"):
+            continue
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except ValueError:
+            # Some redirected streams do not allow reconfiguration.
+            continue
+
+
+def read_utf8_text(path: str | Path, *, errors: str = "strict") -> str:
+    """Read repo-managed text files as UTF-8, tolerating an optional BOM."""
+    return Path(path).read_text(encoding=TEXT_READ_ENCODING, errors=errors)
+
+
+def write_utf8_text(path: str | Path, text: str) -> None:
+    """Write repo-managed text files as UTF-8 with stable LF newlines."""
+    Path(path).write_text(text, encoding=TEXT_WRITE_ENCODING, newline="\n")
 
 
 def get_repo_root() -> Path:
@@ -19,8 +45,8 @@ def get_repo_root() -> Path:
 
 def parse_skill_md(skill_path: Path) -> tuple[str, str, str]:
     """Parse a SKILL.md file, returning (name, description, full_content)."""
-    content = (skill_path / "SKILL.md").read_text()
-    lines = content.split("\n")
+    content = read_utf8_text(skill_path / "SKILL.md")
+    lines = content.splitlines()
 
     if lines[0].strip() != "---":
         raise ValueError("SKILL.md missing frontmatter (no opening ---)")
@@ -317,7 +343,7 @@ def load_structured_data(path: str | Path) -> Any:
     """Load JSON or a small YAML subset based on file extension."""
     target = Path(path)
     suffix = target.suffix.lower()
-    text = target.read_text()
+    text = read_utf8_text(target)
 
     if suffix == ".json":
         return json.loads(text)

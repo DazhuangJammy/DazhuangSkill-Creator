@@ -23,12 +23,16 @@ from scripts.improve_description import improve_description
 from scripts.run_eval import find_project_root, run_eval
 from scripts.utils import (
     coalesce,
+    configure_utf8_stdio,
     extract_eval_items,
     get_config_value,
     load_dazhuangskill_creator_config,
     load_structured_data,
     parse_skill_md,
+    write_utf8_text,
 )
+
+configure_utf8_stdio()
 
 
 def split_eval_set(eval_set: list[dict], holdout: float, seed: int = 42) -> tuple[list[dict], list[dict]]:
@@ -158,7 +162,10 @@ def run_loop(
                 "test_size": len(test_set),
                 "history": history,
             }
-            live_report_path.write_text(generate_html(partial_output, auto_refresh=True, skill_name=name))
+            write_utf8_text(
+                live_report_path,
+                generate_html(partial_output, auto_refresh=True, skill_name=name),
+            )
 
         if verbose:
             def print_eval_stats(label, results, elapsed):
@@ -306,8 +313,11 @@ def main():
         else:
             live_report_path = Path(report_setting)
         # Open the report immediately so the user can watch
-        live_report_path.write_text("<html><body><h1>Starting optimization loop...</h1><meta http-equiv='refresh' content='5'></body></html>")
-        webbrowser.open(str(live_report_path))
+        write_utf8_text(
+            live_report_path,
+            "<html><body><h1>Starting optimization loop...</h1><meta http-equiv='refresh' content='5'></body></html>",
+        )
+        webbrowser.open(live_report_path.resolve().as_uri())
     else:
         live_report_path = None
 
@@ -341,15 +351,21 @@ def main():
     json_output = json.dumps(output, indent=2)
     print(json_output)
     if results_dir:
-        (results_dir / "results.json").write_text(json_output)
+        write_utf8_text(results_dir / "results.json", json_output)
 
     # Write final HTML report (without auto-refresh)
     if live_report_path:
-        live_report_path.write_text(generate_html(output, auto_refresh=False, skill_name=name))
+        write_utf8_text(
+            live_report_path,
+            generate_html(output, auto_refresh=False, skill_name=name),
+        )
         print(f"\nReport: {live_report_path}", file=sys.stderr)
 
     if results_dir and live_report_path:
-        (results_dir / "report.html").write_text(generate_html(output, auto_refresh=False, skill_name=name))
+        write_utf8_text(
+            results_dir / "report.html",
+            generate_html(output, auto_refresh=False, skill_name=name),
+        )
 
     if results_dir:
         print(f"Results saved to: {results_dir}", file=sys.stderr)

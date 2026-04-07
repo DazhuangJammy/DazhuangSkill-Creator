@@ -11,6 +11,13 @@ import json
 import sys
 from pathlib import Path
 
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.utils import configure_utf8_stdio, read_utf8_text, write_utf8_text
+
+configure_utf8_stdio()
+
 
 def generate_html(data: dict, auto_refresh: bool = False, skill_name: str = "") -> str:
     """从循环输出数据生成 HTML 报告；如果 auto_refresh 为 True，则加入自动刷新标签。"""
@@ -310,12 +317,12 @@ def main():
     if args.input == "-":
         data = json.load(sys.stdin)
     else:
-        data = json.loads(Path(args.input).read_text())
+        data = json.loads(read_utf8_text(Path(args.input)))
 
     html_output = generate_html(data, skill_name=args.skill_name)
 
     if args.output:
-        Path(args.output).write_text(html_output)
+        write_utf8_text(Path(args.output), html_output)
         print(f"Report written to {args.output}", file=sys.stderr)
     else:
         print(html_output)

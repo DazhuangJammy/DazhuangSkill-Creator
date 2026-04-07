@@ -58,7 +58,7 @@
 - 只要有 Python 和文件系统，打包仍然可用：
 
 ```bash
-cd "<skill-base>" && python3 scripts/package_skill.py <path-to-skill-folder>
+<python-cmd> "<skill-base>/scripts/package_skill.py" <path-to-skill-folder>
 ```
 
 - 如果要进入完整交付路径，回 `<skill-base>/references/package-and-present.md`。

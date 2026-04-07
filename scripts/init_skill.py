@@ -25,7 +25,15 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from generate_openai_yaml import write_openai_yaml
-from scripts.utils import coalesce, get_config_value, load_dazhuangskill_creator_config
+from scripts.utils import (
+    coalesce,
+    configure_utf8_stdio,
+    get_config_value,
+    load_dazhuangskill_creator_config,
+    write_utf8_text,
+)
+
+configure_utf8_stdio()
 
 MAX_SKILL_NAME_LENGTH = 64
 ALLOWED_RESOURCES = {"scripts", "references", "assets"}
@@ -211,7 +219,7 @@ def render_skill_template(skill_name, sections, resources, create_config, create
     if "scripts" in resources:
         blocks.insert(
             len(blocks) - 1,
-            "- 当工作流要运行 bundled script 时，优先写成显式命令，例如 `cd \"<skill-base>\" && python3 scripts/...`。",
+            "- 当工作流要运行 bundled script 时，优先写成显式命令，例如 `<python-cmd> \"<skill-base>/scripts/...\"`；其中 `<python-cmd>` 在 macOS/Linux 通常是 `python3`，Windows 通常优先 `py -3`，其次 `python`。",
         )
     if create_config:
         blocks.insert(
@@ -246,7 +254,7 @@ def render_skill_template(skill_name, sections, resources, create_config, create
     if "assets" in resources:
         blocks.append("- 如果需要下沉的输出格式，读取 `<skill-base>/assets/output-format.md`；这里放的是模型应直接遵循的模板或骨架。")
     if "scripts" in resources:
-        blocks.append("- 如果需要确定性或重复性执行，运行 `cd \"<skill-base>\" && python3 scripts/...`。")
+        blocks.append("- 如果需要确定性或重复性执行，运行 `<python-cmd> \"<skill-base>/scripts/...\"`。")
 
     blocks.extend(
         [
@@ -315,7 +323,7 @@ def create_resource_dirs(skill_dir, skill_name, resources, include_examples):
         if resource == "scripts":
             if include_examples:
                 example_script = resource_dir / "example_task.py"
-                example_script.write_text(EXAMPLE_SCRIPT.format(skill_name=skill_name))
+                write_utf8_text(example_script, EXAMPLE_SCRIPT.format(skill_name=skill_name))
                 example_script.chmod(0o755)
                 print("[OK] 已创建 scripts/example_task.py")
             else:
@@ -323,14 +331,14 @@ def create_resource_dirs(skill_dir, skill_name, resources, include_examples):
         elif resource == "references":
             if include_examples:
                 examples_file = resource_dir / "examples.md"
-                examples_file.write_text(EXAMPLE_REFERENCE_EXAMPLES)
+                write_utf8_text(examples_file, EXAMPLE_REFERENCE_EXAMPLES)
                 print("[OK] 已创建 references/examples.md")
             else:
                 print("[OK] 已创建 references/")
         elif resource == "assets":
             if include_examples:
                 output_format_file = resource_dir / "output-format.md"
-                output_format_file.write_text(EXAMPLE_ASSET_OUTPUT_FORMAT)
+                write_utf8_text(output_format_file, EXAMPLE_ASSET_OUTPUT_FORMAT)
                 print("[OK] 已创建 assets/output-format.md")
             else:
                 print("[OK] 已创建 assets/")
@@ -338,7 +346,7 @@ def create_resource_dirs(skill_dir, skill_name, resources, include_examples):
 
 def create_config_file(skill_dir):
     config_path = skill_dir / "config.yaml"
-    config_path.write_text(EXAMPLE_CONFIG)
+    write_utf8_text(config_path, EXAMPLE_CONFIG)
     print("[OK] 已创建 config.yaml")
 
 
@@ -377,7 +385,7 @@ def init_skill(
 
     skill_md_path = skill_dir / "SKILL.md"
     try:
-        skill_md_path.write_text(skill_content)
+        write_utf8_text(skill_md_path, skill_content)
         print("[OK] 已创建 SKILL.md")
     except Exception as exc:
         print(f"[ERROR] 创建 SKILL.md 失败：{exc}")

@@ -14,7 +14,15 @@ from pathlib import Path
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.utils import get_config_value, load_dazhuangskill_creator_config
+from scripts.utils import (
+    configure_utf8_stdio,
+    get_config_value,
+    load_dazhuangskill_creator_config,
+    read_utf8_text,
+    write_utf8_text,
+)
+
+configure_utf8_stdio()
 
 ACRONYMS = {
     "GH",
@@ -112,7 +120,7 @@ def read_frontmatter_name(skill_dir):
         print(f"[ERROR] 在 {skill_dir} 中找不到 SKILL.md")
         return None
 
-    content = skill_md.read_text()
+    content = read_utf8_text(skill_md)
     match = re.match(r"^---\n(.*?)\n---", content, re.DOTALL)
     if not match:
         print("[ERROR] SKILL.md frontmatter 格式无效。")
@@ -206,7 +214,7 @@ def write_openai_yaml(skill_dir, skill_name, raw_overrides, config_defaults=None
     agents_dir = Path(skill_dir) / "agents"
     agents_dir.mkdir(parents=True, exist_ok=True)
     output_path = agents_dir / "openai.yaml"
-    output_path.write_text("\n".join(interface_lines) + "\n")
+    write_utf8_text(output_path, "\n".join(interface_lines) + "\n")
     print("[OK] 已创建 agents/openai.yaml")
     return output_path
 

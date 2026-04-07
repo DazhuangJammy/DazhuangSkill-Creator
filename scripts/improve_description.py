@@ -19,11 +19,15 @@ if __package__ in {None, ""}:
 
 from scripts.utils import (
     coalesce,
+    configure_utf8_stdio,
     get_config_value,
     load_dazhuangskill_creator_config,
     load_structured_data,
     parse_skill_md,
+    write_utf8_text,
 )
+
+configure_utf8_stdio()
 
 
 def _call_claude(prompt: str, model: str | None, timeout: int = 300) -> str:
@@ -43,17 +47,18 @@ def _call_claude(prompt: str, model: str | None, timeout: int = 300) -> str:
 
     result = subprocess.run(
         cmd,
-        input=prompt,
+        input=prompt.encode("utf-8"),
         capture_output=True,
-        text=True,
         env=env,
         timeout=timeout,
     )
+    stdout = result.stdout.decode("utf-8", errors="replace")
+    stderr = result.stderr.decode("utf-8", errors="replace")
     if result.returncode != 0:
         raise RuntimeError(
-            f"claude -p exited {result.returncode}\nstderr: {result.stderr}"
+            f"claude -p exited {result.returncode}\nstderr: {stderr}"
         )
-    return result.stdout
+    return stdout
 
 
 def improve_description(
@@ -194,7 +199,7 @@ Skill 内容（帮助你理解这个 skill 到底做什么）：
     if log_dir:
         log_dir.mkdir(parents=True, exist_ok=True)
         log_file = log_dir / f"improve_iter_{iteration or 'unknown'}.json"
-        log_file.write_text(json.dumps(transcript, indent=2))
+        write_utf8_text(log_file, json.dumps(transcript, indent=2))
 
     return description
 

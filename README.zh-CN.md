@@ -10,6 +10,8 @@
 
 Dazhuang Skill Creator 基于 Claude Code 官方 `skill-creator`，但并不只是改几句提示词。我把自己对提示词架构、Skill 架构，以及 CLI 工具运行机制的理解重新整合进去，对整体工作流、结构分层、bundled resources 和可维护性做了一次完整重构。
 
+> `v1.4.0` 更新（2026-04-07）：仓库现在补齐了 macOS / Windows 双端兼容层。这次更新的目标不是改 skill 架构或改方法论，而是在尽量不影响原有效果的前提下，修掉 Windows 上的编码、BOM 和脚本执行问题。
+
 在测评环节，我采用 Codex 的 Headless 模式进行测试：不需要打开图形界面，也不需要进入 CLI 页面，直接在终端执行。每个 benchmark item 都至少进行了 3 轮独立对话测试。完整的评测标准、原始结果与报告已经归档在 `测评报告/` 文件夹中。
 
 如果这个项目对你有帮助，欢迎点一个 star。联系 / 合作方式：
@@ -170,6 +172,8 @@ https://github.com/DazhuangJammy/DazhuangSkill-Creator.git
 
 ### 新建一个 skill 脚手架
 
+如果你在 Windows 上运行，把 `python3` 替换成 `py -3`（优先）或 `python`。
+
 ```bash
 python3 scripts/init_skill.py my-skill --path ./out
 ```
@@ -202,9 +206,7 @@ python3 scripts/check_update.py --force
 ### 评估触发效果
 
 ```bash
-python3 scripts/run_eval.py \
-  --eval-set ./path/to/eval-set.json \
-  --skill-path ./out/my-skill
+python3 scripts/run_eval.py --eval-set ./path/to/eval-set.json --skill-path ./out/my-skill
 ```
 
 ### 跑描述优化循环
@@ -212,9 +214,7 @@ python3 scripts/run_eval.py \
 仅在 skill 本体结构已经站住时使用：
 
 ```bash
-python3 scripts/run_loop.py \
-  --eval-set ./path/to/eval-set.json \
-  --skill-path ./out/my-skill
+python3 scripts/run_loop.py --eval-set ./path/to/eval-set.json --skill-path ./out/my-skill
 ```
 
 ### 打包 skill

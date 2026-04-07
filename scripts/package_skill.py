@@ -19,7 +19,14 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.quick_validate import validate_skill
-from scripts.utils import coalesce, get_config_value, load_dazhuangskill_creator_config
+from scripts.utils import (
+    coalesce,
+    configure_utf8_stdio,
+    get_config_value,
+    load_dazhuangskill_creator_config,
+)
+
+configure_utf8_stdio()
 
 # 打包时需要排除的目录和文件模式。
 EXCLUDE_DIRS = {"__pycache__", "node_modules"}

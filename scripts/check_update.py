@@ -20,7 +20,17 @@ from urllib.request import Request, urlopen
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.utils import coalesce, get_config_value, get_repo_root, load_dazhuangskill_creator_config
+from scripts.utils import (
+    coalesce,
+    configure_utf8_stdio,
+    get_config_value,
+    get_repo_root,
+    load_dazhuangskill_creator_config,
+    read_utf8_text,
+    write_utf8_text,
+)
+
+configure_utf8_stdio()
 
 DEFAULT_REPO = "DazhuangJammy/DazhuangSkill-Creator"
 DEFAULT_BRANCH = "main"
@@ -82,7 +92,7 @@ def load_state(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
     try:
-        data = json.loads(path.read_text())
+        data = json.loads(read_utf8_text(path))
     except (OSError, json.JSONDecodeError):
         return {}
     return data if isinstance(data, dict) else {}
@@ -90,7 +100,7 @@ def load_state(path: Path) -> dict[str, Any]:
 
 def save_state(path: Path, state: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n")
+    write_utf8_text(path, json.dumps(state, ensure_ascii=False, indent=2) + "\n")
 
 
 def normalize_version(raw_value: str) -> str:
@@ -132,7 +142,7 @@ def compare_versions(left: str, right: str) -> int:
 
 
 def read_local_version(version_path: Path) -> str:
-    return normalize_version(version_path.read_text())
+    return normalize_version(read_utf8_text(version_path))
 
 
 def fetch_text(url: str, timeout_seconds: int) -> str:
@@ -153,6 +163,8 @@ def run_git_command(repo_root: Path, args: list[str]) -> subprocess.CompletedPro
         cwd=repo_root,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         check=False,
     )
 

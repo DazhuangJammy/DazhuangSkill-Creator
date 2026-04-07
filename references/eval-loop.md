@@ -111,7 +111,7 @@ grader 应该：
 在 `<skill-base>` 下执行：
 
 ```bash
-cd "<skill-base>" && python3 -m scripts.aggregate_benchmark <workspace>/iteration-N --skill-name <name>
+<python-cmd> "<skill-base>/scripts/aggregate_benchmark.py" <workspace>/iteration-N --skill-name <name>
 ```
 
 它会输出通过率、耗时、Token 数等聚合数据。
@@ -129,7 +129,7 @@ cd "<skill-base>" && python3 -m scripts.aggregate_benchmark <workspace>/iteratio
 典型命令：
 
 ```bash
-cd "<skill-base>" && python3 eval-viewer/generate_review.py <workspace>/iteration-N --skill-name "<name>" --benchmark <workspace>/iteration-N/benchmark.json
+<python-cmd> "<skill-base>/eval-viewer/generate_review.py" <workspace>/iteration-N --skill-name "<name>" --benchmark <workspace>/iteration-N/benchmark.json
 ```
 
 如果是第 2 轮以后，还要带上 `--previous-workspace <workspace>/iteration-(N-1)`。

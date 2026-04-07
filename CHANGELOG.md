@@ -2,6 +2,15 @@
 
 按版本记录主要更新，保持简洁，方便后续追踪。
 
+## v1.4.0 - 2026-04-07
+
+1. 补齐 macOS / Windows 双端兼容层，不改 skill 架构、不改 validator 判型标准，也不改 benchmark / trigger optimization 的方法论。
+2. 统一仓库内文本文件读写为 UTF-8，并在读取时兼容 BOM，修复 Windows 上 `SKILL.md`、`config.yaml`、JSON / HTML / Markdown 因默认编码或 BOM 导致的失败。
+3. 修复 `scripts/check_update.py`、`scripts/init_skill.py`、`scripts/quick_validate.py`、`scripts/generate_openai_yaml.py`、`eval-viewer/generate_review.py` 等脚本在 Windows 上的编码脆弱点。
+4. 重写 `scripts/run_eval.py` 的子进程输出读取方式，去掉对 Unix 风格 `select + pipe` 的依赖，让触发评测和描述优化链路在 Windows 上可运行。
+5. 更新 `README.md`、`README.zh-CN.md`、主 `SKILL.md` 与多份 `references/`，把关键命令改成跨平台写法：统一使用 `<python-cmd>` 概念，Windows 默认优先 `py -3`。
+6. 版本号提升到 `1.4.0`，让现有更新检查链路把这次双端兼容更新识别成一个新版本。
+
 ## v1.3.1 - 2026-04-06
 
 1. 把 `config.yaml` 的 `update_check.auto_update` 默认值改成 `true`，让干净的 git clone 安装默认尝试自动更新。

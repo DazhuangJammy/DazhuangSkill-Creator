@@ -12,6 +12,8 @@ Dazhuang Skill Creator starts from Claude Code's official `skill-creator`, then 
 
 This is not just a wording tweak. I reworked the workflow, structure, bundled resources, and maintenance model so the generated skill is easier to evolve, easier to debug, and easier to collaborate on over time.
 
+> Update `v1.4.0` (2026-04-07): the repo now includes a cross-platform compatibility layer for both macOS and Windows. This update is meant to preserve the existing skill architecture and behavior while fixing Windows encoding, BOM, and script-execution issues.
+
 For evaluation, I used Codex in headless mode - no GUI, no need to open the CLI page, just terminal execution - and ran at least 3 independent conversation tests per benchmark item. The full benchmark standards and archived reports are included in `测评报告/`.
 
 If this project is useful to you, please consider giving it a star. For contact or collaboration:
@@ -172,6 +174,8 @@ Requirements:
 
 ### Create a new skill scaffold
 
+On Windows, replace `python3` with `py -3` (preferred) or `python`.
+
 ```bash
 python3 scripts/init_skill.py my-skill --path ./out
 ```
@@ -204,9 +208,7 @@ python3 scripts/check_update.py --force
 ### Evaluate triggering behavior
 
 ```bash
-python3 scripts/run_eval.py \
-  --eval-set ./path/to/eval-set.json \
-  --skill-path ./out/my-skill
+python3 scripts/run_eval.py --eval-set ./path/to/eval-set.json --skill-path ./out/my-skill
 ```
 
 ### Run the optimization loop
@@ -214,9 +216,7 @@ python3 scripts/run_eval.py \
 Use this only after the skill body is already structurally sound:
 
 ```bash
-python3 scripts/run_loop.py \
-  --eval-set ./path/to/eval-set.json \
-  --skill-path ./out/my-skill
+python3 scripts/run_loop.py --eval-set ./path/to/eval-set.json --skill-path ./out/my-skill
 ```
 
 ### Package a skill

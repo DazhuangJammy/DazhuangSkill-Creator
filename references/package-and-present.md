@@ -53,7 +53,7 @@
 在 `<skill-base>` 下执行：
 
 ```bash
-cd "<skill-base>" && python3 scripts/package_skill.py <path-to-skill-folder>
+<python-cmd> "<skill-base>/scripts/package_skill.py" <path-to-skill-folder>
 ```
 
 打包脚本会先做验证，再产出 `.skill` 压缩包。

@@ -5,6 +5,13 @@ import re
 import sys
 from pathlib import Path
 
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.utils import configure_utf8_stdio, read_utf8_text
+
+configure_utf8_stdio()
+
 try:
     import yaml
 except ModuleNotFoundError:
@@ -106,7 +113,7 @@ def validate_skill(skill_path):
     if not skill_md.exists():
         return False, "找不到 SKILL.md"
 
-    content = skill_md.read_text()
+    content = read_utf8_text(skill_md)
     if not content.startswith("---"):
         return False, "没有找到 YAML frontmatter"
 

@@ -11,7 +11,7 @@
 
 ## 当前生成器支持什么
 
-当前 `cd "<skill-base>" && python3 scripts/generate_openai_yaml.py <skill-dir>` 只会生成 `interface:` 段，支持这些字段：
+当前 `<python-cmd> "<skill-base>/scripts/generate_openai_yaml.py" <skill-dir>` 只会生成 `interface:` 段，支持这些字段：
 
 - `display_name`
 - `short_description`
@@ -58,13 +58,11 @@ interface:
 只用自动默认值：
 
 ```bash
-cd "<skill-base>" && python3 scripts/generate_openai_yaml.py <skill-dir>
+<python-cmd> "<skill-base>/scripts/generate_openai_yaml.py" <skill-dir>
 ```
 
 覆盖部分字段：
 
 ```bash
-cd "<skill-base>" && python3 scripts/generate_openai_yaml.py <skill-dir> \
-  --interface display_name="Skill Creator" \
-  --interface short_description="Create or update a skill"
+<python-cmd> "<skill-base>/scripts/generate_openai_yaml.py" <skill-dir> --interface display_name="Skill Creator" --interface short_description="Create or update a skill"
 ```

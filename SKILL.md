@@ -28,9 +28,9 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 默认路径要轻。不要一上来就跑重型 benchmark、blind comparison 或触发优化，除非用户真的需要这一级证据。
 - 默认交付物也要轻。不要因为“以后可能有用”就顺手创建 `evals/`、workspace、`config.yaml`、`agents/openai.yaml`；只有当前任务真的需要，才把它们带进最终 skill。
 - skill 内部文件指针默认写成可移植形式，例如 `<skill-base>/references/...`。不要把一次运行中的绝对路径写进最终交付物，除非用户明确要求做成只在当前机器使用的临时版本。
-- 文件指针和命令都尽量写死、写全，例如 `cd "<skill-base>" && python3 scripts/...`。
+- 文件指针和命令都尽量写死、写全。把 `<python-cmd>` 视为当前环境可用的 Python 命令：macOS/Linux 通常是 `python3`，Windows 通常优先 `py -3`，其次 `python`。
 - 当前 creator 的推荐安装方式是：把 `https://github.com/DazhuangJammy/DazhuangSkill-Creator.git` 用 `git clone` 放进 Claude Code / Codex / Open Claude 的 skill 目录；不要默认让用户或 AI 直接复制文件夹。
-- 当前 creator 自带轻量更新检查。只要本地脚本可用且已经进入真实执行，不是纯讨论产品形态，就在 Step 1 开头运行 `cd "<skill-base>" && python3 scripts/check_update.py --json`。
+- 当前 creator 自带轻量更新检查。只要本地脚本可用且已经进入真实执行，不是纯讨论产品形态，就在 Step 1 开头运行 `<python-cmd> "<skill-base>/scripts/check_update.py" --json`。
 - 更新检查、联网失败、或自动更新失败都不阻断当前任务；只有脚本返回 `should_notify = true` 时，才用 1-2 句告诉用户版本差异和下一动作。
 - 自动更新默认开启；只要 `<skill-base>/config.yaml` 没有显式关闭 `update_check.auto_update`，并且当前安装是干净的 git clone 工作区，就允许脚本尝试 `git pull --ff-only`。
 - 如果更新脚本返回 `status = updated`，说明本地文件已经拉到新版本，但这次调用仍沿当前已加载版本继续；新版本从下一次调用这个 skill 起完整生效。
@@ -62,7 +62,7 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
   - `current_step` = `Step 1`
   - `next_action` = 用一句话说明接下来要做什么
 - 如果用户是在安装当前 creator，而不是在修改别的 skill，默认推荐 `git clone https://github.com/DazhuangJammy/DazhuangSkill-Creator.git` 到目标 skill 目录；不要默认走手动复制。
-- 如果本地脚本可用且已经进入真实执行，先按需读取 `<skill-base>/config.yaml` 里的 `update_check`，再运行 `cd "<skill-base>" && python3 scripts/check_update.py --json`。
+- 如果本地脚本可用且已经进入真实执行，先按需读取 `<skill-base>/config.yaml` 里的 `update_check`，再运行 `<python-cmd> "<skill-base>/scripts/check_update.py" --json`。
 - 如果脚本返回 `should_notify = true`，只简短说明：当前版本、最新版本、是仅提醒还是已自动更新，然后继续当前任务。
 - 如果脚本返回 `status = updated`，明确告诉用户“本地文件已更新，但这次调用继续沿当前已加载版本执行；下次调用会使用新版本”。
 - 如果用户还在探索或讨论阶段，就停留在结构判断/评审模式，不要强行进入实现或重型评测。
@@ -114,7 +114,7 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 进入这一步时，更新：
   - `current_step` = `Step 3`
   - `next_action` = 起草或重写最小可用结构
-- 新 skill 如果适合先搭脚手架，就执行：`cd "<skill-base>" && python3 scripts/init_skill.py ...`
+- 新 skill 如果适合先搭脚手架，就执行：`<python-cmd> "<skill-base>/scripts/init_skill.py" ...`
 - 改已有 skill 时，不要把“保留原格式”当默认约束。把旧 skill 当作素材和脏输入，抽取承重内容后，按当前蓝图重新组织。
 - 改已有 skill 时，优先保留真正承重的结构；把低频细节移到 bundled resources，而不是继续塞胖主 body。
 - `轻优化`、`结构重构`、`完整改造` 只是在这套蓝图上的改动深浅不同；完成后都应该回到同一个目标形状。
@@ -124,7 +124,7 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 长示例、长输出规格、长解释默认不要放在主 body，除非它们又短又关键。
 - 如果任务属于“输入很脏、输出很稳”的结构化整理（例如访谈纪要、brief、研究总结），优先考虑补一份短而专的 `references/` 指南，而不是把抽取 heuristics 全塞进主 body。
 - 如果这类结构化任务的最终输出本来就有固定章节或固定标题层级，把准确结构下沉到 `<skill-base>/assets/` 模板里，例如直接写死 `## Summary` 这类 heading level；不要只在正文里提章节名，让模型自己猜最终排版。
-- 只有当目标交付环境真的需要 OpenAI 界面元数据时，才执行 `cd "<skill-base>" && python3 scripts/generate_openai_yaml.py ...`；不要把它当默认产物。字段说明和最小示例看 `<skill-base>/references/openai-yaml.md`。
+- 只有当目标交付环境真的需要 OpenAI 界面元数据时，才执行 `<python-cmd> "<skill-base>/scripts/generate_openai_yaml.py" ...`；不要把它当默认产物。字段说明和最小示例看 `<skill-base>/references/openai-yaml.md`。
 - 改写时优先让每个 Step 都只回答一件事：现在在哪条路径、下一步做什么、需要读哪个精确文件。
 - 如果目标 skill 需要 `# 索引`，就让它只承担“恢复方向”这一件事：
   - 先复述 `current_path`、`current_step`、`next_action`
@@ -141,7 +141,7 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
   - `current_step` = `Step 4`
   - `next_action` = 选一条最轻但仍可信的验证路径
 - 只是讨论结构或架构：直接读文件并做判断。
-- 快速体检：执行 `cd "<skill-base>" && python3 scripts/quick_validate.py <skill-dir>`，再配少量真实 prompt 做 sanity check。
+- 快速体检：执行 `<python-cmd> "<skill-base>/scripts/quick_validate.py" <skill-dir>`，再配少量真实 prompt 做 sanity check。
 - 优化现有 skill 的默认验证顺序是：先结构体检，再用少量真实 prompt 做 sanity check，最后才决定要不要跑 trigger eval。
 - 标准输出质量迭代：读 `<skill-base>/references/eval-loop.md`；如果需要机器写入格式，再读 `<skill-base>/references/schemas.md`。
 - 触发优化：读 `<skill-base>/references/description-optimization.md`。
