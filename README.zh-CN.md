@@ -216,6 +216,7 @@ python3 scripts/init_skill.py my-analysis-skill --path ./out --memory-mode adapt
 - `lessons`：从第一天就开始记忆；同类失败签名重复后写入/更新 lessons。
 - `adaptive`：先关闭记忆；达到阈值后自动开启 lessons。
 - 两种模式都会在 lesson 稳定命中后，把规则晋升到生成的 `SKILL.md` 里的 `MEMORY_HARD_RULES` 区块。
+- 安全护栏：只要最终配置落到 `memory_mode=off`（命令行或 config），但 auto 判型认为这个 skill 应该开记忆，初始化会直接拦住。只有明确追加 `--force-memory-off` 才会强制关闭。
 
 ### 校验 skill 结构
 

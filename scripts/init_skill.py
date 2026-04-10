@@ -3,7 +3,7 @@
 Skill 初始化器：用固定的单文件/多文件脚手架创建新 skill。
 
 用法：
-    init_skill.py <skill-name> --path <path> [--resources scripts,references,assets] [--sections role,examples,output-format,index] [--memory-mode off|lessons|adaptive|auto] [--intent <text>] [--examples] [--config-file] [--openai-yaml] [--interface key=value]
+    init_skill.py <skill-name> --path <path> [--resources scripts,references,assets] [--sections role,examples,output-format,index] [--memory-mode off|lessons|adaptive|auto] [--force-memory-off] [--intent <text>] [--examples] [--config-file] [--openai-yaml] [--interface key=value]
     init_skill.py <skill-name> [--config ./config.yaml]
 
 示例：
@@ -13,6 +13,7 @@ Skill 初始化器：用固定的单文件/多文件脚手架创建新 skill。
     init_skill.py my-api-helper --path skills/private --resources scripts,references,assets --examples
     init_skill.py my-review-skill --path skills/public --memory-mode lessons
     init_skill.py my-analysis-skill --path skills/public --memory-mode auto --intent "要处理高变异输入并持续迭代"
+    init_skill.py my-legacy-skill --path skills/public --memory-mode off --force-memory-off
     init_skill.py custom-skill --path /custom/location
     init_skill.py my-skill --path skills/public --openai-yaml --interface short_description="中文界面说明"
     init_skill.py my-skill --config ./config.yaml
@@ -1082,6 +1083,57 @@ def resolve_memory_mode(requested_mode, skill_name, intent, resources, sections,
     return resolved_mode, auto_summary
 
 
+def build_auto_memory_summary(skill_name, intent, resources, sections, auto_scores):
+    resolved_mode, score, reasons = classify_memory_mode(
+        skill_name,
+        intent,
+        resources,
+        sections,
+        auto_scores,
+    )
+    return {
+        "score": score,
+        "reasons": reasons,
+        "resolved_mode": resolved_mode,
+    }
+
+
+def enforce_memory_off_guard(
+    requested_memory_mode,
+    auto_reference_summary,
+    force_memory_off,
+    memory_mode_from_cli,
+):
+    if requested_memory_mode != "off":
+        return
+
+    suggested_mode = auto_reference_summary["resolved_mode"]
+    if suggested_mode == "off":
+        return
+
+    suggestion_line = (
+        f"auto 判型建议是 `{suggested_mode}`（score={auto_reference_summary['score']}），"
+        "因为检测到了高风险或高变异信号。"
+    )
+
+    if force_memory_off:
+        print("[WARN] 你使用了 --force-memory-off，已按要求继续关闭记忆层。")
+        print(f"       但 {suggestion_line}")
+        return
+
+    if memory_mode_from_cli:
+        print("[ERROR] 你手动传了 `--memory-mode off`，但当前 skill 不建议关闭记忆层。")
+    else:
+        print("[ERROR] config.yaml 里 `init_skill.memory_mode=off`，但当前 skill 不建议关闭记忆层。")
+    print(f"        {suggestion_line}")
+    print("        如果你确认要强制关闭，请追加 `--force-memory-off`。")
+    if memory_mode_from_cli:
+        print("        否则请改用 `--memory-mode auto` 或直接指定 `adaptive/lessons`。")
+    else:
+        print("        否则请把 config.yaml 的 `init_skill.memory_mode` 改回 `auto`。")
+    sys.exit(1)
+
+
 def validate_structure_choices(resources, sections, memory_mode):
     if "references" in resources and "examples" in sections:
         print("[ERROR] 启用 references/ 时，不要再把 `# 例子` 内联到主 SKILL.md。")
@@ -1145,7 +1197,6 @@ def render_skill_template(skill_name, sections, resources, create_config, create
         [
             "# 规则",
             "",
-            "- 顶级 section 只在 `角色`、`规则`、`工作流程`、`例子`、`输出格式`、`索引` 这套闭集里组合；不需要的模块不要加。",
             "- 这里只保留对当前 skill 真正承重的规则；能交给 creator、validator 或 bundled resources 保证的通用结构说明，不要原封不动塞进最终版。",
             "- [TODO: 只补充真正耐久、真正承重的规则。]",
         ]
@@ -1535,6 +1586,12 @@ def main():
         ),
     )
     parser.add_argument(
+        "--force-memory-off",
+        action="store_true",
+        default=False,
+        help="仅在 --memory-mode off 时生效：确认强制关闭记忆层，即使 auto 判型建议开启。",
+    )
+    parser.add_argument(
         "--intent",
         default=None,
         help="skill 目标说明（用于 memory_mode=auto 判型；CLI > config.yaml）",
@@ -1611,6 +1668,19 @@ def main():
         sections,
         auto_scores,
     )
+    auto_reference_summary = build_auto_memory_summary(
+        skill_name,
+        memory_intent,
+        resources,
+        sections,
+        auto_scores,
+    )
+    enforce_memory_off_guard(
+        requested_memory_mode,
+        auto_reference_summary,
+        args.force_memory_off,
+        args.memory_mode == "off",
+    )
 
     if memory_mode in {"lessons", "adaptive"}:
         missing = []
@@ -1667,6 +1737,10 @@ def main():
         print(f"   记忆层：auto -> {memory_mode}")
     else:
         print(f"   记忆层：{memory_mode}")
+        print(
+            "   auto 参考："
+            f"{auto_reference_summary['resolved_mode']} (score={auto_reference_summary['score']})"
+        )
     if memory_auto_summary:
         print(f"   auto score：{memory_auto_summary['score']}")
         if memory_auto_summary["reasons"]:

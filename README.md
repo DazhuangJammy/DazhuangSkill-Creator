@@ -218,6 +218,7 @@ Both `lessons` and `adaptive` add `scripts/memory_mode_guard.py`, `references/me
 - `lessons`: starts with memory enabled; repeated failure signatures are promoted into lessons.
 - `adaptive`: starts disabled; reaches thresholds, then auto-enables lessons.
 - In both modes, stable lessons are promoted into a `MEMORY_HARD_RULES` block inside generated `SKILL.md`.
+- Safety rail: if the final setting ends up as `memory_mode=off` (via CLI or config) while auto-classification suggests memory should be enabled, initialization now blocks by default. Use `--force-memory-off` only when you truly want to override it.
 
 ### Validate a skill
 
