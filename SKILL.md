@@ -117,6 +117,7 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
   - `next_action` = 起草或重写最小可用结构
 - 新 skill 如果适合先搭脚手架，就执行：`<python-cmd> "<skill-base>/scripts/init_skill.py" ...`
 - 新 skill 用 `init_skill.py` 时，默认先做记忆判型：优先用 `--memory-mode auto --intent "<任务语义>"`；如果明确要手动指定，也要说明为什么不是另外两种模式。
+- 跑 `init_skill.py` 时，要么显式传 `--path <output-dir>`，要么提前在 `config.yaml` 里设置 `init_skill.output_path`；两边都没给会直接报错。
 - 改已有 skill 时，不要把“保留原格式”当默认约束。把旧 skill 当作素材和脏输入，抽取承重内容后，按当前蓝图重新组织。
 - 改已有 skill 时，优先保留真正承重的结构；把低频细节移到 bundled resources，而不是继续塞胖主 body。
 - `轻优化`、`结构重构`、`完整改造` 只是在这套蓝图上的改动深浅不同；完成后都应该回到同一个目标形状。
@@ -144,6 +145,7 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
   - `next_action` = 选一条最轻但仍可信的验证路径
 - 只是讨论结构或架构：直接读文件并做判断。
 - 快速体检：执行 `<python-cmd> "<skill-base>/scripts/quick_validate.py" <skill-dir>`，再配少量真实 prompt 做 sanity check。
+- 如果 `quick_validate.py` 报 Step 4 缺少 `retry` / `failure` 事件命令，直接把 `memory_mode_guard.py --event retry` 和 `--event failure` 这两行补回目标 skill 的 Step 4。
 - 优化现有 skill 的默认验证顺序是：先结构体检，再用少量真实 prompt 做 sanity check，最后才决定要不要跑 trigger eval。
 - 标准输出质量迭代：读 `<skill-base>/references/eval-loop.md`；如果需要机器写入格式，再读 `<skill-base>/references/schemas.md`。
 - 触发优化：读 `<skill-base>/references/description-optimization.md`。

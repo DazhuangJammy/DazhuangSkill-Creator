@@ -45,6 +45,18 @@ MEMORY_HARD_RULES_END = "<!-- MEMORY_HARD_RULES_END -->"
 MEMORY_GUARD_INVOKE_RE = re.compile(r"memory_mode_guard\.py\"[^\n]*--event\s+invoke")
 MEMORY_GUARD_RETRY_RE = re.compile(r"memory_mode_guard\.py\"[^\n]*--event\s+retry")
 MEMORY_GUARD_FAILURE_RE = re.compile(r"memory_mode_guard\.py\"[^\n]*--event\s+failure")
+MEMORY_INVOKE_CMD = (
+    '`<python-cmd> "<skill-base>/scripts/memory_mode_guard.py" '
+    '--skill-dir "<skill-base>" --event invoke`'
+)
+MEMORY_RETRY_CMD = (
+    '`<python-cmd> "<skill-base>/scripts/memory_mode_guard.py" '
+    '--skill-dir "<skill-base>" --event retry`'
+)
+MEMORY_FAILURE_CMD = (
+    '`<python-cmd> "<skill-base>/scripts/memory_mode_guard.py" '
+    '--skill-dir "<skill-base>" --event failure`'
+)
 
 
 def read_memory_state(path):
@@ -314,18 +326,18 @@ def validate_skill(skill_path):
         workflow_text = "\n".join(seen.get("工作流程", {}).get("lines", []))
         if not MEMORY_GUARD_INVOKE_RE.search(workflow_text):
             return False, (
-                "memory skill 的 Step 1 必须包含 invoke 事件记录命令："
-                "`memory_mode_guard.py ... --event invoke`"
+                "memory skill 的 Step 1 缺少 invoke 事件记录命令。"
+                f"请把这行加到 Step 1：{MEMORY_INVOKE_CMD}"
             )
         if not MEMORY_GUARD_RETRY_RE.search(workflow_text):
             return False, (
-                "memory skill 的 Step 4 必须包含 retry 事件记录命令："
-                "`memory_mode_guard.py ... --event retry`"
+                "memory skill 的 Step 4 缺少 retry 事件记录命令。"
+                f"请把这行加到 Step 4：{MEMORY_RETRY_CMD}"
             )
         if not MEMORY_GUARD_FAILURE_RE.search(workflow_text):
             return False, (
-                "memory skill 的 Step 4 必须包含 failure 事件记录命令："
-                "`memory_mode_guard.py ... --event failure`"
+                "memory skill 的 Step 4 缺少 failure 事件记录命令。"
+                f"请把这行加到 Step 4：{MEMORY_FAILURE_CMD}"
             )
 
         memory_state = read_memory_state(skill_path / MEMORY_STATE_FILE)

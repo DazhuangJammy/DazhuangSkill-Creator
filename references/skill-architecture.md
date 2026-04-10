@@ -376,6 +376,8 @@ BREAKING CHANGE: update scripts and automation to use --api-token
 <python-cmd> "<skill-base>/scripts/init_skill.py" <skill-name> --path <output-dir> --memory-mode auto --intent "<task semantics>"
 ```
 
+注意：`--path` 和 `config.yaml -> init_skill.output_path` 至少要有一个；两边都没有会直接报错。
+
 常见选项：
 - `--resources scripts,references,assets`
 - `--memory-mode off|lessons|adaptive|auto`
@@ -410,6 +412,7 @@ BREAKING CHANGE: update scripts and automation to use --api-token
 - `# 例子` 和 `# 输出格式` 如果已经变长，是否已经下沉
 - 每个 bundled file 指针是否都足够精确
 - 每条脚本命令是否都写明执行路径
+- 如果是 memory skill，Step 4 里是否保留了 `memory_mode_guard.py --event retry` 和 `--event failure`
 - 新结构是否真的比之前更轻，而且没有丢关键能力
 - 最终交付物里有没有混入不必要的 `config.yaml`、`agents/openai.yaml`、`evals/` 或 workspace 资产
 - 如果默认输出应该极简，最终样例有没有偷偷长出多余 body、解释或多方案

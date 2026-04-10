@@ -4,7 +4,8 @@ Skill 初始化器：用固定的单文件/多文件脚手架创建新 skill。
 
 用法：
     init_skill.py <skill-name> --path <path> [--resources scripts,references,assets] [--sections role,examples,output-format,index] [--memory-mode off|lessons|adaptive|auto] [--force-memory-off] [--intent <text>] [--examples] [--config-file] [--openai-yaml] [--interface key=value]
-    init_skill.py <skill-name> [--config ./config.yaml]
+    init_skill.py <skill-name> [--path <path>] [--config ./config.yaml]
+    （未传 --path 时，config.yaml 里必须提供 init_skill.output_path）
 
 示例：
     init_skill.py my-new-skill --path skills/public --memory-mode auto --intent "低风险的确定性整理任务"
@@ -1592,7 +1593,11 @@ def main():
     )
     parser.add_argument("skill_name", help="Skill 名称（会规范化为 kebab-case）")
     parser.add_argument("--config", default=None, help="config.yaml 路径（默认使用 dazhuangskill-creator/config.yaml）")
-    parser.add_argument("--path", required=False, help="skill 输出目录（CLI > config.yaml）")
+    parser.add_argument(
+        "--path",
+        required=False,
+        help="skill 输出目录（CLI > config.yaml；若两边都没给，会提示可复制命令）",
+    )
     parser.add_argument(
         "--resources",
         default=None,
@@ -1739,10 +1744,20 @@ def main():
         print("[ERROR] 使用 --examples 时，必须同时提供 --resources。")
         sys.exit(1)
 
-    path = coalesce(args.path, get_config_value(config, "init_skill.output_path"))
+    path_from_config = get_config_value(config, "init_skill.output_path")
+    path = coalesce(args.path, path_from_config)
     if not path:
-        print("[ERROR] 必须提供 --path，除非 config.yaml 已设置 init_skill.output_path。")
+        print("[ERROR] 没找到输出目录。")
+        print("        请二选一：")
+        print("        1) 直接在命令里加 --path（最快）：")
+        print(
+            "           <python-cmd> scripts/init_skill.py my-skill --path ./out "
+            '--memory-mode auto --intent "低风险、低变异、可确定性执行"'
+        )
+        print('        2) 先在 config.yaml 里设置：init_skill.output_path: "./out"')
+        print("           然后再运行 init_skill.py。")
         sys.exit(1)
+    path_source = "--path" if args.path else "config.yaml:init_skill.output_path"
 
     interface_defaults = get_config_value(config, "openai_yaml.interface_defaults", {})
     create_config = (
@@ -1760,7 +1775,7 @@ def main():
         sys.exit(1)
 
     print(f"准备初始化 skill：{skill_name}")
-    print(f"   位置：{path}")
+    print(f"   位置：{path}（来源：{path_source}）")
     if resources:
         print(f"   资源目录：{', '.join(resources)}")
         if include_examples:

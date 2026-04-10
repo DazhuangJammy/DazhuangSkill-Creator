@@ -14,6 +14,7 @@ This is not just a wording tweak. I reworked the workflow, structure, bundled re
 
 > Update `v1.5.0` (2026-04-11): this major memory release introduces memory modes (`off` / `adaptive` / `lessons` / `auto`), lesson-to-hard-rule promotion, stricter memory invariants in `quick_validate.py`, and regression coverage for no-rehire behavior.
 > Update `v1.5.2` (2026-04-11): memory judgment is now a required step during scaffold creation; if `auto` is used without `--intent` and it currently falls to `off`, initialization pauses and asks for explicit intent or explicit mode.
+> Update `v1.5.3` (2026-04-11): onboarding friction is reduced. `init_skill.py` now prints copy-ready fixes when `--path` is missing, and `quick_validate.py` now prints copy-ready Step 4 event lines when memory commands are missing.
 
 For evaluation, I used Codex in headless mode - no GUI, no need to open the CLI page, just terminal execution - and ran at least 3 independent conversation tests per benchmark item. The full benchmark standards and archived reports are included in `测评报告/`.
 
@@ -177,6 +178,11 @@ Requirements:
 
 On Windows, replace `python3` with `py -3` (preferred) or `python`.
 
+One easy-to-miss point:
+
+- `--path` is not optional in practice. If you do not pass `--path`, you must set `init_skill.output_path` in `config.yaml` first.
+- For first-run success, explicitly pass `--path ./out`, then move it into config later if you want.
+
 ```bash
 python3 scripts/init_skill.py my-skill --path ./out --memory-mode auto --intent "low-risk deterministic task"
 ```
@@ -235,6 +241,13 @@ python3 scripts/quick_validate.py ./out/my-skill
 ```
 
 `quick_validate.py` now also enforces memory-skill invariants (when memory files are detected): `MEMORY_HARD_RULES` markers, Step 1/Step 4 guard commands, and required memory runtime files.
+
+If it reports missing Step 4 retry/failure event commands, add these lines inside Step 4 of the target skill:
+
+```text
+<python-cmd> "<skill-base>/scripts/memory_mode_guard.py" --skill-dir "<skill-base>" --event retry
+<python-cmd> "<skill-base>/scripts/memory_mode_guard.py" --skill-dir "<skill-base>" --event failure
+```
 
 ### Manually check creator updates
 
