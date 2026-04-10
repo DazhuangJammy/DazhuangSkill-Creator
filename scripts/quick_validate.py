@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """用于快速校验 skill 结构的脚本。"""
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -35,6 +36,53 @@ INLINE_SECTION_LIMITS = {
 }
 INLINE_COMBINED_LIMIT = 30
 RESOURCE_ANCHOR_IGNORE_DIRS = {"__pycache__", "node_modules", ".git"}
+MEMORY_GUARD_SCRIPT = Path("scripts") / "memory_mode_guard.py"
+MEMORY_STATE_FILE = Path("references") / "memory-state.json"
+MEMORY_EVENTS_FILE = Path("references") / "memory-events.jsonl"
+MEMORY_LESSONS_FILE = Path("references") / "memory-lessons.md"
+MEMORY_HARD_RULES_START = "<!-- MEMORY_HARD_RULES_START -->"
+MEMORY_HARD_RULES_END = "<!-- MEMORY_HARD_RULES_END -->"
+MEMORY_GUARD_INVOKE_RE = re.compile(r"memory_mode_guard\.py\"[^\n]*--event\s+invoke")
+MEMORY_GUARD_RETRY_RE = re.compile(r"memory_mode_guard\.py\"[^\n]*--event\s+retry")
+MEMORY_GUARD_FAILURE_RE = re.compile(r"memory_mode_guard\.py\"[^\n]*--event\s+failure")
+
+
+def read_memory_state(path):
+    """Read references/memory-state.json as a dict."""
+    try:
+        payload = json.loads(read_utf8_text(path))
+    except (json.JSONDecodeError, OSError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def detect_memory_profile(skill_path, body_text):
+    """Detect whether this skill uses memory runtime files or markers."""
+    has_guard_script = (skill_path / MEMORY_GUARD_SCRIPT).exists()
+    has_state_file = (skill_path / MEMORY_STATE_FILE).exists()
+    has_events_file = (skill_path / MEMORY_EVENTS_FILE).exists()
+    has_lessons_file = (skill_path / MEMORY_LESSONS_FILE).exists()
+    has_markers = MEMORY_HARD_RULES_START in body_text or MEMORY_HARD_RULES_END in body_text
+    references_guard = "memory_mode_guard.py" in body_text
+
+    is_memory_skill = any(
+        [
+            has_guard_script,
+            has_state_file,
+            has_events_file,
+            has_lessons_file,
+            has_markers,
+            references_guard,
+        ]
+    )
+    return {
+        "is_memory_skill": is_memory_skill,
+        "has_guard_script": has_guard_script,
+        "has_state_file": has_state_file,
+        "has_events_file": has_events_file,
+        "has_lessons_file": has_lessons_file,
+        "has_markers": has_markers,
+    }
 
 
 def skill_root_has_bundled_resources(skill_path):
@@ -238,6 +286,66 @@ def validate_skill(skill_path):
             f"内联的 `# 例子` + `# 输出格式` 总长度过大（{inline_total} 行非空内容）。"
             "请把它们下沉到 references/ 或 assets/。"
         )
+
+    memory_profile = detect_memory_profile(skill_path, body_text)
+    if memory_profile["is_memory_skill"]:
+        missing = []
+        if not memory_profile["has_guard_script"]:
+            missing.append(str(MEMORY_GUARD_SCRIPT))
+        if not memory_profile["has_state_file"]:
+            missing.append(str(MEMORY_STATE_FILE))
+        if not memory_profile["has_events_file"]:
+            missing.append(str(MEMORY_EVENTS_FILE))
+        if missing:
+            return False, (
+                "检测到这是 memory skill，但缺少关键运行文件："
+                f"{', '.join(missing)}"
+            )
+
+        rules_text = "\n".join(seen.get("规则", {}).get("lines", []))
+        if MEMORY_HARD_RULES_START not in rules_text or MEMORY_HARD_RULES_END not in rules_text:
+            return False, (
+                "memory skill 的 `# 规则` 必须包含 MEMORY_HARD_RULES 标记块："
+                f"{MEMORY_HARD_RULES_START} ... {MEMORY_HARD_RULES_END}"
+            )
+        if rules_text.find(MEMORY_HARD_RULES_START) > rules_text.find(MEMORY_HARD_RULES_END):
+            return False, "MEMORY_HARD_RULES 标记顺序错误：start 必须出现在 end 前面。"
+
+        workflow_text = "\n".join(seen.get("工作流程", {}).get("lines", []))
+        if not MEMORY_GUARD_INVOKE_RE.search(workflow_text):
+            return False, (
+                "memory skill 的 Step 1 必须包含 invoke 事件记录命令："
+                "`memory_mode_guard.py ... --event invoke`"
+            )
+        if not MEMORY_GUARD_RETRY_RE.search(workflow_text):
+            return False, (
+                "memory skill 的 Step 4 必须包含 retry 事件记录命令："
+                "`memory_mode_guard.py ... --event retry`"
+            )
+        if not MEMORY_GUARD_FAILURE_RE.search(workflow_text):
+            return False, (
+                "memory skill 的 Step 4 必须包含 failure 事件记录命令："
+                "`memory_mode_guard.py ... --event failure`"
+            )
+
+        memory_state = read_memory_state(skill_path / MEMORY_STATE_FILE)
+        if memory_state is None:
+            return False, "references/memory-state.json 不是有效 JSON 对象。"
+
+        memory_mode = str(memory_state.get("mode", "")).strip().lower()
+        if memory_mode not in {"adaptive", "lessons"}:
+            return False, "references/memory-state.json 的 mode 必须是 adaptive 或 lessons。"
+
+        memory_enabled = bool(memory_state.get("memory_enabled", False))
+        if memory_mode == "lessons" and not memory_enabled:
+            return False, "mode=lessons 的 memory skill 必须从创建时就满足 memory_enabled=true。"
+        if memory_mode == "lessons" and not memory_profile["has_lessons_file"]:
+            return False, "mode=lessons 的 memory skill 必须存在 references/memory-lessons.md。"
+        if memory_mode == "adaptive" and memory_enabled and not memory_profile["has_lessons_file"]:
+            return False, (
+                "mode=adaptive 且 memory_enabled=true 时，"
+                "必须存在 references/memory-lessons.md。"
+            )
 
     return True, "Skill 结构有效！"
 

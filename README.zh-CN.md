@@ -10,7 +10,7 @@
 
 Dazhuang Skill Creator 基于 Claude Code 官方 `skill-creator`，但并不只是改几句提示词。我把自己对提示词架构、Skill 架构，以及 CLI 工具运行机制的理解重新整合进去，对整体工作流、结构分层、bundled resources 和可维护性做了一次完整重构。
 
-> `v1.4.0` 更新（2026-04-07）：仓库现在补齐了 macOS / Windows 双端兼容层。这次更新的目标不是改 skill 架构或改方法论，而是在尽量不影响原有效果的前提下，修掉 Windows 上的编码、BOM 和脚本执行问题。
+> `v2.0.0` 更新（2026-04-11）：这是一次大版本升级。新增记忆模式（`off` / `adaptive` / `lessons` / `auto`），补齐 lesson 晋升硬规则链路，`quick_validate.py` 增加记忆结构强校验，并补上“经验退休后不立刻复活”的回归测试。
 
 在测评环节，我采用 Codex 的 Headless 模式进行测试：不需要打开图形界面，也不需要进入 CLI 页面，直接在终端执行。每个 benchmark item 都至少进行了 3 轮独立对话测试。完整的评测标准、原始结果与报告已经归档在 `测评报告/` 文件夹中。
 
@@ -184,11 +184,46 @@ python3 scripts/init_skill.py my-skill --path ./out
 python3 scripts/init_skill.py my-judge-skill --path ./out --sections role,output-format
 ```
 
+记忆层模式说明：
+
+- `off`：不启用记忆层
+- `lessons`：从创建当天启用完整记忆管线（`memory-state` + `memory-events` + `memory-lessons`）
+- `adaptive`：先不启用，运行中检测到重复摩擦后自动开启
+- `auto`（默认）：创建前自动判型，在 `off` / `adaptive` / `lessons` 里自动选择
+
+`config.yaml` 里的这些 `memory_*` 字段只控制“新创建 skill 的默认策略”，不代表当前 creator 自己开启了记忆功能。
+
+如果你要强制从第一天启用记忆层，可以用 lessons：
+
+```bash
+python3 scripts/init_skill.py my-review-skill --path ./out --memory-mode lessons
+```
+
+如果你要创建前自动判型，建议补一段 intent：
+
+```bash
+python3 scripts/init_skill.py my-analysis-skill --path ./out --memory-mode auto --intent "高变异分析任务，且会持续迭代"
+```
+
+如果你要运行中自动开启记忆层，使用 adaptive：
+
+```bash
+python3 scripts/init_skill.py my-analysis-skill --path ./out --memory-mode adaptive
+```
+
+`lessons` 和 `adaptive` 都会创建 `scripts/memory_mode_guard.py`、`references/memory-state.json`、`references/memory-events.jsonl`。
+
+- `lessons`：从第一天就开始记忆；同类失败签名重复后写入/更新 lessons。
+- `adaptive`：先关闭记忆；达到阈值后自动开启 lessons。
+- 两种模式都会在 lesson 稳定命中后，把规则晋升到生成的 `SKILL.md` 里的 `MEMORY_HARD_RULES` 区块。
+
 ### 校验 skill 结构
 
 ```bash
 python3 scripts/quick_validate.py ./out/my-skill
 ```
+
+`quick_validate.py` 现在会对 memory skill 做强校验：`MEMORY_HARD_RULES` 标记块、Step 1 / Step 4 的 guard 命令，以及必需的记忆运行文件是否齐全。
 
 ### 手动检查 creator 更新
 

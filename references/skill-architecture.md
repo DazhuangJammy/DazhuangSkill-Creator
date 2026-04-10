@@ -102,6 +102,9 @@ skill-name/
 这里放：
 - 长解释
 - 给模型看的内部例子 / canonical case
+- 可复用的短经验提炼（例如 `references/memory-lessons.md`，只在命中重复错误或高代价边界时读取）
+- 运行期记忆状态（例如 `references/memory-state.json`）与事件轨迹（例如 `references/memory-events.jsonl`）
+- 记忆计数脚本（例如 `scripts/memory_mode_guard.py`；当 `memory_enabled=true` 时把读 memory-lessons 视为默认前置步骤，并把稳定 lesson 晋升到 `SKILL.md` 的硬规则块）
 - schema
 - 环境差异说明
 - 触发优化、benchmark、blind comparison 这类低频模块说明
@@ -375,6 +378,8 @@ BREAKING CHANGE: update scripts and automation to use --api-token
 
 常见选项：
 - `--resources scripts,references,assets`
+- `--memory-mode off|lessons|adaptive|auto`
+- `--intent "<text>"`（在 `memory-mode=auto` 下提供判型语义）
 - `--examples`
 - `--config-file`
 - `--openai-yaml`

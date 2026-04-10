@@ -12,7 +12,7 @@ Dazhuang Skill Creator starts from Claude Code's official `skill-creator`, then 
 
 This is not just a wording tweak. I reworked the workflow, structure, bundled resources, and maintenance model so the generated skill is easier to evolve, easier to debug, and easier to collaborate on over time.
 
-> Update `v1.4.0` (2026-04-07): the repo now includes a cross-platform compatibility layer for both macOS and Windows. This update is meant to preserve the existing skill architecture and behavior while fixing Windows encoding, BOM, and script-execution issues.
+> Update `v2.0.0` (2026-04-11): this major release introduces memory modes (`off` / `adaptive` / `lessons` / `auto`), lesson-to-hard-rule promotion, stricter memory invariants in `quick_validate.py`, and regression coverage for no-rehire behavior.
 
 For evaluation, I used Codex in headless mode - no GUI, no need to open the CLI page, just terminal execution - and ran at least 3 independent conversation tests per benchmark item. The full benchmark standards and archived reports are included in `测评报告/`.
 
@@ -186,11 +186,46 @@ If a single-file skill needs extra inline modules, declare them explicitly:
 python3 scripts/init_skill.py my-judge-skill --path ./out --sections role,output-format
 ```
 
+Memory modes:
+
+- `off`: no memory layer
+- `lessons`: enable memory pipeline from day one (`memory-state` + `memory-events` + `memory-lessons`)
+- `adaptive`: start without memory, then auto-enable after repeated runtime friction
+- `auto` (default): classify before scaffold creation and choose `off` / `adaptive` / `lessons`
+
+These `memory_*` settings in `config.yaml` are scaffold defaults for generated skills only; they do not turn on memory for this creator repo itself.
+
+If you want to force memory from day one, enable lessons mode:
+
+```bash
+python3 scripts/init_skill.py my-review-skill --path ./out --memory-mode lessons
+```
+
+If you want pre-creation auto-classification, provide intent text:
+
+```bash
+python3 scripts/init_skill.py my-analysis-skill --path ./out --memory-mode auto --intent "high-variance analysis with iterative refinement"
+```
+
+If you want runtime auto-enable, use adaptive mode:
+
+```bash
+python3 scripts/init_skill.py my-analysis-skill --path ./out --memory-mode adaptive
+```
+
+Both `lessons` and `adaptive` add `scripts/memory_mode_guard.py`, `references/memory-state.json`, and `references/memory-events.jsonl`.
+
+- `lessons`: starts with memory enabled; repeated failure signatures are promoted into lessons.
+- `adaptive`: starts disabled; reaches thresholds, then auto-enables lessons.
+- In both modes, stable lessons are promoted into a `MEMORY_HARD_RULES` block inside generated `SKILL.md`.
+
 ### Validate a skill
 
 ```bash
 python3 scripts/quick_validate.py ./out/my-skill
 ```
+
+`quick_validate.py` now also enforces memory-skill invariants (when memory files are detected): `MEMORY_HARD_RULES` markers, Step 1/Step 4 guard commands, and required memory runtime files.
 
 ### Manually check creator updates
 

@@ -20,6 +20,24 @@ init_skill:
   output_path: ""
   resources: []
   sections: []
+  # 注意：下面 memory_* 只影响“新创建出来的 skill”默认行为，
+  # 不代表当前 dazhuangskill-creator 自己启用了记忆机制。
+  memory_mode: "auto"
+  memory_intent: ""
+  memory_auto:
+    lessons_score: 6
+    adaptive_score: 3
+  memory_thresholds:
+    min_calls: 20
+    min_retry_events: 2
+    min_repeat_requests: 2
+    window_size: 10
+    failure_signature_threshold: 2
+    promote_success_hits: 5
+    promote_stable_window: 20
+    max_active_lessons: 12
+    retire_after_days: 30
+    reactivation_cooldown_days: 14
   include_examples: false
   create_config: false
   create_openai_yaml: false

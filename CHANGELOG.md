@@ -1,60 +1,59 @@
-# Changelog / 更新日志
+# 更新日志
 
-按版本记录主要更新，保持简洁，方便后续追踪。
+## v2.0.0 - 2026-04-11
+
+- 这是一次“大升级”：新建 skill 时，系统会先帮你判断记忆模式，也可以手动选。
+- 现在有 4 种记忆模式：`off`、`adaptive`、`lessons`、`auto`（默认）。
+- 开记忆后，skill 会把“状态、事件、经验”分开记，后面排错和迭代都更清楚。
+- 同一个坑老是出现，会先写进经验本；如果后面一直做对，这条经验会升级成 `SKILL.md` 里的硬规则。
+- 新增了防回归测试，避免“已经退休的经验”马上被重新激活。
+- `quick_validate.py` 也更严格了：记忆模式缺关键步骤会直接提醒。
+
+## v1.5.0 - 2026-04-10
+
+- 这版最重要的事：skill 会更会“长记性”了。
+- 新建 skill 时，系统会先判断要不要开记忆（也能手动选：`off`、`adaptive`、`lessons`、`auto`）。
+- 需要记忆的 skill 会带 3 个“小本本”：状态本（`memory-state.json`）、过程本（`memory-events.jsonl`）、经验本（`memory-lessons.md`）。
+- 同一个坑反复踩到，才会记进经验本；如果后来一直做对，这条经验会“毕业”，升级成 `SKILL.md` 里的硬规则。
+- 我们还加了更严格的自动体检（`quick_validate.py`）：少了关键步骤会直接提醒，不让坏结构混过去。
 
 ## v1.4.0 - 2026-04-07
 
-1. 补齐 macOS / Windows 双端兼容层，不改 skill 架构、不改 validator 判型标准，也不改 benchmark / trigger optimization 的方法论。
-2. 统一仓库内文本文件读写为 UTF-8，并在读取时兼容 BOM，修复 Windows 上 `SKILL.md`、`config.yaml`、JSON / HTML / Markdown 因默认编码或 BOM 导致的失败。
-3. 修复 `scripts/check_update.py`、`scripts/init_skill.py`、`scripts/quick_validate.py`、`scripts/generate_openai_yaml.py`、`eval-viewer/generate_review.py` 等脚本在 Windows 上的编码脆弱点。
-4. 重写 `scripts/run_eval.py` 的子进程输出读取方式，去掉对 Unix 风格 `select + pipe` 的依赖，让触发评测和描述优化链路在 Windows 上可运行。
-5. 更新 `README.md`、`README.zh-CN.md`、主 `SKILL.md` 与多份 `references/`，把关键命令改成跨平台写法：统一使用 `<python-cmd>` 概念，Windows 默认优先 `py -3`。
-6. 版本号提升到 `1.4.0`，让现有更新检查链路把这次双端兼容更新识别成一个新版本。
+- 这版重点是：Mac 和 Windows 都能更稳地跑。
+- 修了编码相关坑，避免在 Windows 上出现中文/文件读取异常。
+- 评测脚本也改成了跨平台更稳的方式，不再依赖 Unix 特有行为。
+- 文档里的命令写法统一成跨平台思路（Windows 可用 `py -3`）。
 
 ## v1.3.1 - 2026-04-06
 
-1. 把 `config.yaml` 的 `update_check.auto_update` 默认值改成 `true`，让干净的 git clone 安装默认尝试自动更新。
-2. 更新 `README.md` 与 `README.zh-CN.md`，明确要求用户和安装型 AI 用 `git clone https://github.com/DazhuangJammy/DazhuangSkill-Creator.git` 安装，而不是手动复制文件夹，并补充可直接复制给 Claude / Codex 的标准安装提示词。
-3. 同步更新主 `SKILL.md` 的自更新规则，明确当前 creator 的推荐安装方式是 git clone，并把默认更新策略改成“默认自动更新，可显式关闭”。
-4. 版本号提升到 `1.3.1`，让现有更新检查链路能把这次行为调整识别成一个新版本。
+- 自动更新默认改成“可自动尝试”，省去你手动更新的麻烦。
+- README 里把安装方式说得更清楚：推荐用 `git clone`，不要手动复制文件夹。
+- 这版主要是把“安装与更新”这条路走顺。
 
 ## v1.3.0 - 2026-04-06
 
-1. 新增根目录 `VERSION` 和 `scripts/check_update.py`，让 creator 在启用时能读取 GitHub 上的远端版本号并做轻量更新检查。
-2. 扩充 `config.yaml` 的 `update_check` 配置块，支持开关、检测频率、远端仓库、提醒频率和可选自动更新。
-3. 更新主 `SKILL.md` 的 Step 1，把“启用即检查更新”接进默认工作流，并明确更新失败不阻断主任务。
-4. 自动更新默认仍关闭；只有在显式开启 `update_check.auto_update` 且当前安装是干净的 git clone 工作区时，才尝试 `git pull --ff-only`。
-5. 更新 `README.md` 与 `README.zh-CN.md`，补充运行时更新检查、手动检查命令和自动更新的适用边界。
-6. 把更新检查的默认网络超时放宽到 `10` 秒，降低首次访问 GitHub Raw 时的误报概率。
-7. 远端版本读取改成优先 GitHub Contents API、失败再回退 GitHub Raw，提升不同网络环境下的可用性。
+- 加了版本检查功能：skill 启动时可以看看自己是不是旧版本。
+- 配置里补了更新开关和频率，让你能自己决定更新策略。
+- 就算更新失败，也不会卡住你当前任务（不阻断主流程）。
 
 ## v1.2.0 - 2026-04-06
 
-1. 收紧单文件 skill 的结构规范，明确顶级 section 白名单只允许 `角色`、`规则`、`工作流程`、`例子`、`输出格式`、`索引`，并补充各 section 的使用边界。
-2. 更新 `scripts/init_skill.py`，新增 `--sections` 参数和 `init_skill.sections` 配置，支持按需生成 `角色`、`例子`、`输出格式`、`索引` 这些可选 section。
-3. 调整初始化脚手架与示例资源，统一把长例子下沉到 `references/examples.md`，把输出模板下沉到 `assets/output-format.md`，避免主 `SKILL.md` 继续膨胀。
-4. 强化 `scripts/quick_validate.py`，新增对顶级 section 名称、顺序、必选项、内联长度和 `<skill-base>` 资源锚点的校验。
-5. 更新 `SKILL.md`、`references/skill-architecture.md`、`README.md` 和 `README.zh-CN.md`，同步说明单文件闭集、下沉阈值以及新脚手架用法。
-6. 扩充 `config.yaml` 初始化项，为新脚手架提供默认 `sections` 配置入口。
+- 把单文件 skill 的结构规则收紧了：该有的有，不该有的别长出来。
+- 初始化脚手架更清楚了，可选模块可以按需开，不用全塞。
+- 校验脚本更严格了，能更早发现“结构跑偏”问题。
 
 ## v1.1.0 - 2026-04-05
 
-1. 补充改已有 skill 的默认策略，明确 `轻优化`、`结构重构`、`完整改造` 三档力度。
-2. 更新 `SKILL.md` 主流程，强调先做结构判断，再做触发优化和评测。
-3. 扩写 `references/skill-architecture.md` 与 `references/description-optimization.md`，补齐重构边界。
-4. 新增 `references/openai-yaml.md`，整理 OpenAI YAML 的最小字段说明和示例。
-5. 更新 `README.md` 与 `README.zh-CN.md`，补充重构说明、使用建议和资料入口。
-6. 补充 benchmark 展示材料与截图，方便直接在仓库里查看结果。
-7. 新增本更新日志，后续版本继续在这里追加。
+- 新增“改老 skill”的分级策略：小修、中改、重做。
+- 主流程更清楚：先把结构站稳，再谈触发优化和评测。
+- 文档补全，方便你知道什么时候该看哪份参考资料。
 
 ## v1.0.0 - 2026-04-04
 
-1. 补齐中英文 README，正式说明项目定位、评测方法、核心结果和使用方式。
-2. 整理仓库结构说明，方便用户快速浏览 `SKILL.md`、`references/`、`scripts/` 和 `测评报告/`。
-3. 公开 benchmark 归档内容，让项目主页就能直接看到主要结论。
+- 正式版发布：中英文 README、结构说明、使用方式都齐了。
+- 仓库内容整理得更好找，第一次进来也不容易迷路。
 
 ## v0.1.0 - 2026-04-03
 
-1. 初始化仓库并完成首版项目导入。
-2. 建立基础目录结构，放入核心 skill、参考资料和脚本骨架。
-3. 完成远程仓库初始同步，作为后续迭代起点。
+- 项目初始版本。
+- 先把基础目录和脚本骨架搭起来，作为后续迭代起点。
