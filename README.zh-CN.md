@@ -10,7 +10,7 @@
 
 Dazhuang Skill Creator 基于 Claude Code 官方 `skill-creator`，但并不只是改几句提示词。我把自己对提示词架构、Skill 架构，以及 CLI 工具运行机制的理解重新整合进去，对整体工作流、结构分层、bundled resources 和可维护性做了一次完整重构。
 
-> `v2.0.0` 更新（2026-04-11）：这是一次大版本升级。新增记忆模式（`off` / `adaptive` / `lessons` / `auto`），补齐 lesson 晋升硬规则链路，`quick_validate.py` 增加记忆结构强校验，并补上“经验退休后不立刻复活”的回归测试。
+> `v1.5.0` 更新（2026-04-11）：这是一次大版本更新。新增记忆模式（`off` / `adaptive` / `lessons` / `auto`），补齐 lesson 晋升硬规则链路，`quick_validate.py` 增加记忆结构强校验，并补上“经验退休后不立刻复活”的回归测试。
 
 在测评环节，我采用 Codex 的 Headless 模式进行测试：不需要打开图形界面，也不需要进入 CLI 页面，直接在终端执行。每个 benchmark item 都至少进行了 3 轮独立对话测试。完整的评测标准、原始结果与报告已经归档在 `测评报告/` 文件夹中。
 
