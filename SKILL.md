@@ -46,6 +46,7 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 如果目标 skill 的默认产物本来就是单个极简结果（例如单行 commit、单条命令、单个标题），就把“默认只输出这一项”写成硬规则，并在最终检查里主动删掉不必要的 body、解释、备选项。
 - 如果目标 skill 是 Conventional Commit、单行命令这类极简输出，不要把 body 触发条件写成“有帮助时可加”。要写成更窄的闭集：通常只有明确的 breaking change、迁移/弃用说明，或用户显式要求更多上下文时才允许 body；普通补充细节、测试更新、第二个子动作都不够构成扩写理由。
 - 如果目标 skill 属于 Conventional Commit、PR 标题压缩、changelog 单行这类“高压缩判型”输出，而且某个边界误判代价很高，就允许保留 1 个极短 canonical example 或一条写死的边界规则来钉住它。尤其是公开接口变更：旧 public CLI flag / option / env var / config key / API field 只要被拒绝、移除、重命名，或被新名字替代，就按 breaking interface change 处理；默认倾向 `feat(scope)!`，必要时再补一行迁移 body，不要降成普通 `fix`。
+- 新建 skill 时，“是否启用记忆层”是必做判断，不允许跳过。即使最后结论是 `off`，也要给出一句理由（例如：低风险、低变异、可确定性执行）。
 
 # 工作流程
 
@@ -115,6 +116,7 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
   - `current_step` = `Step 3`
   - `next_action` = 起草或重写最小可用结构
 - 新 skill 如果适合先搭脚手架，就执行：`<python-cmd> "<skill-base>/scripts/init_skill.py" ...`
+- 新 skill 用 `init_skill.py` 时，默认先做记忆判型：优先用 `--memory-mode auto --intent "<任务语义>"`；如果明确要手动指定，也要说明为什么不是另外两种模式。
 - 改已有 skill 时，不要把“保留原格式”当默认约束。把旧 skill 当作素材和脏输入，抽取承重内容后，按当前蓝图重新组织。
 - 改已有 skill 时，优先保留真正承重的结构；把低频细节移到 bundled resources，而不是继续塞胖主 body。
 - `轻优化`、`结构重构`、`完整改造` 只是在这套蓝图上的改动深浅不同；完成后都应该回到同一个目标形状。

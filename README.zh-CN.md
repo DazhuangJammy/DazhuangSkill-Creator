@@ -11,6 +11,7 @@
 Dazhuang Skill Creator 基于 Claude Code 官方 `skill-creator`，但并不只是改几句提示词。我把自己对提示词架构、Skill 架构，以及 CLI 工具运行机制的理解重新整合进去，对整体工作流、结构分层、bundled resources 和可维护性做了一次完整重构。
 
 > `v1.5.0` 更新（2026-04-11）：这是一次大版本更新。新增记忆模式（`off` / `adaptive` / `lessons` / `auto`），补齐 lesson 晋升硬规则链路，`quick_validate.py` 增加记忆结构强校验，并补上“经验退休后不立刻复活”的回归测试。
+> `v1.5.2` 更新（2026-04-11）：把“记忆层判断”升级成新建 skill 的必做步骤；如果 `auto` 没给 `--intent` 且暂时判成 `off`，初始化会先暂停并提醒你补判断信息。
 
 在测评环节，我采用 Codex 的 Headless 模式进行测试：不需要打开图形界面，也不需要进入 CLI 页面，直接在终端执行。每个 benchmark item 都至少进行了 3 轮独立对话测试。完整的评测标准、原始结果与报告已经归档在 `测评报告/` 文件夹中。
 
@@ -175,13 +176,13 @@ https://github.com/DazhuangJammy/DazhuangSkill-Creator.git
 如果你在 Windows 上运行，把 `python3` 替换成 `py -3`（优先）或 `python`。
 
 ```bash
-python3 scripts/init_skill.py my-skill --path ./out
+python3 scripts/init_skill.py my-skill --path ./out --memory-mode auto --intent "低风险、低变异、可确定性执行"
 ```
 
 如果单文件 skill 需要额外模块，可以显式声明：
 
 ```bash
-python3 scripts/init_skill.py my-judge-skill --path ./out --sections role,output-format
+python3 scripts/init_skill.py my-judge-skill --path ./out --sections role,output-format --memory-mode auto --intent "需要边界判断的评审任务"
 ```
 
 记忆层模式说明：
@@ -191,6 +192,12 @@ python3 scripts/init_skill.py my-judge-skill --path ./out --sections role,output
 - `adaptive`：先不启用，运行中检测到重复摩擦后自动开启
 - `auto`（默认）：创建前自动判型，在 `off` / `adaptive` / `lessons` 里自动选择
 
+记忆层判断是必做步骤，不要跳过：
+
+- 不管最后选哪种模式，都要先判断“这个 skill 到底要不要记忆层”。
+- 推荐默认写法：`--memory-mode auto --intent "<任务语义>"`。
+- 如果你明确指定 `off`，要写一句理由（例如低风险、低变异、可确定性执行）。
+
 `config.yaml` 里的这些 `memory_*` 字段只控制“新创建 skill 的默认策略”，不代表当前 creator 自己开启了记忆功能。
 
 如果你要强制从第一天启用记忆层，可以用 lessons：
@@ -199,7 +206,7 @@ python3 scripts/init_skill.py my-judge-skill --path ./out --sections role,output
 python3 scripts/init_skill.py my-review-skill --path ./out --memory-mode lessons
 ```
 
-如果你要创建前自动判型，建议补一段 intent：
+如果你要创建前自动判型，请补一段 intent：
 
 ```bash
 python3 scripts/init_skill.py my-analysis-skill --path ./out --memory-mode auto --intent "高变异分析任务，且会持续迭代"
@@ -217,6 +224,7 @@ python3 scripts/init_skill.py my-analysis-skill --path ./out --memory-mode adapt
 - `adaptive`：先关闭记忆；达到阈值后自动开启 lessons。
 - 两种模式都会在 lesson 稳定命中后，把规则晋升到生成的 `SKILL.md` 里的 `MEMORY_HARD_RULES` 区块。
 - 安全护栏：只要最终配置落到 `memory_mode=off`（命令行或 config），但 auto 判型认为这个 skill 应该开记忆，初始化会直接拦住。只有明确追加 `--force-memory-off` 才会强制关闭。
+- 新护栏：如果你用 `memory_mode=auto`，但没给 `--intent`，而且 auto 暂时判成 `off`，初始化会先暂停，提醒你补 intent 或显式指定模式，避免“没想清楚就关记忆”。
 
 ### 校验 skill 结构
 

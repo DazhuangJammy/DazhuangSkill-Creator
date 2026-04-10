@@ -373,7 +373,7 @@ BREAKING CHANGE: update scripts and automation to use --api-token
 当空白结构比手写更省时间时，执行：
 
 ```bash
-<python-cmd> "<skill-base>/scripts/init_skill.py" <skill-name> --path <output-dir>
+<python-cmd> "<skill-base>/scripts/init_skill.py" <skill-name> --path <output-dir> --memory-mode auto --intent "<task semantics>"
 ```
 
 常见选项：
@@ -384,6 +384,11 @@ BREAKING CHANGE: update scripts and automation to use --api-token
 - `--config-file`
 - `--openai-yaml`
 - `--interface key=value`（只有在已经决定要生成 `agents/openai.yaml` 时才需要）
+
+记忆层判断是必做步骤，不要跳过：
+- 无论最后是 `off`、`adaptive` 还是 `lessons`，都要先判断“要不要记忆层”。
+- 推荐默认写法：`--memory-mode auto --intent "<任务语义>"`。
+- 如果你手动指定 `--memory-mode off`，要补一句理由（例如低风险、低变异、可确定性执行）。
 
 ### 生成 OpenAI 界面元数据
 

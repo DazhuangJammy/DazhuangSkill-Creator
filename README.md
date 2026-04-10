@@ -13,6 +13,7 @@ Dazhuang Skill Creator starts from Claude Code's official `skill-creator`, then 
 This is not just a wording tweak. I reworked the workflow, structure, bundled resources, and maintenance model so the generated skill is easier to evolve, easier to debug, and easier to collaborate on over time.
 
 > Update `v1.5.0` (2026-04-11): this major memory release introduces memory modes (`off` / `adaptive` / `lessons` / `auto`), lesson-to-hard-rule promotion, stricter memory invariants in `quick_validate.py`, and regression coverage for no-rehire behavior.
+> Update `v1.5.2` (2026-04-11): memory judgment is now a required step during scaffold creation; if `auto` is used without `--intent` and it currently falls to `off`, initialization pauses and asks for explicit intent or explicit mode.
 
 For evaluation, I used Codex in headless mode - no GUI, no need to open the CLI page, just terminal execution - and ran at least 3 independent conversation tests per benchmark item. The full benchmark standards and archived reports are included in `测评报告/`.
 
@@ -177,13 +178,13 @@ Requirements:
 On Windows, replace `python3` with `py -3` (preferred) or `python`.
 
 ```bash
-python3 scripts/init_skill.py my-skill --path ./out
+python3 scripts/init_skill.py my-skill --path ./out --memory-mode auto --intent "low-risk deterministic task"
 ```
 
 If a single-file skill needs extra inline modules, declare them explicitly:
 
 ```bash
-python3 scripts/init_skill.py my-judge-skill --path ./out --sections role,output-format
+python3 scripts/init_skill.py my-judge-skill --path ./out --sections role,output-format --memory-mode auto --intent "boundary-heavy review task"
 ```
 
 Memory modes:
@@ -192,6 +193,12 @@ Memory modes:
 - `lessons`: enable memory pipeline from day one (`memory-state` + `memory-events` + `memory-lessons`)
 - `adaptive`: start without memory, then auto-enable after repeated runtime friction
 - `auto` (default): classify before scaffold creation and choose `off` / `adaptive` / `lessons`
+
+Memory-layer judgment is a required step:
+
+- Always decide whether memory is needed, even if the final mode is `off`.
+- Recommended default: `--memory-mode auto --intent "<task semantics>"`.
+- If you manually choose `off`, include a one-line reason (for example: low risk, low variability, deterministic flow).
 
 These `memory_*` settings in `config.yaml` are scaffold defaults for generated skills only; they do not turn on memory for this creator repo itself.
 
@@ -219,6 +226,7 @@ Both `lessons` and `adaptive` add `scripts/memory_mode_guard.py`, `references/me
 - `adaptive`: starts disabled; reaches thresholds, then auto-enables lessons.
 - In both modes, stable lessons are promoted into a `MEMORY_HARD_RULES` block inside generated `SKILL.md`.
 - Safety rail: if the final setting ends up as `memory_mode=off` (via CLI or config) while auto-classification suggests memory should be enabled, initialization now blocks by default. Use `--force-memory-off` only when you truly want to override it.
+- New rail: if you use `memory_mode=auto` without `--intent` and auto currently falls to `off`, initialization now pauses and asks you to either provide intent or choose a mode explicitly.
 
 ### Validate a skill
 

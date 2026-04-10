@@ -23,6 +23,7 @@ init_skill:
   # 注意：下面 memory_* 只影响“新创建出来的 skill”默认行为，
   # 不代表当前 dazhuangskill-creator 自己启用了记忆机制。
   memory_mode: "auto"
+  # 建议给一个默认 intent，避免 auto 在无语义输入时误判为 off。
   memory_intent: ""
   memory_auto:
     lessons_score: 6
