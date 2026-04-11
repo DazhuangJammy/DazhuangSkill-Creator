@@ -382,10 +382,15 @@ BREAKING CHANGE: update scripts and automation to use --api-token
 - `--resources scripts,references,assets`
 - `--memory-mode off|lessons|adaptive|auto`
 - `--intent "<text>"`（在 `memory-mode=auto` 下提供判型语义）
-- `--examples`
+- `--examples`（只有加这个，才会创建 `references/examples.md`）
 - `--config-file`
 - `--openai-yaml`
 - `--interface key=value`（只有在已经决定要生成 `agents/openai.yaml` 时才需要）
+
+额外提醒：
+- 如果最终模式是 `lessons` 或 `adaptive`，脚手架会自动补齐 `references/` 和 `scripts/`。
+- 只要启用了 `--resources assets`，脚手架会默认创建 `assets/output-format.md`。
+- 如果任务是固定章节/评审报告/表格模板输出，优先走 assets 路径，不要先塞进内联 `# 输出格式`。
 
 记忆层判断是必做步骤，不要跳过：
 - 无论最后是 `off`、`adaptive` 还是 `lessons`，都要先判断“要不要记忆层”。
@@ -413,6 +418,7 @@ BREAKING CHANGE: update scripts and automation to use --api-token
 - 每个 bundled file 指针是否都足够精确
 - 每条脚本命令是否都写明执行路径
 - 如果是 memory skill，Step 4 里是否保留了 `memory_mode_guard.py --event retry` 和 `--event failure`
+- 如果准备交付，是否已经跑过 `quick_validate.py <skill-dir> --strict`，并清掉 TODO/TBD 占位词
 - 新结构是否真的比之前更轻，而且没有丢关键能力
 - 最终交付物里有没有混入不必要的 `config.yaml`、`agents/openai.yaml`、`evals/` 或 workspace 资产
 - 如果默认输出应该极简，最终样例有没有偷偷长出多余 body、解释或多方案

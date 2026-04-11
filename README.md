@@ -15,6 +15,9 @@ This is not just a wording tweak. I reworked the workflow, structure, bundled re
 > Update `v1.5.0` (2026-04-11): this major memory release introduces memory modes (`off` / `adaptive` / `lessons` / `auto`), lesson-to-hard-rule promotion, stricter memory invariants in `quick_validate.py`, and regression coverage for no-rehire behavior.
 > Update `v1.5.2` (2026-04-11): memory judgment is now a required step during scaffold creation; if `auto` is used without `--intent` and it currently falls to `off`, initialization pauses and asks for explicit intent or explicit mode.
 > Update `v1.5.3` (2026-04-11): onboarding friction is reduced. `init_skill.py` now prints copy-ready fixes when `--path` is missing, and `quick_validate.py` now prints copy-ready Step 4 event lines when memory commands are missing.
+> Update `v1.5.4` (2026-04-11): fixed three real flow pain points: no more default pointers to missing `references/examples.md`; `quick_validate.py` now supports `--strict` (and packaging uses strict checks by default); memory-judgment wording is now dynamic so explicit modes do not look like re-classification.
+> Update `v1.5.5` (2026-04-11): fixed fenced-code heading parsing in `quick_validate.py`; selecting `--resources assets` now always scaffolds `assets/output-format.md`; report/review/table-like tasks now get earlier assets-path guidance during init.
+> Update `v1.5.6` (2026-04-11): clarified auto-mode resource completion (`lessons/adaptive` always auto-add `references/` + `scripts/`), and fixed throttled update checks so stale cached versions are no longer shown as `latest`.
 
 For evaluation, I used Codex in headless mode - no GUI, no need to open the CLI page, just terminal execution - and ran at least 3 independent conversation tests per benchmark item. The full benchmark standards and archived reports are included in `测评报告/`.
 
@@ -193,12 +196,17 @@ If a single-file skill needs extra inline modules, declare them explicitly:
 python3 scripts/init_skill.py my-judge-skill --path ./out --sections role,output-format --memory-mode auto --intent "boundary-heavy review task"
 ```
 
+If you want `references/examples.md` to be created on day one, add `--examples`.
+Without `--examples`, that file is not created and the scaffold will not force a pointer to it.
+If you enable `--resources assets`, the scaffold now always creates `assets/output-format.md` (independent of `--examples`).
+
 Memory modes:
 
 - `off`: no memory layer
 - `lessons`: enable memory pipeline from day one (`memory-state` + `memory-events` + `memory-lessons`)
 - `adaptive`: start without memory, then auto-enable after repeated runtime friction
 - `auto` (default): classify before scaffold creation and choose `off` / `adaptive` / `lessons`
+- Resource auto-completion: if the resolved mode is `lessons` or `adaptive`, init will auto-add `references/` and `scripts/` even when they are not explicitly listed in `--resources`.
 
 Memory-layer judgment is a required step:
 
@@ -241,6 +249,14 @@ python3 scripts/quick_validate.py ./out/my-skill
 ```
 
 `quick_validate.py` now also enforces memory-skill invariants (when memory files are detected): `MEMORY_HARD_RULES` markers, Step 1/Step 4 guard commands, and required memory runtime files.
+For pre-release checks, use strict mode:
+
+```bash
+python3 scripts/quick_validate.py ./out/my-skill --strict
+```
+
+Strict mode additionally blocks `TODO` / `TBD` / placeholder markers and requires non-empty frontmatter `description`.
+`package_skill.py` now runs strict validation by default before packaging.
 
 If it reports missing Step 4 retry/failure event commands, add these lines inside Step 4 of the target skill:
 
@@ -290,6 +306,7 @@ This repo now ships with a lightweight self-update path that hangs off Step 1 of
 - Recommended install mode: `git clone` into the target skill directory
 - Every real invocation of the skill starts by running `scripts/check_update.py`
 - By default it checks the network at most once every `24` hours
+- In throttled mode, JSON exposes the cached remote value as `cached_remote_version`; `latest_version` is no longer downgraded to an older cached value than local
 - When a new version is found, it reminds once, then stays quiet until an even newer version appears
 - The default config already enables `update_check.auto_update: true`; as long as the current install is a clean git clone, the script will try `git pull --ff-only`
 - If the skill was installed by manually copying the folder, or the working tree has local edits, the script falls back to reminder-only mode

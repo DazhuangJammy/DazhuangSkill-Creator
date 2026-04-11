@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """用于快速校验 skill 结构的脚本。"""
 
+import argparse
 import json
 import re
 import sys
@@ -56,6 +57,10 @@ MEMORY_RETRY_CMD = (
 MEMORY_FAILURE_CMD = (
     '`<python-cmd> "<skill-base>/scripts/memory_mode_guard.py" '
     '--skill-dir "<skill-base>" --event failure`'
+)
+STRICT_PLACEHOLDER_RE = re.compile(
+    r"\[(?:TODO|TBD|占位|待补充)[^\]]*\]|\b(?:TODO|TBD|placeholder)\b",
+    re.IGNORECASE,
 )
 
 
@@ -149,8 +154,51 @@ def parse_top_level_sections(body_text):
     sections = []
     stray_lines = []
     current = None
+    in_fenced_block = False
+    fence_char = ""
+    fence_len = 0
+
+    def fence_start(line):
+        stripped = line.lstrip()
+        match = re.match(r"^(`{3,}|~{3,})", stripped)
+        if not match:
+            return None, 0
+        token = match.group(1)
+        return token[0], len(token)
+
+    def is_fence_end(line, marker_char, marker_len):
+        stripped = line.lstrip()
+        match = re.match(r"^([`~]{3,})", stripped)
+        if not match:
+            return False
+        token = match.group(1)
+        return token[0] == marker_char and len(token) >= marker_len
 
     for line in body_text.splitlines():
+        if in_fenced_block:
+            if is_fence_end(line, fence_char, fence_len):
+                in_fenced_block = False
+                fence_char = ""
+                fence_len = 0
+            if current is None:
+                if line.strip():
+                    stray_lines.append(line.strip())
+                continue
+            current["lines"].append(line)
+            continue
+
+        marker_char, marker_len = fence_start(line)
+        if marker_char:
+            in_fenced_block = True
+            fence_char = marker_char
+            fence_len = marker_len
+            if current is None:
+                if line.strip():
+                    stray_lines.append(line.strip())
+                continue
+            current["lines"].append(line)
+            continue
+
         heading_match = re.match(r"^#\s+(.+?)\s*$", line)
         if heading_match:
             current = {"name": heading_match.group(1).strip(), "lines": []}
@@ -165,7 +213,15 @@ def parse_top_level_sections(body_text):
     return stray_lines, sections
 
 
-def validate_skill(skill_path):
+def first_placeholder_line(text):
+    """Return the first line containing a strict placeholder marker."""
+    for line_no, line in enumerate(text.splitlines(), start=1):
+        if STRICT_PLACEHOLDER_RE.search(line):
+            return line_no, line.strip()
+    return None
+
+
+def validate_skill(skill_path, strict=False):
     """对 skill 做基础结构校验。"""
     skill_path = Path(skill_path)
 
@@ -219,6 +275,11 @@ def validate_skill(skill_path):
             return False, "description 不能包含尖括号（< 或 >）"
         if len(description) > 1024:
             return False, f"description 过长（{len(description)} 个字符）。最大允许 1024 个字符。"
+    if strict:
+        if not description:
+            return False, "严格模式失败：frontmatter 的 description 不能为空。"
+        if STRICT_PLACEHOLDER_RE.search(description):
+            return False, "严格模式失败：frontmatter 的 description 里还有 TODO/TBD 占位词。"
 
     compatibility = frontmatter.get("compatibility", "")
     if compatibility:
@@ -299,6 +360,12 @@ def validate_skill(skill_path):
             "请把它们下沉到 references/ 或 assets/。"
         )
 
+    if strict:
+        placeholder_hit = first_placeholder_line(body_text)
+        if placeholder_hit:
+            line_no, line = placeholder_hit
+            return False, f"严格模式失败：正文第 {line_no} 行还留着占位词：{line}"
+
     memory_profile = detect_memory_profile(skill_path, body_text)
     if memory_profile["is_memory_skill"]:
         missing = []
@@ -363,10 +430,16 @@ def validate_skill(skill_path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("用法：python quick_validate.py <skill_directory>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="快速校验 skill 结构（可选严格模式）。")
+    parser.add_argument("skill_directory", help="待校验的 skill 目录")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        default=False,
+        help="开启严格模式：拦截 TODO/TBD/占位词，并要求 description 非空。",
+    )
+    args = parser.parse_args()
 
-    valid, message = validate_skill(sys.argv[1])
+    valid, message = validate_skill(args.skill_directory, strict=args.strict)
     print(message)
     sys.exit(0 if valid else 1)

@@ -80,8 +80,8 @@ def package_skill(skill_path, output_dir=None):
         return None
 
     # 打包前先跑一次校验
-    print("🔍 正在校验 skill...")
-    valid, message = validate_skill(skill_path)
+    print("🔍 正在校验 skill（严格模式）...")
+    valid, message = validate_skill(skill_path, strict=True)
     if not valid:
         print(f"❌ 校验失败：{message}")
         print("   请先修复这些问题，再继续打包。")

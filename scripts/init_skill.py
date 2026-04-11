@@ -6,6 +6,7 @@ Skill 初始化器：用固定的单文件/多文件脚手架创建新 skill。
     init_skill.py <skill-name> --path <path> [--resources scripts,references,assets] [--sections role,examples,output-format,index] [--memory-mode off|lessons|adaptive|auto] [--force-memory-off] [--intent <text>] [--examples] [--config-file] [--openai-yaml] [--interface key=value]
     init_skill.py <skill-name> [--path <path>] [--config ./config.yaml]
     （未传 --path 时，config.yaml 里必须提供 init_skill.output_path）
+    （当最终 memory_mode 落到 lessons/adaptive 时，会自动补齐 references/ 和 scripts/）
 
 示例：
     init_skill.py my-new-skill --path skills/public --memory-mode auto --intent "低风险的确定性整理任务"
@@ -147,6 +148,33 @@ MEMORY_SIGNAL_KEYWORDS = {
         "单行",
     ),
 }
+
+FIXED_OUTPUT_FORMAT_HINT_KEYWORDS = (
+    "report",
+    "review",
+    "assessment",
+    "audit",
+    "checklist",
+    "table",
+    "matrix",
+    "scorecard",
+    "rubric",
+    "compliance",
+    "risk",
+    "regulatory",
+    "风控",
+    "评审",
+    "审查",
+    "报告",
+    "清单",
+    "表格",
+    "矩阵",
+    "评分",
+    "打分",
+    "合规",
+    "稽核",
+    "审核",
+)
 
 EXAMPLE_SCRIPT = '''#!/usr/bin/env python3
 """
@@ -1179,6 +1207,34 @@ def validate_structure_choices(resources, sections, memory_mode):
         sys.exit(1)
 
 
+def detect_fixed_output_format_signals(skill_name, memory_intent):
+    text = f"{skill_name} {memory_intent}".lower()
+    hits = []
+    for keyword in FIXED_OUTPUT_FORMAT_HINT_KEYWORDS:
+        if keyword.lower() in text:
+            hits.append(keyword)
+    return hits
+
+
+def maybe_warn_assets_output_format(skill_name, memory_intent, resources, sections):
+    if "assets" in resources:
+        return
+
+    hits = detect_fixed_output_format_signals(skill_name, memory_intent)
+    if not hits:
+        return
+
+    if "output-format" in sections:
+        print("[WARN] 检测到固定章节/表格/报告类输出信号，但你当前选择了内联 `# 输出格式`。")
+        print(f"       命中信号：{', '.join(hits[:5])}")
+        print("       这类模板更建议下沉到 `assets/output-format.md`，避免后续迁移和行数限制。")
+        print("       可改用：`--resources assets`，并移除 `--sections output-format`。")
+        return
+
+    print("[HINT] 检测到固定章节/表格/报告类输出信号。")
+    print("       建议优先启用 `--resources assets`，把模板放进 `assets/output-format.md`。")
+
+
 def needs_skill_base_rule(resources, create_config, create_openai_yaml):
     return bool(resources or create_config or create_openai_yaml)
 
@@ -1196,7 +1252,16 @@ def render_memory_guard_script(default_thresholds):
     return script
 
 
-def render_skill_template(skill_name, sections, resources, create_config, create_openai_yaml, memory_mode):
+def render_skill_template(
+    skill_name,
+    sections,
+    resources,
+    create_config,
+    create_openai_yaml,
+    memory_mode,
+    requested_memory_mode,
+    include_examples,
+):
     require_skill_base = needs_skill_base_rule(resources, create_config, create_openai_yaml)
     has_memory_runtime = memory_mode in {"lessons", "adaptive"}
     blocks = [
@@ -1245,8 +1310,10 @@ def render_skill_template(skill_name, sections, resources, create_config, create
             "- 这个 skill 已启用 `<skill-base>/config.yaml`；只有当流程真的依赖可调参数时才读取它。",
         )
 
-    if "references" in resources:
+    if "references" in resources and include_examples:
         blocks.append("- 已启用 `references/` 时，只在需要低频边界、内部参考例子或 few-shot 材料时读取 `<skill-base>/references/examples.md`。")
+    elif "references" in resources:
+        blocks.append("- 已启用 `references/`；只有当你真的放入低频边界材料时，才在流程里引用对应文件。")
     if memory_mode == "lessons":
         blocks.append(
             "- 已启用记忆层（`memory_mode=lessons`）时，默认从第 1 次调用开始记录事件；每次先读 `<skill-base>/references/memory-lessons.md` 的相关 active 经验（最多 3 条），同类坑重复出现后更新 lesson。"
@@ -1268,6 +1335,21 @@ def render_skill_template(skill_name, sections, resources, create_config, create
         )
     if "assets" in resources:
         blocks.append("- 已启用 `assets/` 时，只在需要稳定交付模板、固定骨架或字段约束时读取 `<skill-base>/assets/output-format.md`。")
+    elif "output-format" in sections:
+        blocks.append(
+            "- 如果输出模板开始出现固定章节/表格/报告骨架，优先改下沉到 `<skill-base>/assets/output-format.md`；"
+            "主文件内联 `# 输出格式` 只适合短模板。"
+        )
+
+    if requested_memory_mode == "auto":
+        memory_judgement_line = (
+            "- 这一步必须完成“记忆层判断”：先判断这次是 `off`、`adaptive` 还是 `lessons`，并记录判断理由（高风险 / 高变异 / 低风险确定性）。"
+        )
+    else:
+        memory_judgement_line = (
+            f"- 本次记忆模式已固定为 `memory_mode={memory_mode}`；这里不用重新判型，"
+            "只需要写清楚为什么这样选，并按该模式执行。"
+        )
 
     blocks.extend(
         [
@@ -1279,7 +1361,7 @@ def render_skill_template(skill_name, sections, resources, create_config, create
             "",
             "- [TODO: 提取任务类型、输入、约束、缺失信息。]",
             "- 先判断这个 skill 需不需要 `角色`、`例子`、`输出格式`、`索引`；不需要就不要加。",
-            "- 这一步必须完成“记忆层判断”：先判断这次是 `off`、`adaptive` 还是 `lessons`，并记录判断理由（高风险 / 高变异 / 低风险确定性）。",
+            memory_judgement_line,
         ]
     )
 
@@ -1287,7 +1369,7 @@ def render_skill_template(skill_name, sections, resources, create_config, create
         blocks.append("- 如果这个 skill 带有本地资源，统一沿 `<skill-base>` 解析，不要依赖当前工作目录。")
     if create_config:
         blocks.append("- 只有当流程真的依赖可调参数时，才读取 `<skill-base>/config.yaml`。")
-    if "references" in resources:
+    if "references" in resources and include_examples:
         blocks.append("- 如果需要下沉的例子，读取 `<skill-base>/references/examples.md`；这里的例子是给模型看的内部参考，不是用户问句示例。")
     if memory_mode == "lessons":
         blocks.append(
@@ -1414,12 +1496,9 @@ def create_resource_dirs(skill_dir, skill_name, resources, include_examples):
             else:
                 print("[OK] 已创建 references/")
         elif resource == "assets":
-            if include_examples:
-                output_format_file = resource_dir / "output-format.md"
-                write_utf8_text(output_format_file, EXAMPLE_ASSET_OUTPUT_FORMAT)
-                print("[OK] 已创建 assets/output-format.md")
-            else:
-                print("[OK] 已创建 assets/")
+            output_format_file = resource_dir / "output-format.md"
+            write_utf8_text(output_format_file, EXAMPLE_ASSET_OUTPUT_FORMAT)
+            print("[OK] 已创建 assets/output-format.md")
 
 
 def create_memory_lessons_file(skill_dir):
@@ -1486,6 +1565,7 @@ def init_skill(
     resources,
     sections,
     include_examples,
+    requested_memory_mode,
     interface_overrides,
     interface_defaults,
     create_config,
@@ -1514,6 +1594,8 @@ def init_skill(
         create_config,
         create_openai_yaml,
         memory_mode,
+        requested_memory_mode,
+        include_examples,
     )
 
     skill_md_path = skill_dir / "SKILL.md"
@@ -1615,6 +1697,7 @@ def main():
         help=(
             "记忆层模式：off | lessons | adaptive | auto（默认）。"
             "lessons=直接启用记忆，adaptive=运行期自动检测后启用，auto=创建前自动判型。"
+            "注意：最终模式若为 lessons/adaptive，会自动补齐 references/ 和 scripts/。"
         ),
     )
     parser.add_argument(
@@ -1734,6 +1817,7 @@ def main():
             print(f"提示：memory_mode={memory_mode} 已自动启用 {', '.join(missing)}。")
 
     validate_structure_choices(resources, sections, memory_mode)
+    maybe_warn_assets_output_format(skill_name, memory_intent, resources, sections)
 
     include_examples = (
         args.examples
@@ -1787,6 +1871,8 @@ def main():
         print(f"   记忆层：auto -> {memory_mode}")
     else:
         print(f"   记忆层：{memory_mode}")
+    if memory_mode in {"lessons", "adaptive"}:
+        print("   资源补齐策略：该模式会自动确保 references/ 和 scripts/ 存在。")
     print(
         "   记忆判型（必做）："
         f"{auto_reference_summary['resolved_mode']} (score={auto_reference_summary['score']})"
@@ -1816,6 +1902,7 @@ def main():
         resources,
         sections,
         include_examples,
+        requested_memory_mode,
         args.interface,
         interface_defaults,
         create_config,

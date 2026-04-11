@@ -348,6 +348,7 @@ def build_result(status: str, current_version: str, latest_version: str | None =
         "auto_updated": False,
         "current_version": current_version,
         "latest_version": latest_version or current_version,
+        "cached_remote_version": "",
         "message": "",
         "update_command": "",
         "manual_update_url": "",
@@ -379,8 +380,22 @@ def evaluate_update(args: argparse.Namespace) -> dict[str, Any]:
     if should_skip_remote_check(state, settings.interval_hours, args.force):
         result["status"] = "throttled"
         result["message"] = "最近已经检查过更新，当前跳过联网检测。"
-        if state.get("last_seen_remote_version"):
-            result["latest_version"] = str(state["last_seen_remote_version"])
+        cached_remote = str(state.get("last_seen_remote_version", "")).strip()
+        if cached_remote:
+            result["cached_remote_version"] = cached_remote
+            if compare_versions(cached_remote, current_version) >= 0:
+                result["latest_version"] = cached_remote
+                result["message"] = (
+                    "最近已经检查过更新，当前跳过联网检测。"
+                    f"上次远端缓存版本：v{cached_remote}。"
+                )
+            else:
+                # Cache can be stale; do not surface a lower cached value as "latest".
+                result["message"] = (
+                    "最近已经检查过更新，当前跳过联网检测。"
+                    f"上次远端缓存版本 v{cached_remote} 低于当前本地 v{current_version}，"
+                    "本次按本地版本展示 latest。"
+                )
         return result
 
     try:
@@ -496,6 +511,7 @@ def main() -> int:
             "auto_updated": False,
             "current_version": "",
             "latest_version": "",
+            "cached_remote_version": "",
             "message": f"更新检查失败：找不到必要文件（{exc}）。",
             "update_command": "",
             "manual_update_url": "",
@@ -509,6 +525,7 @@ def main() -> int:
             "auto_updated": False,
             "current_version": "",
             "latest_version": "",
+            "cached_remote_version": "",
             "message": f"更新检查失败：{exc}",
             "update_command": "",
             "manual_update_url": "",
