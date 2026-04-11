@@ -26,6 +26,9 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 只要目标 skill 根目录下出现 bundled resources（例如 `references/`、`assets/`、`scripts/`、`agents/`、`evals/`、`config.yaml`），主 `SKILL.md` 就必须明确把当前 `SKILL.md` 所在目录定义为 `<skill-base>`，让模型知道所有本地资源相对谁解析。
 - 单文件闭集、下沉阈值、校验规则这些“creator 级架构说明”，默认尽量留在 creator 和 validator；不要整段原封不动塞进每个目标 skill。目标 skill 只保留自己真正承重的最小结构规则。
 - 默认路径要轻。不要一上来就跑重型 benchmark、blind comparison 或触发优化，除非用户真的需要这一级证据。
+- 对任何带明显主观标准、人格模仿、方法论借用，或存在多种“到底算哪种好”可能性的评估，不要直接开始跑 eval；先让 AI 做 skill 判型，给出推荐评法和其他可选评法，再和人类对齐成正式评估计划。
+- 只要用户提到“评估 / 测评 / 评测 / 测一下 / 比较效果 / 有 skill 和没 skill / 两个 skill 谁更好”这类请求，第一次响应必须先停在“评估前置提案”，不能直接给分、不能直接说谁更好、不能直接进入 with-vs-without / A-B / benchmark / review。
+- 在评估路径里，AI 自己写出来的推荐方案不算“已经确认”；只有用户明确拍板“按这个标准评”，才允许进入正式评估计划和执行层。
 - 默认交付物也要轻。不要因为“以后可能有用”就顺手创建 `evals/`、workspace、`config.yaml`、`agents/openai.yaml`；只有当前任务真的需要，才把它们带进最终 skill。
 - skill 内部文件指针默认写成可移植形式，例如 `<skill-base>/references/...`。不要把一次运行中的绝对路径写进最终交付物，除非用户明确要求做成只在当前机器使用的临时版本。
 - 文件指针和命令都尽量写死、写全。把 `<python-cmd>` 视为当前环境可用的 Python 命令：macOS/Linux 通常是 `python3`，Windows 通常优先 `py -3`，其次 `python`。
@@ -66,6 +69,7 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 如果本地脚本可用且已经进入真实执行，先按需读取 `<skill-base>/config.yaml` 里的 `update_check`，再运行 `<python-cmd> "<skill-base>/scripts/check_update.py" --json`。
 - 如果脚本返回 `should_notify = true`，只简短说明：当前版本、最新版本、是仅提醒还是已自动更新，然后继续当前任务。
 - 如果脚本返回 `status = updated`，明确告诉用户“本地文件已更新，但这次调用继续沿当前已加载版本执行；下次调用会使用新版本”。
+- 只要用户这次是在说“评估某个 skill”、“测有无 skill 的差别”或“比较多个同类 skill”，就直接判到 `评估输出质量` 这条路径，并把 `next_action` 设成“先出评估前置提案，等用户拍板”，不要跳过到执行层。
 - 如果用户还在探索或讨论阶段，就停留在结构判断/评审模式，不要强行进入实现或重型评测。
 - 如果路径不清楚，先做最轻的结构判断，再决定是否继续下钻。
 - 如果用户说的是“优化一个现有 skill”，默认先停在 `修改现有 skill`，不要直接跳进 `优化触发行为`。
@@ -152,10 +156,14 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 要交付或打包前，再跑一次严格体检：`<python-cmd> "<skill-base>/scripts/quick_validate.py" <skill-dir> --strict`。
 - 如果 `quick_validate.py` 报 Step 4 缺少 `retry` / `failure` 事件命令，直接把 `memory_mode_guard.py --event retry` 和 `--event failure` 这两行补回目标 skill 的 Step 4。
 - 优化现有 skill 的默认验证顺序是：先结构体检，再用少量真实 prompt 做 sanity check，最后才决定要不要跑 trigger eval。
-- 标准输出质量迭代：读 `<skill-base>/references/eval-loop.md`；如果需要机器写入格式，再读 `<skill-base>/references/schemas.md`。
+- 评估前置对齐：先读 `<skill-base>/references/eval-planning.md`，完成 skill 判型、可选评法展示和正式评估计划。
+- 只要这次是第一次收到评估请求，默认只允许走到 `<skill-base>/references/eval-planning.md` 的前置提案 / 用户对齐阶段；用户没明确确认前，不要继续进 `<skill-base>/references/eval-loop.md`。
+- 标准输出质量迭代：确认正式评估计划后，再读 `<skill-base>/references/eval-loop.md`；如果需要机器写入格式，再读 `<skill-base>/references/schemas.md`。
+- 正式评估完成的硬标准：最终必须落地两份 HTML，`review.html` 继续做基础证据工作台，`report.html` 负责把计划、案例、回答、评分和结论讲给人看；默认用 `<skill-base>/scripts/generate_eval_artifacts.py` 一次性生成。
 - 触发优化：读 `<skill-base>/references/description-optimization.md`。
 - 不要拿 `<skill-base>/references/description-optimization.md` 去替代结构改造；description 只解决“会不会触发”，不解决“触发后会不会沿着正确主线执行”。
 - Blind A/B 对比：读 `<skill-base>/agents/comparator.md` 和 `<skill-base>/agents/analyzer.md`。
+- 只要这次评估带明显主观性、人格/语气/思维方式模仿，或要比较多个同类 skill，就不要跳过 `eval-planning.md`。
 - 打包或交付：读 `<skill-base>/references/package-and-present.md`。
 - 运行环境不是标准本地 Codex：按需读 `<skill-base>/references/runtime-claude-ai.md` 或 `<skill-base>/references/runtime-cowork.md`。
 - 如果只是做轻量 sanity check，不要顺手把 `evals/`、workspace、benchmark 资产写进最终 skill 目录；这些重资产只有在用户真的要评测闭环时才存在。
@@ -185,7 +193,8 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
   - `next_action`
 - 然后按当前路径直达对应材料：
   - 结构起草或重写：`<skill-base>/references/skill-architecture.md`
-  - 输出质量评测：`<skill-base>/references/eval-loop.md`
+  - 评估前置对齐：`<skill-base>/references/eval-planning.md`
+  - 输出质量评测执行：`<skill-base>/references/eval-loop.md`
   - 触发描述优化：`<skill-base>/references/description-optimization.md`
   - 打包与交付：`<skill-base>/references/package-and-present.md`
   - 环境差异：`<skill-base>/references/runtime-claude-ai.md` 或 `<skill-base>/references/runtime-cowork.md`

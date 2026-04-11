@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
-"""Run the eval + improve loop until all pass or max iterations reached.
+"""Run the trigger-eval + description-improve loop until all pass or max iterations reached.
 
 Combines run_eval.py and improve_description.py in a loop, tracking history
 and returning the best description found. Supports train/test split to prevent
 overfitting.
+
+This loop is only for trigger optimization. If you want to evaluate output
+quality, delivery effect, or compare multiple skills under an aligned rubric,
+use the eval-planning / eval-loop workflow instead.
 """
 
 import argparse
@@ -259,7 +263,7 @@ def run_loop(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="运行评测 + 改进循环")
+    parser = argparse.ArgumentParser(description="运行 trigger 评测 + description 改进循环")
     parser.add_argument("--config", default=None, help="config.yaml 路径（默认读取 dazhuangskill-creator/config.yaml）")
     parser.add_argument("--eval-set", required=True, help="评测集 JSON/YAML 路径")
     parser.add_argument("--skill-path", required=True, help="skill 目录路径")

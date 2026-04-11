@@ -48,6 +48,8 @@
 - `结构重构`：skill 太胖、太散、多路径易漂移，需要按当前这套架构原则重排主 body 与 bundled resources
 - `完整改造`：先做结构重构，再做 output eval、trigger optimization、blind comparison 之类更重的验证
 
+如果后面要进 output eval，不要直接从写 eval prompts 开始。先回主 `SKILL.md` 的 Step 1，再走 `<skill-base>/references/eval-planning.md`，把“到底评什么、哪些不看、怎么比较”先锁成正式评估计划；之后才进 `<skill-base>/references/eval-loop.md`。
+
 满足下面任一条时，默认至少升到 `结构重构`：
 
 - 主 body 混了长解释、长示例、低频模块说明
@@ -136,6 +138,14 @@ skill-name/
 - 模型应直接遵循的模板、骨架、字段约束
 - HTML review 壳子
 - Claude 应该直接复制、填写、交付的文件
+
+如果你在做输出评估，也可以把固定提案骨架和固定计划骨架放这里。像这次 creator 自带的：
+
+- `assets/evaluation-proposal-template.md`
+- `assets/evaluation-plan-template.md`
+- `assets/evaluation-alignment-script.md`
+
+就是给模型直接复制使用的评估模板，而不是长解释。
 
 ### `scripts/`
 

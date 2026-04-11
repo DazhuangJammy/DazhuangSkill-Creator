@@ -366,6 +366,185 @@ def extract_eval_items(data: Any) -> list[dict[str, Any]]:
     )
 
 
+def _clean_optional_text(value: Any) -> str:
+    """Normalize a possibly-empty scalar to a stripped string."""
+    return value.strip() if isinstance(value, str) else ""
+
+
+def _normalize_string_list(value: Any) -> list[str]:
+    """Keep only non-empty strings from a list-like value."""
+    if not isinstance(value, list):
+        return []
+    normalized: list[str] = []
+    for item in value:
+        text = _clean_optional_text(item)
+        if text:
+            normalized.append(text)
+    return normalized
+
+
+def _normalize_direction(value: Any) -> dict[str, Any]:
+    """Normalize a direction block from eval-plan.json."""
+    if not isinstance(value, dict):
+        return {}
+
+    direction: dict[str, Any] = {}
+    identifier = _clean_optional_text(value.get("id"))
+    label = _clean_optional_text(value.get("label")) or identifier
+    if identifier:
+        direction["id"] = identifier
+    if label:
+        direction["label"] = label
+
+    weight = value.get("weight")
+    if isinstance(weight, (int, float)):
+        direction["weight"] = round(float(weight), 4)
+
+    notes = _clean_optional_text(value.get("notes"))
+    if notes:
+        direction["notes"] = notes
+
+    return direction
+
+
+def _normalize_dimensions(value: Any) -> list[dict[str, Any]]:
+    """Normalize the dimensions block from eval-plan.json."""
+    if not isinstance(value, list):
+        return []
+
+    dimensions: list[dict[str, Any]] = []
+    for item in value:
+        if not isinstance(item, dict):
+            continue
+        normalized: dict[str, Any] = {}
+        identifier = _clean_optional_text(item.get("id"))
+        label = _clean_optional_text(item.get("label")) or identifier
+        if identifier:
+            normalized["id"] = identifier
+        if label:
+            normalized["label"] = label
+
+        weight = item.get("weight")
+        if isinstance(weight, (int, float)):
+            normalized["weight"] = round(float(weight), 4)
+
+        notes = _clean_optional_text(item.get("notes"))
+        if notes:
+            normalized["notes"] = notes
+
+        if normalized:
+            dimensions.append(normalized)
+    return dimensions
+
+
+def summarize_evaluation_plan(plan: Any) -> dict[str, Any]:
+    """Return a compact, display-friendly summary for an eval-plan payload.
+
+    Accepts either the full `eval-plan.json` shape or an already-summarized
+    structure and normalizes the fields we want to carry through benchmark /
+    review artifacts.
+    """
+    if not isinstance(plan, dict):
+        return {}
+
+    target = plan.get("target") if isinstance(plan.get("target"), dict) else plan
+    confirmed = (
+        plan.get("confirmed_plan")
+        if isinstance(plan.get("confirmed_plan"), dict)
+        else plan
+    )
+    initial = (
+        plan.get("initial_judgement")
+        if isinstance(plan.get("initial_judgement"), dict)
+        else plan.get("initial_judgement", {})
+    )
+
+    summary: dict[str, Any] = {}
+
+    skill_name = _clean_optional_text(target.get("skill_name"))
+    if skill_name:
+        summary["skill_name"] = skill_name
+
+    comparison_mode = _clean_optional_text(target.get("comparison_mode") or plan.get("comparison_mode"))
+    if comparison_mode:
+        summary["comparison_mode"] = comparison_mode
+
+    variants = _normalize_string_list(target.get("variants") or plan.get("variants"))
+    if variants:
+        summary["variants"] = variants
+
+    if isinstance(initial, dict):
+        initial_summary: dict[str, Any] = {}
+        for key in (
+            "skill_type",
+            "recommended_primary_direction",
+            "recommended_secondary_direction",
+            "reasoning",
+        ):
+            text = _clean_optional_text(initial.get(key))
+            if text:
+                initial_summary[key] = text
+        if initial_summary:
+            summary["initial_judgement"] = initial_summary
+
+    primary_direction = _normalize_direction(
+        confirmed.get("primary_direction") if isinstance(confirmed, dict) else None
+    ) or _normalize_direction(plan.get("primary_direction"))
+    if primary_direction:
+        summary["primary_direction"] = primary_direction
+
+    secondary_direction = _normalize_direction(
+        confirmed.get("secondary_direction") if isinstance(confirmed, dict) else None
+    ) or _normalize_direction(plan.get("secondary_direction"))
+    if secondary_direction:
+        summary["secondary_direction"] = secondary_direction
+
+    dimensions = _normalize_dimensions(
+        confirmed.get("dimensions") if isinstance(confirmed, dict) else None
+    ) or _normalize_dimensions(plan.get("dimensions"))
+    if dimensions:
+        summary["dimensions"] = dimensions
+
+    out_of_scope = _normalize_string_list(
+        confirmed.get("out_of_scope") if isinstance(confirmed, dict) else None
+    ) or _normalize_string_list(plan.get("out_of_scope"))
+    if out_of_scope:
+        summary["out_of_scope"] = out_of_scope
+
+    case_plan_source = (
+        confirmed.get("case_plan") if isinstance(confirmed, dict) and isinstance(confirmed.get("case_plan"), dict) else {}
+    )
+    case_plan: dict[str, Any] = {}
+    sample_types = _normalize_string_list(case_plan_source.get("sample_types"))
+    if sample_types:
+        case_plan["sample_types"] = sample_types
+
+    sample_count = case_plan_source.get("sample_count")
+    if isinstance(sample_count, int):
+        case_plan["sample_count"] = sample_count
+
+    blind_review = case_plan_source.get("blind_review")
+    if isinstance(blind_review, bool):
+        case_plan["blind_review"] = blind_review
+
+    if case_plan:
+        summary["case_plan"] = case_plan
+
+    report_requirements_source = (
+        confirmed.get("report_requirements")
+        if isinstance(confirmed, dict) and isinstance(confirmed.get("report_requirements"), dict)
+        else {}
+    )
+    report_requirements: dict[str, Any] = {}
+    must_include = _normalize_string_list(report_requirements_source.get("must_include"))
+    if must_include:
+        report_requirements["must_include"] = must_include
+    if report_requirements:
+        summary["report_requirements"] = report_requirements
+
+    return summary
+
+
 def load_dazhuangskill_creator_config(config_path: str | Path | None = None) -> dict[str, Any]:
     """Load dazhuangskill-creator defaults from config.yaml when present."""
     target = Path(config_path) if config_path else DEFAULT_CONFIG_PATH

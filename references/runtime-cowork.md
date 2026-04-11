@@ -28,7 +28,7 @@
   - `next_action` = 尽量保留并行评测，但避免因为超时把主循环拖崩
 - 如果子代理超时非常严重，可以退化成串行跑，而不是把整个评测循环弄崩。
 - 只要环境扛得住，with-skill / baseline / grading 这些链路都尽量保留。
-- 如果要跑完整评测主线，回 `<skill-base>/references/eval-loop.md`。
+- 如果要跑完整评测主线，先回 `<skill-base>/references/eval-planning.md` 锁评估计划，再进 `<skill-base>/references/eval-loop.md`。
 
 ## Step 3：把 review 结果优先做成静态工件
 
@@ -75,7 +75,8 @@
   - `next_action`
 - 然后按当前路径直达对应材料：
   - Cowork 适配主线：留在这份文档，继续当前 Step
-  - 普通输出评测：回主 `SKILL.md` 的 Step 1，再看 `<skill-base>/references/eval-loop.md`
+  - 评估前置对齐：回主 `SKILL.md` 的 Step 1，再看 `<skill-base>/references/eval-planning.md`
+  - 普通输出评测：先确认前置计划，再看 `<skill-base>/references/eval-loop.md`
   - 触发描述优化：回主 `SKILL.md` 的 Step 1，再看 `<skill-base>/references/description-optimization.md`
   - 打包交付：回主 `SKILL.md` 的 Step 1，再看 `<skill-base>/references/package-and-present.md`
 - 这个索引只用来快速恢复上下文，不替代上面的 Step 1 到 Step 6。

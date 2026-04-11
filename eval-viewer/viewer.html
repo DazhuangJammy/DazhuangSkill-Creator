@@ -713,9 +713,8 @@
 
       // Config badge
       const badge = document.getElementById("config-badge");
-      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
-      if (configMatch) {
-        const config = configMatch[1];
+      const config = run.configuration || ((run.id.match(/(?:^|[-/])(with_skill|without_skill|new_skill|old_skill|skill_[a-zA-Z0-9_]+)(?:[-/]|$)/) || [])[1]);
+      if (config) {
         const isBaseline = config === "without_skill" || config === "old_skill";
         badge.textContent = formatConfigLabel(config);
         badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
@@ -1109,7 +1108,12 @@
         new_skill: "新版 skill",
         old_skill: "旧版 skill",
       };
-      return labels[config] || config.replace(/_/g, " ");
+      if (labels[config]) return labels[config];
+      if (config && config.startsWith("skill_")) {
+        const suffix = config.slice("skill_".length).trim();
+        if (suffix) return "Skill " + suffix.toUpperCase();
+      }
+      return (config || "").replace(/_/g, " ");
     }
 
     // ---- View switching ----
@@ -1132,6 +1136,8 @@
       const summary = data.run_summary || {};
       const metadata = data.metadata || {};
       const notes = data.notes || [];
+      const evaluationPlan = EMBEDDED_DATA.evaluation_plan || metadata.evaluation_plan || null;
+      const dimensionCoverage = metadata.dimension_coverage || null;
 
       let html = "";
 
@@ -1144,15 +1150,94 @@
       html += "每个配置运行 " + (metadata.runs_per_configuration || "?") + " 次";
       html += "</p>";
 
+      if (evaluationPlan) {
+        const primary = evaluationPlan.primary_direction || {};
+        const secondary = evaluationPlan.secondary_direction || {};
+        const dimensions = evaluationPlan.dimensions || [];
+        const outOfScope = evaluationPlan.out_of_scope || [];
+        const casePlan = evaluationPlan.case_plan || {};
+        const reportRequirements = evaluationPlan.report_requirements || {};
+        const mustInclude = reportRequirements.must_include || [];
+
+        function formatDirection(direction) {
+          if (!direction || (!direction.label && !direction.id)) return "—";
+          const label = direction.label || direction.id;
+          if (typeof direction.weight === "number") {
+            return label + "（" + direction.weight.toFixed(2) + "）";
+          }
+          return label;
+        }
+
+        html += '<div class="benchmark-notes" style="margin-bottom: 1rem;">';
+        html += "<h3>本次怎么评</h3>";
+        html += "<ul>";
+        if (metadata.evaluation_plan_path) {
+          html += "<li>评估计划：" + escapeHtml(metadata.evaluation_plan_path) + "</li>";
+        }
+        if (evaluationPlan.comparison_mode) {
+          let comparison = evaluationPlan.comparison_mode;
+          if (evaluationPlan.variants && evaluationPlan.variants.length) {
+            comparison += "（" + evaluationPlan.variants.join(", ") + "）";
+          }
+          html += "<li>比较方式：" + escapeHtml(comparison) + "</li>";
+        }
+        if (primary.label || primary.id) {
+          html += "<li>主方向：" + escapeHtml(formatDirection(primary)) + "</li>";
+        }
+        if (secondary.label || secondary.id) {
+          html += "<li>次方向：" + escapeHtml(formatDirection(secondary)) + "</li>";
+        }
+        if (dimensions.length) {
+          const labels = dimensions.map(item => {
+            const base = item.label || item.id || "未命名维度";
+            if (typeof item.weight === "number") {
+              return base + "（" + item.weight.toFixed(2) + "）";
+            }
+            return base;
+          });
+          html += "<li>重点维度：" + escapeHtml(labels.join("、")) + "</li>";
+        }
+        if (outOfScope.length) {
+          html += "<li>这次不看：" + escapeHtml(outOfScope.join("、")) + "</li>";
+        }
+        if (casePlan.sample_types || casePlan.sample_count || typeof casePlan.blind_review === "boolean") {
+          const chunks = [];
+          if (casePlan.sample_types && casePlan.sample_types.length) chunks.push("样本类型：" + casePlan.sample_types.join("、"));
+          if (typeof casePlan.sample_count === "number") chunks.push("样本数：" + casePlan.sample_count);
+          if (typeof casePlan.blind_review === "boolean") chunks.push(casePlan.blind_review ? "盲评：是" : "盲评：否");
+          html += "<li>案例计划：" + escapeHtml(chunks.join("；")) + "</li>";
+        }
+        if (mustInclude.length) {
+          html += "<li>结论必须包含：" + escapeHtml(mustInclude.join("、")) + "</li>";
+        }
+        if (dimensionCoverage) {
+          const covered = (dimensionCoverage.covered_dimension_labels || []).length;
+          const total = dimensionCoverage.total_dimensions || covered;
+          html += "<li>维度覆盖：已覆盖 " + covered + "/" + total + " 个维度</li>";
+          if (dimensionCoverage.evals && dimensionCoverage.evals.length) {
+            const mapping = dimensionCoverage.evals
+              .filter(item => item && item.dimension_labels && item.dimension_labels.length)
+              .map(item => {
+                const name = item.eval_name || ("评测 " + (item.eval_id == null ? "?" : item.eval_id));
+                return name + " -> " + item.dimension_labels.join("、");
+              });
+            if (mapping.length) {
+              html += "<li>题目映射：" + escapeHtml(mapping.join("；")) + "</li>";
+            }
+          }
+        }
+        html += "</ul></div>";
+      }
+
       // Summary table
       html += '<table class="benchmark-table">';
 
-      function fmtStat(stat, pct) {
+      function fmtStat(stat, pct, unit) {
         if (!stat) return "—";
         const suffix = pct ? "%" : "";
         const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
         const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
-        return m + suffix + " ± " + s + suffix;
+        return m + suffix + unit + " ± " + s + suffix + unit;
       }
 
       function deltaClass(val) {
@@ -1165,37 +1250,42 @@
 
       // Discover config names dynamically (everything except "delta")
       const configs = Object.keys(summary).filter(k => k !== "delta");
-      const configA = configs[0] || "config_a";
-      const configB = configs[1] || "config_b";
-      const labelA = formatConfigLabel(configA);
-      const labelB = formatConfigLabel(configB);
-      const a = summary[configA] || {};
-      const b = summary[configB] || {};
       const delta = summary.delta || {};
+      const hasDelta = configs.length === 2 && Object.keys(delta).length > 0;
 
-      html += "<thead><tr><th>指标</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>差值</th></tr></thead>";
+      html += "<thead><tr><th>指标</th>";
+      for (const config of configs) {
+        html += "<th>" + escapeHtml(formatConfigLabel(config)) + "</th>";
+      }
+      if (hasDelta) html += "<th>差值</th>";
+      html += "</tr></thead>";
       html += "<tbody>";
 
-      html += "<tr><td><strong>通过率</strong></td>";
-      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
-      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
-      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
-
-      // Time (only show row if data exists)
-      if (a.time_seconds || b.time_seconds) {
-        html += "<tr><td><strong>耗时（秒）</strong></td>";
-        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
-        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
-        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      function appendSummaryRow(label, key, pct, unit) {
+        html += "<tr><td><strong>" + escapeHtml(label) + "</strong></td>";
+        for (const config of configs) {
+          const stat = (summary[config] || {})[key];
+          if (key === "tokens") {
+            if (!stat) {
+              html += "<td>—</td>";
+            } else {
+              html += "<td>" + Number(stat.mean || 0).toFixed(0) + " ± " + Number(stat.stddev || 0).toFixed(0) + "</td>";
+            }
+            continue;
+          }
+          html += "<td>" + fmtStat(stat, pct, unit) + "</td>";
+        }
+        if (hasDelta) {
+          let deltaValue = delta[key] || "—";
+          if (key === "time_seconds" && deltaValue !== "—") deltaValue += "s";
+          html += '<td class="' + deltaClass(delta[key]) + '">' + deltaValue + "</td>";
+        }
+        html += "</tr>";
       }
 
-      // Tokens (only show row if data exists)
-      if (a.tokens || b.tokens) {
-        html += "<tr><td><strong>Token 数</strong></td>";
-        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
-        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
-        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
-      }
+      appendSummaryRow("通过率", "pass_rate", true, "");
+      appendSummaryRow("耗时（秒）", "time_seconds", false, "s");
+      appendSummaryRow("Token 数", "tokens", false, "");
 
       html += "</tbody></table>";
 
@@ -1212,8 +1302,12 @@
         for (const evalId of evalIds) {
           const evalRuns = runs.filter(r => r.eval_id === evalId);
           const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "评测 " + evalId;
+          const evalDimensions = evalRuns[0] && evalRuns[0].dimension_labels ? evalRuns[0].dimension_labels : [];
 
           html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          if (evalDimensions.length) {
+            html += "<p style='color: var(--text-muted); margin: -0.25rem 0 0.75rem; font-size: 0.875rem;'>对应维度：" + escapeHtml(evalDimensions.join("、")) + "</p>";
+          }
           html += '<table class="benchmark-table">';
           html += "<thead><tr><th>配置</th><th>运行</th><th>通过率</th>";
           if (hasTime) html += "<th>耗时（秒）</th>";
@@ -1222,13 +1316,13 @@
           html += "<tbody>";
 
           // Group by config and render with average rows
-          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          const configGroups = configs.filter(config => evalRuns.some(r => r.configuration === config));
           for (let ci = 0; ci < configGroups.length; ci++) {
             const config = configGroups[ci];
             const configRuns = evalRuns.filter(r => r.configuration === config);
             if (configRuns.length === 0) continue;
 
-            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const rowClass = ci % 2 === 0 ? "benchmark-row-with" : "benchmark-row-without";
             const configLabel = formatConfigLabel(config);
 
             for (const run of configRuns) {

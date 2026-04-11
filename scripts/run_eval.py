@@ -3,6 +3,11 @@
 
 检查某个 skill 的描述是否会让 Claude 在一组 query 上正确触发
 （也就是判断要不要读取这个 skill），并以 JSON 输出结果。
+
+注意：这个脚本只用于 trigger eval / description eval。
+如果你要评估 skill 的落地效果、输出质量、with-vs-without 提升，
+先走 `references/eval-planning.md` 和 `references/eval-loop.md`，
+不要把这个脚本误当成那条主线。
 """
 
 import argparse
@@ -295,7 +300,7 @@ def run_eval(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="评估一个 skill 描述的触发效果")
+    parser = argparse.ArgumentParser(description="评估一个 skill 描述的触发效果（仅 trigger eval）")
     parser.add_argument("--config", default=None, help="config.yaml 路径（默认读取 dazhuangskill-creator/config.yaml）")
     parser.add_argument("--eval-set", required=True, help="评测集 JSON/YAML 路径")
     parser.add_argument("--skill-path", required=True, help="skill 目录路径")

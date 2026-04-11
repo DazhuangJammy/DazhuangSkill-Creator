@@ -18,6 +18,9 @@ This is not just a wording tweak. I reworked the workflow, structure, bundled re
 > Update `v1.5.4` (2026-04-11): fixed three real flow pain points: no more default pointers to missing `references/examples.md`; `quick_validate.py` now supports `--strict` (and packaging uses strict checks by default); memory-judgment wording is now dynamic so explicit modes do not look like re-classification.
 > Update `v1.5.5` (2026-04-11): fixed fenced-code heading parsing in `quick_validate.py`; selecting `--resources assets` now always scaffolds `assets/output-format.md`; report/review/table-like tasks now get earlier assets-path guidance during init.
 > Update `v1.5.6` (2026-04-11): clarified auto-mode resource completion (`lessons/adaptive` always auto-add `references/` + `scripts/`), and fixed throttled update checks so stale cached versions are no longer shown as `latest`.
+> Update `v1.5.7` (2026-04-11): the evaluation flow now stops to align the judging standard first. You write an "evaluation proposal" first, then a "formal evaluation plan"; without that plan, benchmark and review now stop by default.
+> Update `v1.5.8` (2026-04-11): multi-skill benchmark summaries now show every config, not just the first two; benchmark aggregation now hard-checks eval-to-dimension coverage against the evaluation plan; review also shows required report sections and dimension mapping.
+> Update `v1.5.9` (2026-04-11): fixed the big evaluation-entry bug. The first response to any skill-evaluation request must now stop at the alignment proposal; no direct scoring, no direct A/B run, and no direct benchmark before the user confirms the judging scheme.
 
 For evaluation, I used Codex in headless mode - no GUI, no need to open the CLI page, just terminal execution - and ran at least 3 independent conversation tests per benchmark item. The full benchmark standards and archived reports are included in `测评报告/`.
 
@@ -278,7 +281,71 @@ python3 scripts/check_update.py --force
 - If the problem is structural bloat, path drift, or losing the main line in long contexts, refactor `SKILL.md` and rebalance `references/`, `assets/`, and `scripts/` first
 - Only move on to the trigger workflow after the structure is stable
 
+### Evaluate whether a skill actually got better
+
+The default path is now split into two layers. Do not start by writing eval prompts immediately:
+
+1. align the judging standard first
+2. then run the execution-side evaluation
+
+Hard gate:
+
+- if the user just said "evaluate this skill", "test with vs without", or "compare these skills", the first response must stop at the alignment proposal
+- do not jump straight to scoring, A/B results, benchmark, or winner selection before the user confirms the plan
+
+Planning entry points:
+
+- `references/eval-planning.md`
+- `assets/evaluation-alignment-script.md`
+- `assets/evaluation-proposal-template.md`
+- `assets/evaluation-plan-template.md`
+
+Execution entry points:
+
+- `references/eval-loop.md`
+- `references/schemas.md`
+
+Recommended order:
+
+1. write the "evaluation proposal" with `assets/evaluation-proposal-template.md`
+2. if you need a ready-made talk track, start from `assets/evaluation-alignment-script.md`
+3. align primary direction, secondary direction, weights, dimensions, and out-of-scope items with the human
+4. write the "formal evaluation plan" with `assets/evaluation-plan-template.md`
+5. save it as `evals/eval-plan.json`
+6. tag each eval's `eval_metadata.json` with `dimension_ids` / `dimension_labels`
+7. run benchmark aggregation
+8. generate both `review.html` and `report.html`
+9. only then ask the user to read results or make a call
+
+Benchmark and the final HTML artifacts now check for that plan by default:
+
+```bash
+python3 scripts/aggregate_benchmark.py ./workspace/iteration-1 --skill-path ./out/my-skill --eval-plan ./out/my-skill/evals/eval-plan.json
+python3 scripts/generate_eval_artifacts.py ./workspace/iteration-1 --benchmark ./workspace/iteration-1/benchmark.json --eval-plan ./out/my-skill/evals/eval-plan.json
+```
+
+Formal evaluation is only considered complete when both files exist:
+
+- `review.html`: the base evidence workbench
+- `report.html`: the human-friendly full report with plan, prompts, answers, scoring, and conclusion
+
+Even if someone directly runs `generate_review.py` or `generate_report.py`, the script now auto-generates the companion HTML by default; if that second file cannot be created, the first file is rolled back and the command fails.
+
+Only use this for old archived results:
+
+- `--allow-missing-eval-plan`
+
+Once a plan exists, benchmark aggregation also hard-checks:
+
+- every eval is tagged with plan-aligned dimensions
+- no eval points to dimensions that are not in the plan
+- the plan's key dimensions are actually covered by the eval set
+
+If you compare `skill_a / skill_b / skill_c`, benchmark markdown and review now render all configs instead of collapsing to only two columns.
+
 ### Evaluate triggering behavior
+
+This is **trigger eval only**, not the main path for output-quality or delivery-effect evaluation:
 
 ```bash
 python3 scripts/run_eval.py --eval-set ./path/to/eval-set.json --skill-path ./out/my-skill
@@ -286,7 +353,7 @@ python3 scripts/run_eval.py --eval-set ./path/to/eval-set.json --skill-path ./ou
 
 ### Run the optimization loop
 
-Use this only after the skill body is already structurally sound:
+Use this only after the skill body is already structurally sound and you are optimizing **trigger behavior**:
 
 ```bash
 python3 scripts/run_loop.py --eval-set ./path/to/eval-set.json --skill-path ./out/my-skill

@@ -7,10 +7,13 @@
 Grader 会阅读 transcript 和输出文件，然后逐条判断 expectation 是通过还是失败，并给出清晰证据。
 
 你有两项工作：
+
 1. 给 outputs 打分
 2. 顺手点评 eval 本身
 
 一条弱断言如果通过了，带来的虚假信心比没测还糟。所以如果你发现某条断言过于表面、太容易糊弄过去，或者关键结果根本没人测到，就要指出来。
+
+如果调用方给了正式评估计划，你还要顺手看一眼：这批 expectations 到底有没有覆盖到那份计划里真正重要的维度。
 
 ## 输入
 
@@ -19,8 +22,15 @@ Grader 会阅读 transcript 和输出文件，然后逐条判断 expectation 是
 - **expectations**：要检查的 expectation 字符串列表
 - **transcript_path**：执行 transcript 路径（markdown）
 - **outputs_dir**：输出文件所在目录
+- **evaluation_plan_path**：可选，已经确认过的正式评估计划路径
 
 ## 流程
+
+### Step 0：先看这轮 eval 本来想证明什么（如果有）
+
+1. 如果给了 `evaluation_plan_path`，先读它
+2. 记录这次的主方向、关键维度、不看项，以及最后结论必须包含什么
+3. 记住：你的 expectation 判定只是证据层，不等于自动替整场评估下总判
 
 ### Step 1：读 transcript
 
@@ -66,6 +76,7 @@ Grader 会阅读 transcript 和输出文件，然后逐条判断 expectation 是
 ### Step 5：读取用户备注
 
 如果 `{outputs_dir}/user_notes.md` 存在：
+
 1. 读它
 2. 记录执行者标记的不确定点、问题、临时绕法
 3. 这些信息要反映到 grading 输出里
@@ -77,9 +88,11 @@ Grader 会阅读 transcript 和输出文件，然后逐条判断 expectation 是
 只有在你真的发现明显缺口时才提建议。高标准，不要为了显得认真而吹毛求疵。
 
 什么样的建议值得提：
+
 - 一条断言虽然通过了，但错得离谱的输出也会通过
 - 你看到了一个关键结果，但没有任何断言在测它
 - 某条断言在当前输出条件下根本无法验证
+- 正式评估计划里的主维度根本没被当前 expectations 照到
 
 好建议要能让 eval 作者觉得“这个提醒确实有价值”。
 
@@ -90,11 +103,13 @@ Grader 会阅读 transcript 和输出文件，然后逐条判断 expectation 是
 ## 判定标准
 
 **PASS 的条件：**
+
 - transcript 或 outputs 明确证明 expectation 成立
 - 可以给出具体证据
 - 证据代表真正完成任务，而不是表面满足
 
 **FAIL 的条件：**
+
 - 找不到证据
 - 证据与 expectation 相反
 - 现有材料无法验证 expectation
@@ -181,6 +196,9 @@ Grader 会阅读 transcript 和输出文件，然后逐条判断 expectation 是
       },
       {
         "reason": "当前没有任何断言检查提取出的电话号码是否和输入一致，但我观察到电话号码有误却没被抓到"
+      },
+      {
+        "reason": "正式评估计划把“稳定性”列为主维度，但这组 expectations 还没有直接覆盖它"
       }
     ],
     "overall": "当前断言更偏向检查有无，而不是检查正确性。建议增加内容校验。"
@@ -211,3 +229,4 @@ Grader 会阅读 transcript 和输出文件，然后逐条判断 expectation 是
 - **具体**：尽量引用明确文本或明确观察
 - **全面**：同时检查 transcript 和 outputs
 - **高标准**：过于表面的满足不应算 PASS
+- **别越权**：expectation 通过率只是证据层，不等于已经替整场评估选出赢家

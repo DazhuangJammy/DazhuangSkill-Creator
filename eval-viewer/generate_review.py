@@ -29,7 +29,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.utils import configure_utf8_stdio, read_utf8_text, write_utf8_text
+from scripts.utils import (
+    configure_utf8_stdio,
+    load_structured_data,
+    read_utf8_text,
+    summarize_evaluation_plan,
+    write_utf8_text,
+)
 
 configure_utf8_stdio()
 
@@ -53,6 +59,46 @@ MIME_OVERRIDES = {
     ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 }
+
+
+def default_companion_path(primary_output: Path, companion_name: str) -> Path:
+    """Choose a stable sibling path for the companion HTML artifact."""
+    if primary_output.name == companion_name:
+        return primary_output
+    return primary_output.with_name(companion_name)
+
+
+def run_companion_report(
+    workspace: Path,
+    *,
+    skill_name: str,
+    benchmark_path: Path | None,
+    eval_plan_path: Path | None,
+    allow_missing_eval_plan: bool,
+    output_path: Path,
+) -> None:
+    """Generate report.html so review/report stay paired by default."""
+    command = [
+        sys.executable,
+        str(Path(__file__).with_name("generate_report.py")),
+        str(workspace),
+        "--output",
+        str(output_path),
+        "--skill-name",
+        skill_name,
+        "--skip-companion-review",
+    ]
+    if benchmark_path:
+        command.extend(["--benchmark", str(benchmark_path)])
+    if eval_plan_path:
+        command.extend(["--eval-plan", str(eval_plan_path)])
+    if allow_missing_eval_plan:
+        command.append("--allow-missing-eval-plan")
+
+    result = subprocess.run(command, capture_output=True, text=True)
+    if result.returncode != 0:
+        output = (result.stdout or "") + (result.stderr or "")
+        raise RuntimeError(output.strip() or "generate_report.py failed")
 
 
 def get_mime_type(path: Path) -> str:
@@ -92,6 +138,7 @@ def build_run(root: Path, run_dir: Path) -> dict | None:
     """Build a run dict with prompt, outputs, and grading data."""
     prompt = ""
     eval_id = None
+    configuration = run_dir.parent.name if run_dir.parent != root else ""
 
     # Try eval_metadata.json
     for candidate in [run_dir / "eval_metadata.json", run_dir.parent / "eval_metadata.json"]:
@@ -147,6 +194,7 @@ def build_run(root: Path, run_dir: Path) -> dict | None:
         "id": run_id,
         "prompt": prompt,
         "eval_id": eval_id,
+        "configuration": configuration,
         "outputs": output_files,
         "grading": grading,
     }
@@ -258,6 +306,7 @@ def generate_html(
     skill_name: str,
     previous: dict[str, dict] | None = None,
     benchmark: dict | None = None,
+    evaluation_plan: dict | None = None,
 ) -> str:
     """Generate the complete standalone HTML page with embedded data."""
     template_path = Path(__file__).parent / "viewer.html"
@@ -273,16 +322,24 @@ def generate_html(
             if data.get("outputs"):
                 previous_outputs[run_id] = data["outputs"]
 
+    benchmark_payload = benchmark
+    if benchmark_payload and evaluation_plan:
+        metadata = benchmark_payload.setdefault("metadata", {})
+        if isinstance(metadata, dict) and "evaluation_plan" not in metadata:
+            metadata["evaluation_plan"] = evaluation_plan
+
     embedded = {
         "skill_name": skill_name,
         "runs": runs,
         "previous_feedback": previous_feedback,
         "previous_outputs": previous_outputs,
     }
-    if benchmark:
-        embedded["benchmark"] = benchmark
+    if benchmark_payload:
+        embedded["benchmark"] = benchmark_payload
+    if evaluation_plan:
+        embedded["evaluation_plan"] = evaluation_plan
 
-    data_json = json.dumps(embedded)
+    data_json = json.dumps(embedded, ensure_ascii=False)
 
     return template.replace("/*__EMBEDDED_DATA__*/", f"const EMBEDDED_DATA = {data_json};")
 
@@ -325,6 +382,7 @@ class ReviewHandler(BaseHTTPRequestHandler):
         feedback_path: Path,
         previous: dict[str, dict],
         benchmark_path: Path | None,
+        evaluation_plan: dict | None,
         *args,
         **kwargs,
     ):
@@ -333,6 +391,7 @@ class ReviewHandler(BaseHTTPRequestHandler):
         self.feedback_path = feedback_path
         self.previous = previous
         self.benchmark_path = benchmark_path
+        self.evaluation_plan = evaluation_plan
         super().__init__(*args, **kwargs)
 
     def do_GET(self) -> None:
@@ -345,7 +404,13 @@ class ReviewHandler(BaseHTTPRequestHandler):
                     benchmark = json.loads(read_utf8_text(self.benchmark_path))
                 except (json.JSONDecodeError, OSError):
                     pass
-            html = generate_html(runs, self.skill_name, self.previous, benchmark)
+            html = generate_html(
+                runs,
+                self.skill_name,
+                self.previous,
+                benchmark,
+                self.evaluation_plan,
+            )
             content = html.encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -404,8 +469,24 @@ def main() -> None:
         help="benchmark.json 路径，用于在“基准”页签中展示量化结果",
     )
     parser.add_argument(
+        "--eval-plan",
+        type=Path,
+        default=None,
+        help="正式评估计划路径；如果 benchmark.json 里已经带了计划摘要，就可以不传",
+    )
+    parser.add_argument(
+        "--allow-missing-eval-plan",
+        action="store_true",
+        help="允许在没有正式评估计划的情况下继续生成复盘页（仅兼容旧数据，默认会直接拦住）",
+    )
+    parser.add_argument(
         "--static", "-s", type=Path, default=None,
         help="把独立 HTML 写到这个路径，而不是启动本地服务",
+    )
+    parser.add_argument(
+        "--skip-companion-report",
+        action="store_true",
+        help=argparse.SUPPRESS,
     )
     args = parser.parse_args()
 
@@ -427,6 +508,10 @@ def main() -> None:
         previous = load_previous_iteration(args.previous_workspace.resolve())
 
     benchmark_path = args.benchmark.resolve() if args.benchmark else None
+    if not benchmark_path:
+        default_benchmark = workspace / "benchmark.json"
+        if default_benchmark.exists():
+            benchmark_path = default_benchmark.resolve()
     benchmark = None
     if benchmark_path and benchmark_path.exists():
         try:
@@ -434,17 +519,73 @@ def main() -> None:
         except (json.JSONDecodeError, OSError):
             pass
 
+    evaluation_plan = None
+    if benchmark and isinstance(benchmark.get("metadata"), dict):
+        evaluation_plan = summarize_evaluation_plan(
+            benchmark["metadata"].get("evaluation_plan")
+        )
+
+    if not evaluation_plan and args.eval_plan:
+        try:
+            evaluation_plan = summarize_evaluation_plan(
+                load_structured_data(args.eval_plan.resolve())
+            )
+        except (OSError, ValueError, json.JSONDecodeError):
+            evaluation_plan = None
+
+    if not evaluation_plan and not args.allow_missing_eval_plan:
+        print(
+            "错误：还没找到正式评估计划。"
+            " 先完成前置对齐，并准备好 evals/eval-plan.json，"
+            "再生成 review；如果你只是在兼容旧 benchmark，"
+            "请显式加 --allow-missing-eval-plan。",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
     if args.static:
-        html = generate_html(runs, skill_name, previous, benchmark)
+        html = generate_html(runs, skill_name, previous, benchmark, evaluation_plan)
         args.static.parent.mkdir(parents=True, exist_ok=True)
         write_utf8_text(args.static, html)
+        if not args.skip_companion_report:
+            companion_report = default_companion_path(args.static.resolve(), "report.html")
+            try:
+                run_companion_report(
+                    workspace,
+                    skill_name=skill_name,
+                    benchmark_path=benchmark_path,
+                    eval_plan_path=args.eval_plan.resolve() if args.eval_plan else None,
+                    allow_missing_eval_plan=args.allow_missing_eval_plan,
+                    output_path=companion_report,
+                )
+            except RuntimeError as exc:
+                try:
+                    args.static.unlink()
+                except OSError:
+                    pass
+                print(
+                    "错误：review.html 已回滚，因为 companion report.html 生成失败。\n"
+                    + str(exc),
+                    file=sys.stderr,
+                )
+                sys.exit(1)
         print(f"\n  静态查看页已写入：{args.static}\n")
+        if not args.skip_companion_report:
+            print(f"  companion report 已写入：{default_companion_path(args.static.resolve(), 'report.html')}\n")
         sys.exit(0)
 
     # Kill any existing process on the target port
     port = args.port
     _kill_port(port)
-    handler = partial(ReviewHandler, workspace, skill_name, feedback_path, previous, benchmark_path)
+    handler = partial(
+        ReviewHandler,
+        workspace,
+        skill_name,
+        feedback_path,
+        previous,
+        benchmark_path,
+        evaluation_plan,
+    )
     try:
         server = HTTPServer(("127.0.0.1", port), handler)
     except OSError:
@@ -462,6 +603,11 @@ def main() -> None:
         print(f"  上一轮：   {args.previous_workspace}（{len(previous)} 个 run）")
     if benchmark_path:
         print(f"  基准结果： {benchmark_path}")
+    if evaluation_plan:
+        primary = evaluation_plan.get("primary_direction", {})
+        primary_label = primary.get("label", primary.get("id", ""))
+        if primary_label:
+            print(f"  主方向：   {primary_label}")
     print(f"\n  按 Ctrl+C 停止。\n")
 
     webbrowser.open(url)

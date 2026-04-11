@@ -82,7 +82,8 @@
   - `next_action`
 - 然后按当前路径直达对应材料：
   - Claude.ai 适配主线：留在这份文档，继续当前 Step
-  - 普通输出评测：回主 `SKILL.md` 的 Step 1，再看 `<skill-base>/references/eval-loop.md`
+  - 评估前置对齐：回主 `SKILL.md` 的 Step 1，再看 `<skill-base>/references/eval-planning.md`
+  - 普通输出评测：先确认前置计划，再看 `<skill-base>/references/eval-loop.md`
   - 触发描述优化：回主 `SKILL.md` 的 Step 1，再看 `<skill-base>/references/description-optimization.md`
   - 打包交付：回主 `SKILL.md` 的 Step 1，再看 `<skill-base>/references/package-and-present.md`
 - 这个索引只用来快速恢复上下文，不替代上面的 Step 1 到 Step 6。
