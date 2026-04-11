@@ -25,10 +25,11 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 如果已经启用 `references/`，就不要再把长 `例子` 留在主 `SKILL.md`；如果已经启用 `assets/`，就不要再把长 `输出格式` 留在主 `SKILL.md`。
 - 只要目标 skill 根目录下出现 bundled resources（例如 `references/`、`assets/`、`scripts/`、`agents/`、`evals/`、`config.yaml`），主 `SKILL.md` 就必须明确把当前 `SKILL.md` 所在目录定义为 `<skill-base>`，让模型知道所有本地资源相对谁解析。
 - 单文件闭集、下沉阈值、校验规则这些“creator 级架构说明”，默认尽量留在 creator 和 validator；不要整段原封不动塞进每个目标 skill。目标 skill 只保留自己真正承重的最小结构规则。
-- 默认路径要轻。不要一上来就跑重型 benchmark、blind comparison 或触发优化，除非用户真的需要这一级证据。
-- 对任何带明显主观标准、人格模仿、方法论借用，或存在多种“到底算哪种好”可能性的评估，不要直接开始跑 eval；先让 AI 做 skill 判型，给出推荐评法和其他可选评法，再和人类对齐成正式评估计划。
-- 只要用户提到“评估 / 测评 / 评测 / 测一下 / 比较效果 / 有 skill 和没 skill / 两个 skill 谁更好”这类请求，第一次响应必须先停在“评估前置提案”，不能直接给分、不能直接说谁更好、不能直接进入 with-vs-without / A-B / benchmark / review。
-- 在评估路径里，AI 自己写出来的推荐方案不算“已经确认”；只有用户明确拍板“按这个标准评”，才允许进入正式评估计划和执行层。
+- 默认路径要轻。不要一上来就跑重型 benchmark、blind comparison 或触发优化，除非用户真的需要这一级证据；但评估 / 测评 / 评测 是例外，只要用户明确提出，就只能进入标准化正式流程，不能降级成轻量判断。
+- 在这个项目里，只要用户说的是“评估 / 测评 / 评测”，就只有一套标准化正式流程：先做前置对齐，再进正式执行，最后必须生成 `review.html` 和 `report.html`；不存在轻量版、降级版或聊天结论版。
+- 对任何带明显主观标准、人格模仿、方法论借用，或存在多种“到底算哪种好”可能性的评估，不要直接开始跑 eval；先让 AI 做 skill 判型，给出推荐评法和其他可选评法，再和人类对齐成正式评估计划。这个前置对齐只是正式评估的第一段，不是另一种更轻的评估模式。
+- 只要用户提到“评估 / 测评 / 评测 / 测一下 / 比较效果 / 有 skill 和没 skill / 两个 skill 谁更好”这类请求，第一次响应必须先停在“评估前置提案”，不能直接给分、不能直接说谁更好、不能直接进入 with-vs-without / A-B / benchmark / review；但这只是正式流程里的等待拍板阶段，不是完成态。
+- 在评估路径里，AI 自己写出来的推荐方案不算“已经确认”；只有用户明确拍板“按这个标准评”，才允许进入正式评估计划和执行层。用户一旦拍板，就必须继续走完整个正式流程，不能改走结构判断/评审模式，也不能只给口头结论、Markdown 结论或普通 review。
 - 默认交付物也要轻。不要因为“以后可能有用”就顺手创建 `evals/`、workspace、`config.yaml`、`agents/openai.yaml`；只有当前任务真的需要，才把它们带进最终 skill。
 - skill 内部文件指针默认写成可移植形式，例如 `<skill-base>/references/...`。不要把一次运行中的绝对路径写进最终交付物，除非用户明确要求做成只在当前机器使用的临时版本。
 - 文件指针和命令都尽量写死、写全。把 `<python-cmd>` 视为当前环境可用的 Python 命令：macOS/Linux 通常是 `python3`，Windows 通常优先 `py -3`，其次 `python`。
@@ -69,8 +70,8 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 如果本地脚本可用且已经进入真实执行，先按需读取 `<skill-base>/config.yaml` 里的 `update_check`，再运行 `<python-cmd> "<skill-base>/scripts/check_update.py" --json`。
 - 如果脚本返回 `should_notify = true`，只简短说明：当前版本、最新版本、是仅提醒还是已自动更新，然后继续当前任务。
 - 如果脚本返回 `status = updated`，明确告诉用户“本地文件已更新，但这次调用继续沿当前已加载版本执行；下次调用会使用新版本”。
-- 只要用户这次是在说“评估某个 skill”、“测有无 skill 的差别”或“比较多个同类 skill”，就直接判到 `评估输出质量` 这条路径，并把 `next_action` 设成“先出评估前置提案，等用户拍板”，不要跳过到执行层。
-- 如果用户还在探索或讨论阶段，就停留在结构判断/评审模式，不要强行进入实现或重型评测。
+- 只要用户这次是在说“评估某个东西”“测评某个东西”“测有无 skill 的差别”或“比较多个同类 skill”，就直接判到 `评估输出质量` 这条路径，并把 `next_action` 设成“先出评估前置提案，等用户拍板”；不要改判到结构判断/评审模式，也不要跳过到执行层。
+- 如果用户还在探索或讨论阶段，而且没有出现评估 / 测评 / 评测意图词，就停留在结构判断/评审模式，不要强行进入实现或重型评测。
 - 如果路径不清楚，先做最轻的结构判断，再决定是否继续下钻。
 - 如果用户说的是“优化一个现有 skill”，默认先停在 `修改现有 skill`，不要直接跳进 `优化触发行为`。
 - 先判断这次更像哪一种：
@@ -151,15 +152,15 @@ description: 用来创建、修改、重构、评估、打包和优化其他 ski
 - 进入这一步时，更新：
   - `current_step` = `Step 4`
   - `next_action` = 选一条最轻但仍可信的验证路径
-- 只是讨论结构或架构：直接读文件并做判断。
+- 只是讨论结构或架构、且这次没有评估 / 测评 / 评测意图：直接读文件并做判断。
 - 快速体检：执行 `<python-cmd> "<skill-base>/scripts/quick_validate.py" <skill-dir>`，再配少量真实 prompt 做 sanity check。
 - 要交付或打包前，再跑一次严格体检：`<python-cmd> "<skill-base>/scripts/quick_validate.py" <skill-dir> --strict`。
 - 如果 `quick_validate.py` 报 Step 4 缺少 `retry` / `failure` 事件命令，直接把 `memory_mode_guard.py --event retry` 和 `--event failure` 这两行补回目标 skill 的 Step 4。
 - 优化现有 skill 的默认验证顺序是：先结构体检，再用少量真实 prompt 做 sanity check，最后才决定要不要跑 trigger eval。
-- 评估前置对齐：先读 `<skill-base>/references/eval-planning.md`，完成 skill 判型、可选评法展示和正式评估计划。
-- 只要这次是第一次收到评估请求，默认只允许走到 `<skill-base>/references/eval-planning.md` 的前置提案 / 用户对齐阶段；用户没明确确认前，不要继续进 `<skill-base>/references/eval-loop.md`。
-- 标准输出质量迭代：确认正式评估计划后，再读 `<skill-base>/references/eval-loop.md`；如果需要机器写入格式，再读 `<skill-base>/references/schemas.md`。
-- 正式评估完成的硬标准：最终必须落地两份 HTML，`review.html` 继续做基础证据工作台，`report.html` 负责把计划、案例、回答、评分和结论讲给人看；默认用 `<skill-base>/scripts/generate_eval_artifacts.py` 一次性生成。
+- 评估前置对齐：先读 `<skill-base>/references/eval-planning.md`，完成 skill 判型、可选评法展示和正式评估计划；这是正式评估唯一流程的第一段，不是替代路线。
+- 只要这次是第一次收到评估请求，默认只允许先走到 `<skill-base>/references/eval-planning.md` 的前置提案 / 用户对齐阶段；用户没明确确认前，不要继续进 `<skill-base>/references/eval-loop.md`。
+- 标准输出质量迭代：确认正式评估计划后，再读 `<skill-base>/references/eval-loop.md`；如果需要机器写入格式，再读 `<skill-base>/references/schemas.md`。一旦确认计划，就必须继续执行到双 HTML 落地，不能停在聊天结论或普通 review。
+- 正式评估完成的硬标准：最终必须落地两份 HTML，`review.html` 继续做基础证据工作台，`report.html` 负责把计划、案例、回答、评分和结论讲给人看；默认用 `<skill-base>/scripts/generate_eval_artifacts.py` 一次性生成。缺任意一份，都不算正式评估完成。
 - 触发优化：读 `<skill-base>/references/description-optimization.md`。
 - 不要拿 `<skill-base>/references/description-optimization.md` 去替代结构改造；description 只解决“会不会触发”，不解决“触发后会不会沿着正确主线执行”。
 - Blind A/B 对比：读 `<skill-base>/agents/comparator.md` 和 `<skill-base>/agents/analyzer.md`。
